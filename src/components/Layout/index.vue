@@ -51,14 +51,14 @@ watch(isCollapsed, (val) => {
   & :deep(.arco-layout-content) {
     flex-wrap: wrap;
     background-color: var(--color-background);
-    overflow-y: auto;
-    padding: 20px;
+    padding: 40px;
+    text-overflow: ellipsis;
   }
 
   & :deep(.arco-layout-header),
   :deep(.arco-layout-footer),
-  :deep(.arco-layout-sider-children),
-  :deep(.arco-layout-content) {
+  :deep(.arco-layout-content),
+  :deep(.arco-layout-sider-children) {
     display: flex;
     flex-direction: row;
     font-stretch: condensed;
@@ -70,8 +70,8 @@ watch(isCollapsed, (val) => {
   }
 }
 .arco-layout {
-  margin-top: 64px;
-  min-height: calc(100% - 64px);
+  padding-top: 64px;
+  height: 100%;
   transition: all 0.1s;
 }
 </style>
