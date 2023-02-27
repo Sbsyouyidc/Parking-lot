@@ -1,24 +1,24 @@
 import { fileURLToPath, URL } from 'node:url'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import { createStyleImportPlugin } from 'vite-plugin-style-import'
-// https://vitejs.dev/config/
+import AutoImport from 'unplugin-auto-import/vite'
+import Components from 'unplugin-vue-components/vite'
+import { ArcoResolver } from 'unplugin-vue-components/resolvers'
+
 export default defineConfig({
   server: {
     open: true
   },
   plugins: [
     vue(),
-    createStyleImportPlugin({
-      libs: [
-        {
-          libraryName: '@arco-design/web-vue',
-          esModule: true,
-          resolveStyle: (name) => {
-            // less
-            return `@arco-design/web-vue/es/${name}/style/index.js`
-          }
-        }
+    AutoImport({
+      resolvers: [ArcoResolver()]
+    }),
+    Components({
+      resolvers: [
+        ArcoResolver({
+          sideEffect: true
+        })
       ]
     })
   ],

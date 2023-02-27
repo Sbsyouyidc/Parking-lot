@@ -11,8 +11,5 @@ const app = createApp(App)
 
 app.use(createPinia())
 app.use(router)
-app.use(ArcoVue, {
-  // 用于改变使用组件时的前缀名称
-  componentPrefix: 'arco'
-})
+app.use(ArcoVue)
 app.mount('#app')
