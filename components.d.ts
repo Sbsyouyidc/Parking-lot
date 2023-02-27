@@ -18,6 +18,8 @@ declare module '@vue/runtime-core' {
     AMenu: typeof import('@arco-design/web-vue')['Menu']
     AMenuItem: typeof import('@arco-design/web-vue')['MenuItem']
     ASubMenu: typeof import('@arco-design/web-vue')['SubMenu']
+    ATabPane: typeof import('@arco-design/web-vue')['TabPane']
+    ATabs: typeof import('@arco-design/web-vue')['Tabs']
     Footer: typeof import('./src/components/Layout/footer/index.vue')['default']
     HeaderMenu: typeof import('./src/components/Layout/header/header-menu.vue')['default']
     Layout: typeof import('./src/components/Layout/index.vue')['default']

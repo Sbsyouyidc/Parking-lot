@@ -8,6 +8,42 @@ const layoutLeft = ref<number>(200)
 watch(isCollapsed, (val) => {
   layoutLeft.value = val ? 48 : 200
 })
+let count = 5
+const data = ref([
+  {
+    key: '1',
+    title: 'Tab 1',
+    content:
+      'Content of Tab Panel 1Content of Tab Panel 1Content of Tab Panel 1Content of Tab Panel 1Content of Tab Panel 1Content of Tab Panel 1Content of Tab Panel 1Content of Tab Panel 1Content of Tab Panel 1Content of Tab Panel 1Content of Tab Panel 1Content of Tab Panel 1Content of Tab Panel 1Content of Tab Panel 1Content of Tab Panel 1Content of Tab Panel 1Content of Tab Panel 1Content of Tab Panel 1Content of Tab Panel 1Content of Tab Panel 1Content of Tab Panel 1Content of Tab Panel 1Content of Tab Panel 1Content of Tab Panel 1Content of Tab Panel 1Content of Tab Panel 1Content of Tab Panel 1Content of Tab Panel 1Content of Tab Panel 1Content of Tab Panel 1Content of Tab Panel 1Content of Tab Panel 1Content of Tab Panel 1Content of Tab Panel 1Content of Tab Panel 1Content of Tab Panel 1Content of Tab Panel 1Content of Tab Panel 1Content of Tab Panel 1Content of Tab Panel 1Content of Tab Panel 1Content of Tab Panel 1Content of Tab Panel 1Content of Tab Panel 1Content of Tab Panel 1Content of Tab Panel 1Content of Tab Panel 1Content of Tab Panel 1Content of Tab Panel 1'
+  },
+  {
+    key: '2',
+    title: 'Tab 2',
+    content: 'Content of Tab Panel 2'
+  },
+  {
+    key: '3',
+    title: 'Tab 3',
+    content: 'Content of Tab Panel 3'
+  },
+  {
+    key: '4',
+    title: 'Tab 4',
+    content: 'Content of Tab Panel 4'
+  }
+])
+
+const handleAdd = () => {
+  const number = count++
+  data.value = data.value.concat({
+    key: `${number}`,
+    title: `New Tab ${number}`,
+    content: `Content of New Tab Panel ${number}`
+  })
+}
+const handleDelete = (key) => {
+  data.value = data.value.filter((item) => item.key !== key)
+}
 </script>
 
 <template>
@@ -20,7 +56,25 @@ watch(isCollapsed, (val) => {
     </a-layout-sider>
 
     <a-layout :style="{ 'margin-left': layoutLeft + 'px' }">
-      <a-layout-content> </a-layout-content>
+      <a-layout-content>
+        <a-tabs
+          type="line"
+          :editable="true"
+          @add="handleAdd"
+          @delete="handleDelete"
+          show-add-button
+          auto-switch
+        >
+          <a-tab-pane
+            v-for="(item, index) of data"
+            :key="item.key"
+            :title="item.title"
+            :closable="index !== 2"
+          >
+            {{ item?.content }}
+          </a-tab-pane>
+        </a-tabs>
+      </a-layout-content>
       <a-layout-footer>ss</a-layout-footer>
     </a-layout>
   </div>
@@ -51,8 +105,7 @@ watch(isCollapsed, (val) => {
   & :deep(.arco-layout-content) {
     flex-wrap: wrap;
     background-color: var(--color-background);
-    padding: 40px;
-    text-overflow: ellipsis;
+    padding: 10px;
   }
 
   & :deep(.arco-layout-header),
@@ -73,5 +126,11 @@ watch(isCollapsed, (val) => {
   padding-top: 64px;
   height: 100%;
   transition: all 0.1s;
+}
+.arco-tabs {
+  width: 100%;
+  & .arco-tabs-nav-tab {
+    height: 40px;
+  }
 }
 </style>
