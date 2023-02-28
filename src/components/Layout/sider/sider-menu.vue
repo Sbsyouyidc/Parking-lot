@@ -26,38 +26,29 @@ const onCollapse = (val: boolean, type: string) => {
     >
       <a-sub-menu key="0">
         <template #icon><icon-apps></icon-apps></template>
-        <template #title>Navigation 1</template>
-        <a-menu-item key="0_0">Menu 1</a-menu-item>
-        <a-menu-item key="0_1">Menu 2</a-menu-item>
-        <a-menu-item key="0_2">Menu 3</a-menu-item>
-        <a-menu-item key="0_3">Menu 4</a-menu-item>
+        <template #title>车场管理</template>
+        <a-menu-item key="0_0">车辆入场</a-menu-item>
+        <a-menu-item key="0_1">车辆离场</a-menu-item>
       </a-sub-menu>
       <a-sub-menu key="1">
-        <template #icon><icon-bug></icon-bug></template>
-        <template #title>Navigation 2</template>
-        <a-menu-item key="1_0">Menu 1</a-menu-item>
-        <a-menu-item key="1_1">Menu 2</a-menu-item>
-        <a-menu-item key="1_2">Menu 3</a-menu-item>
+        <template #icon><icon-apps></icon-apps></template>
+        <template #title>信息查询管理</template>
+        <a-menu-item key="1_0">车位查询</a-menu-item>
+        <a-menu-item key="1_1">收费明细</a-menu-item>
+        <a-menu-item key="1_2">订单记录</a-menu-item>
       </a-sub-menu>
       <a-sub-menu key="2">
-        <template #icon><icon-bulb></icon-bulb></template>
-        <template #title>Navigation 3</template>
-        <a-menu-item key="2_0">Menu 1</a-menu-item>
-        <a-menu-item key="2_1">Menu 2</a-menu-item>
-        <a-sub-menu key="2_2" title="Navigation 4">
-          <a-menu-item key="2_2_0">Menu 1</a-menu-item>
-          <a-menu-item key="2_2_1">Menu 2</a-menu-item>
-        </a-sub-menu>
+        <template #icon><icon-apps></icon-apps></template>
+        <template #title>信息维护管理</template>
+        <a-menu-item key="2_0">个人信息</a-menu-item>
+        <a-menu-item key="2_0">用户管理</a-menu-item>
       </a-sub-menu>
       <a-sub-menu key="3">
-        <template #icon><icon-bulb></icon-bulb></template>
-        <template #title>Navigation 3</template>
-        <a-menu-item key="2_0">Menu 1</a-menu-item>
-        <a-menu-item key="2_1">Menu 2</a-menu-item>
-        <a-sub-menu key="2_2" title="Navigation 4">
-          <a-menu-item key="2_2_0">Menu 1</a-menu-item>
-          <a-menu-item key="2_2_1">Menu 2</a-menu-item>
-        </a-sub-menu>
+        <template #icon><icon-apps></icon-apps></template>
+        <template #title>系统管理</template>
+        <a-menu-item key="3_0">黑名单管理</a-menu-item>
+        <a-menu-item key="3_1">收费标准管理</a-menu-item>
+        <a-menu-item key="3_2">车位管理</a-menu-item>
       </a-sub-menu>
     </a-menu>
   </div>
