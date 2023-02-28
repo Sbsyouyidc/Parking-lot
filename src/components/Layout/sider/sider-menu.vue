@@ -1,6 +1,7 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
-import { defineEmits } from 'vue'
+import { defineEmits, ref, watch } from 'vue'
+import { useRouter } from 'vue-router'
 import {
   IconMenuFold,
   IconMenuUnfold,
@@ -8,10 +9,15 @@ import {
   IconBug,
   IconBulb
 } from '@arco-design/web-vue/es/icon'
+const router = useRouter()
 const emit = defineEmits<{ (e: 'on-collapse', name: boolean): void }>()
 const onCollapse = (val: boolean, type: string) => {
   emit('on-collapse', true)
 }
+const selectedKeys = ref('')
+watch(selectedKeys, (key) => {
+  router.push({ name: key[0] })
+})
 </script>
 
 <template>
@@ -22,13 +28,15 @@ const onCollapse = (val: boolean, type: string) => {
       :default-selected-keys="['0_2']"
       show-collapse-button
       breakpoint="md"
+      auto-switch
+      v-model:selected-keys="selectedKeys"
       @collapse="onCollapse"
     >
       <a-sub-menu key="0">
         <template #icon><icon-apps></icon-apps></template>
         <template #title>车场管理</template>
-        <a-menu-item key="0_0">车辆入场</a-menu-item>
-        <a-menu-item key="0_1">车辆离场</a-menu-item>
+        <a-menu-item key="cardEntry">车辆入场</a-menu-item>
+        <a-menu-item key="cardLeave">车辆离场</a-menu-item>
       </a-sub-menu>
       <a-sub-menu key="1">
         <template #icon><icon-apps></icon-apps></template>
