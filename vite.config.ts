@@ -7,7 +7,10 @@ import { ArcoResolver } from 'unplugin-vue-components/resolvers'
 
 export default defineConfig({
   server: {
-    open: true
+    open: true,
+    proxy: {
+      '/api': 'http://127.0.0.1:3000'
+    }
   },
   plugins: [
     vue(),

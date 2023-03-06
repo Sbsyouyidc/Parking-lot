@@ -1,0 +1,153 @@
+<!-- eslint-disable vue/multi-word-component-names -->
+<script setup lang="ts">
+import { ref, reactive, computed } from 'vue'
+import { IconEye, IconEdit } from '@arco-design/web-vue/es/icon'
+import { base64 } from '@/util/index'
+import fetch from '@/request/fetch'
+import { useCounterStore } from '@/stores/loading'
+
+const loading = useCounterStore()
+
+const visible = ref(false)
+const form = reactive({
+  num1: '',
+  num2: '',
+  num3: '',
+  num4: '',
+  num5: ''
+})
+const fileUrl = reactive({
+  file: '',
+  url: 'https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/a8c8cdb109cb051163646151a4a5083b.png~tplv-uwbnlip3yd-webp.webp'
+})
+
+const I1 = ref()
+const I2 = ref()
+const I3 = ref()
+const I4 = ref()
+const I5 = ref()
+
+const input = ref()
+
+// const previewFile = () => {
+//   fileUrl.file = input.value.files[0]
+//   base64(input.value.files[0], (dataUrl: string) => {
+//     fileUrl.url = dataUrl
+//   })
+// }
+
+const licensePlate = computed(() => {
+  return ''
+})
+const recognition = () => {
+  const data = new FormData()
+  data.append('file', fileUrl.file)
+}
+</script>
+
+<template>
+  <div class="Login box-shadow">
+    <div class="Login-title">
+      <a-typography-title :heading="3">登录</a-typography-title>
+    </div>
+    <a-col :span="13">
+      <a-alert>This is an info alert.</a-alert>
+    </a-col>
+    <div class="Login-body">
+      <a-form :model="form" layout="vertical" size="medium">
+        <a-form-item field="name" label="车牌号">
+          <a-space size="small">
+            <a-input max-length="1" ref="I1" v-model="form.num1" />
+            <a-input max-length="1" ref="I2" v-model="form.num2" />
+            <a-input max-length="1" ref="I3" v-model="form.num3" />
+            <a-input max-length="1" ref="I4" v-model="form.num4" />
+            <a-input max-length="1" ref="I5" v-model="form.num5"
+          /></a-space>
+        </a-form-item>
+      </a-form>
+      <div class="divider">
+        <div class="divider-body"></div>
+      </div>
+      <div class="upload-body">
+        <a-upload action="/api/upload" />
+        <a-image
+          :src="fileUrl.url"
+          width="100"
+          show-loader
+          footer-position="outer"
+          :preview-visible="visible"
+          @preview-visible-change="
+            () => {
+              visible = false
+            }
+          "
+        >
+          <template #extra>
+            <div class="actions actions-outer">
+              <span
+                class="action"
+                @click="
+                  () => {
+                    visible = true
+                  }
+                "
+                ><icon-eye
+              /></span>
+              <span class="action" @click="() => input.click()"><icon-edit /> </span>
+            </div>
+          </template>
+        </a-image>
+      </div>
+    </div>
+    <a-button @click="recognition">车牌绑定</a-button>
+  </div>
+</template>
+<style lang="less" scoped>
+.Login {
+  background-color: #ffffff;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  padding: 20px;
+  transform: translate(-50%, -50%);
+}
+.Login-body {
+  padding: 10px;
+  width: 100%;
+  display: flex;
+  & > .arco-form {
+    width: calc(50%);
+  }
+  & > .upload-body {
+    width: calc(50%);
+    text-align: center;
+    & .arco-upload-list-item {
+      justify-content: center;
+    }
+  }
+}
+.arco-input-wrapper :deep(.arco-input.arco-input-size-medium) {
+  text-align: center;
+  font-size: 15px;
+}
+.divider {
+  border-left: 1px solid var(--color-neutral-3);
+  height: 100px;
+  margin: 0 12px;
+}
+
+:deep(.arco-image-footer) {
+  justify-content: end;
+}
+.action {
+  padding: 5px 4px;
+  font-size: 14px;
+  border-radius: 2px;
+  line-height: 1;
+  cursor: pointer;
+  &:hover {
+    color: #ffffff;
+    background: rgba(0, 0, 0, 0.5);
+  }
+}
+</style>
