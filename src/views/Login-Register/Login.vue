@@ -1,24 +1,15 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
-import { ref, reactive, computed } from 'vue'
-import { IconEye, IconEdit } from '@arco-design/web-vue/es/icon'
-import { base64 } from '@/util/index'
+import { ref, reactive, computed, toRaw } from 'vue'
 import fetch from '@/request/fetch'
-import { useCounterStore } from '@/stores/loading'
+import type { FileItem } from '@arco-design/web-vue/es/upload'
 
-const loading = useCounterStore()
-
-const visible = ref(false)
 const form = reactive({
   num1: '',
   num2: '',
   num3: '',
   num4: '',
   num5: ''
-})
-const fileUrl = reactive({
-  file: '',
-  url: 'https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/a8c8cdb109cb051163646151a4a5083b.png~tplv-uwbnlip3yd-webp.webp'
 })
 
 const I1 = ref()
@@ -27,28 +18,38 @@ const I3 = ref()
 const I4 = ref()
 const I5 = ref()
 
-const input = ref()
+const imagePath = ref('')
+const isDisable = computed(() => {
+  if (licensePlate.value.length == 5 && imagePath.value !== '') {
+    return false
+  } else {
+    return true
+  }
+})
 
-// const previewFile = () => {
-//   fileUrl.file = input.value.files[0]
-//   base64(input.value.files[0], (dataUrl: string) => {
-//     fileUrl.url = dataUrl
-//   })
-// }
+const successLoad = (fileItem: FileItem) => {
+  const {
+    response: { path }
+  } = fileItem
+  imagePath.value = path
+}
 
 const licensePlate = computed(() => {
-  return ''
+  return Object.values(form).join('')
 })
 const recognition = () => {
-  const data = new FormData()
-  data.append('file', fileUrl.file)
+  const params = {
+    licensePlate: licensePlate.value,
+    imagePath: imagePath.value
+  }
+  fetch.post('/api/recognition', params)
 }
 </script>
 
 <template>
   <div class="Login box-shadow">
     <div class="Login-title">
-      <a-typography-title :heading="3">登录</a-typography-title>
+      <a-typography-title :heading="3">注册</a-typography-title>
     </div>
     <a-col :span="13">
       <a-alert>This is an info alert.</a-alert>
@@ -69,37 +70,21 @@ const recognition = () => {
         <div class="divider-body"></div>
       </div>
       <div class="upload-body">
-        <a-upload action="/api/upload" />
-        <a-image
-          :src="fileUrl.url"
-          width="100"
-          show-loader
-          footer-position="outer"
-          :preview-visible="visible"
-          @preview-visible-change="
+        <a-upload
+          action="/api/upload"
+          :limit="1"
+          list-type="picture"
+          @success="successLoad"
+          :on-before-remove="
             () => {
-              visible = false
+              imagePath = ''
+              return true
             }
           "
-        >
-          <template #extra>
-            <div class="actions actions-outer">
-              <span
-                class="action"
-                @click="
-                  () => {
-                    visible = true
-                  }
-                "
-                ><icon-eye
-              /></span>
-              <span class="action" @click="() => input.click()"><icon-edit /> </span>
-            </div>
-          </template>
-        </a-image>
+        />
       </div>
     </div>
-    <a-button @click="recognition">车牌绑定</a-button>
+    <a-button @click="recognition" :disabled="isDisable">车牌绑定</a-button>
   </div>
 </template>
 <style lang="less" scoped>
