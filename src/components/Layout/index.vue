@@ -51,7 +51,7 @@ const activeKey = ref('')
 
     <a-layout :style="{ 'margin-left': layoutLeft + 'px' }">
       <a-layout-content>
-        <a-tabs type="line" :editable="true" @delete="handleDelete" v-model:active-key="activeKey">
+        <a-tabs type="line" :editable="true" @delete="handleDelete" :active-key="activeKey">
           <a-tab-pane v-for="(item, index) of data" :key="item.key" :title="item.title">
             <div class="a"></div>
             <div class="a"></div>

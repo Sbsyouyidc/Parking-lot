@@ -1,4 +1,4 @@
-import { Message, Upload } from '@arco-design/web-vue'
+import { Message } from '@arco-design/web-vue'
 import { useCounterStore } from '@/stores/loading'
 const loading = useCounterStore()
 
@@ -75,6 +75,5 @@ export default {
     }
 
     return Fetch(path, requestOptions)
-  },
-
+  }
 }

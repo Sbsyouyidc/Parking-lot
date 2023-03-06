@@ -5,7 +5,6 @@ import path from 'path'
 import cors from 'cors'
 import router from './router'
 
-
 app.use(express.urlencoded({ extended: true }))
 app.use(cors())
 app.use('/static', express.static(path.join(__dirname, '../public')))

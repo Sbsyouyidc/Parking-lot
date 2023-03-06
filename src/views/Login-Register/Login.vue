@@ -3,13 +3,15 @@
 import { ref, reactive, computed, toRaw } from 'vue'
 import fetch from '@/request/fetch'
 import type { FileItem } from '@arco-design/web-vue/es/upload'
-
+import { Message } from '@arco-design/web-vue'
 const form = reactive({
   num1: '',
   num2: '',
   num3: '',
   num4: '',
-  num5: ''
+  num5: '',
+  num6: '',
+  num7: ''
 })
 
 const I1 = ref()
@@ -17,10 +19,10 @@ const I2 = ref()
 const I3 = ref()
 const I4 = ref()
 const I5 = ref()
-
+const I6 = ref()
 const imagePath = ref('')
 const isDisable = computed(() => {
-  if (licensePlate.value.length == 5 && imagePath.value !== '') {
+  if (licensePlate.value.length == 7 && imagePath.value !== '') {
     return false
   } else {
     return true
@@ -42,7 +44,10 @@ const recognition = () => {
     licensePlate: licensePlate.value,
     imagePath: imagePath.value
   }
-  fetch.post('/api/recognition', params)
+  fetch.post('/api/recognition', params).then((result: any) => {
+    const { res } = result
+    ;(res && Message.success('注册失败')) || Message.normal('注册成功')
+  })
 }
 </script>
 
@@ -62,7 +67,10 @@ const recognition = () => {
             <a-input max-length="1" ref="I2" v-model="form.num2" />
             <a-input max-length="1" ref="I3" v-model="form.num3" />
             <a-input max-length="1" ref="I4" v-model="form.num4" />
-            <a-input max-length="1" ref="I5" v-model="form.num5"
+            <a-input max-length="1" ref="I5" v-model="form.num5" /><a-input
+              max-length="1"
+              ref="I6"
+              v-model="form.num6" /><a-input max-length="1" ref="I5" v-model="form.num7"
           /></a-space>
         </a-form-item>
       </a-form>
@@ -96,25 +104,31 @@ const recognition = () => {
   padding: 20px;
   transform: translate(-50%, -50%);
 }
+
 .Login-body {
   padding: 10px;
   width: 100%;
   display: flex;
+
   & > .arco-form {
     width: calc(50%);
   }
+
   & > .upload-body {
     width: calc(50%);
     text-align: center;
+
     & .arco-upload-list-item {
       justify-content: center;
     }
   }
 }
+
 .arco-input-wrapper :deep(.arco-input.arco-input-size-medium) {
   text-align: center;
   font-size: 15px;
 }
+
 .divider {
   border-left: 1px solid var(--color-neutral-3);
   height: 100px;
@@ -124,12 +138,14 @@ const recognition = () => {
 :deep(.arco-image-footer) {
   justify-content: end;
 }
+
 .action {
   padding: 5px 4px;
   font-size: 14px;
   border-radius: 2px;
   line-height: 1;
   cursor: pointer;
+
   &:hover {
     color: #ffffff;
     background: rgba(0, 0, 0, 0.5);

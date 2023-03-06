@@ -10,8 +10,18 @@ const router = createRouter({
       meta: { title: '主页' },
       component: () => import('@/components/Layout/index.vue')
     },
-    { path: '/cardEntry', name: 'cardEntry', meta: { title: '车辆入场' } },
-    { path: '/cardLeave', name: 'cardLeave', meta: { title: '车辆离场' } },
+    {
+      path: '/cardEntry',
+      name: 'cardEntry',
+      meta: { title: '车辆入场' },
+      component: () => import('@/components/Layout/index.vue')
+    },
+    {
+      path: '/cardLeave',
+      name: 'cardLeave',
+      meta: { title: '车辆离场' },
+      component: () => import('@/components/Layout/index.vue')
+    },
     {
       path: '/Login',
       name: 'Login',
