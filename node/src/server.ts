@@ -2,7 +2,7 @@ import { connection } from './utils'
 import fs from 'fs'
 import path from 'path'
 import request from 'request'
-import { getFileContentAsBase64 } from './utils'
+import { getFileContentAsBase64, isExistence } from './utils'
 interface IData {
   [key: string]: string
 }
@@ -23,23 +23,32 @@ export default {
         image
       }
     }
-    request(options, (error, response) => {
+    request(options, async (error, response) => {
       if (error) throw new Error(error)
       const { number } = JSON.parse(response.body).words_result
       if (number == licensePlate) {
-        connection.query(
-          `INSERT INTO card(image, LicensePlate) VALUES ('${licensePlate}', '${imagePath}')`,
-          (err: any, results: IData) => {
-            if (err) throw new Error(err)
-            res.send({
-              code: 200,
-              res: true
-            })
-          }
-        )
+        const boolean = await isExistence(licensePlate)
+        ;(boolean &&
+          res.send({
+            code: 200,
+            message: '已存在车牌',
+            res: false
+          })) ||
+          connection.query(
+            `INSERT INTO card(LicensePlate,image ) VALUES ('${licensePlate}', '${imagePath}')`,
+            (err: any, results: IData) => {
+              if (err) throw new Error(err)
+              res.send({
+                code: 200,
+                message: '注册成功',
+                res: true
+              })
+            }
+          )
       } else {
         res.send({
           code: 200,
+          message: '车牌识别不匹配',
           res: false
         })
       }
@@ -59,5 +68,24 @@ export default {
       code: 200,
       path: `/${originalname}`
     })
+  },
+
+  //登录
+  login: async (req: any, res: any) => {
+    const { licensePlate } = req.body
+    console.log(licensePlate)
+    const boolean = await isExistence(licensePlate)
+    console.log(boolean)
+    ;(boolean &&
+      res.send({
+        code: 200,
+        message: '登陆成功',
+        res: true
+      })) ||
+      res.send({
+        code: 200,
+        message: '车牌未存在；请先注册，绑定车牌',
+        res: false
+      })
   }
 }

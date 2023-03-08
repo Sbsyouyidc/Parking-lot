@@ -2,16 +2,11 @@
 <script setup lang="ts">
 import { defineEmits, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import {
-  IconMenuFold,
-  IconMenuUnfold,
-  IconApps,
-  IconBug,
-  IconBulb
-} from '@arco-design/web-vue/es/icon'
+import { IconApps } from '@arco-design/web-vue/es/icon'
+
 const router = useRouter()
 const emit = defineEmits<{ (e: 'on-collapse', name: boolean): void }>()
-const onCollapse = (val: boolean, type: string) => {
+const onCollapse = () => {
   emit('on-collapse', true)
 }
 const selectedKeys = ref('')
