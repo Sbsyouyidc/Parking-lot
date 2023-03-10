@@ -9,4 +9,5 @@ const upload = multer({ dest: path.join(__dirname, '../public/images') })
 router.post('/recognition', server.recognition)
 router.post('/upload', upload.single('file'), server.upload)
 router.post('/login', server.login)
+router.get('/parkingSpace', server.parkingSpace)
 export default router

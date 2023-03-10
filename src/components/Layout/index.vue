@@ -1,18 +1,21 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
 import { ref, watch, computed } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { RouterView, useRoute, useRouter } from 'vue-router'
 import headerMenu from './header/header-menu.vue'
 import siderMenu from './sider/sider-menu.vue'
 
-const isCollapsed = ref(false)
 const router = useRouter()
 const route = useRoute()
+const isCollapsed = ref(false)
 const layoutLeft = computed(() => (isCollapsed.value ? 48 : 200))
+const activeKey = ref('')
 
 watch(
   () => route.name,
   (val) => {
+    console.log(route)
+
     const {
       meta: { title }
     } = route
@@ -37,7 +40,6 @@ const handleDelete = (key: string) => {
     router.push({ name: data.value[index].key })
   }
 }
-const activeKey = ref('')
 </script>
 
 <template>
@@ -51,25 +53,21 @@ const activeKey = ref('')
 
     <a-layout :style="{ 'margin-left': layoutLeft + 'px' }">
       <a-layout-content>
-        <a-tabs type="line" :editable="true" @delete="handleDelete" :active-key="activeKey">
-          <a-tab-pane v-for="(item, index) of data" :key="item.key" :title="item.title">
-            <div class="a"></div>
-            <div class="a"></div>
-            <div class="a"></div>
-            <div class="a"></div>
-            <div class="a"></div>
-            <div class="a"></div>
-            <div class="a"></div>
-            <div class="a"></div>
-            <div class="a"></div>
-            <div class="a"></div>
-            <div class="a"></div>
-            <div class="a"></div>
-            <div class="a"></div>
-            <div class="a"></div>
-            <div class="a"></div>
-            <div class="a"></div>
-          </a-tab-pane>
+        <a-tabs
+          type="line"
+          :editable="true"
+          @delete="handleDelete"
+          v-model:active-key="activeKey"
+          @tab-click="(	
+key: string) => router.push({ name: key })"
+        >
+          <KeepAlive>
+            <a-tab-pane v-for="(item, index) in data" :key="item.key" :title="item.title"
+              >{{ item }}
+              <!-- <RouterView :name="item.key"></RouterView> -->
+              <!-- <component :is="ds" /> -->
+            </a-tab-pane>
+          </KeepAlive>
         </a-tabs>
       </a-layout-content>
       <a-layout-footer></a-layout-footer>
@@ -126,7 +124,7 @@ const activeKey = ref('')
     width: 100%;
     height: 40px;
     position: fixed;
-    z-index: 998;
+    z-index: 997;
     box-shadow: 5px 1px 5px 0 rgb(0 0 0 / 8%);
     & :deep(.arco-tabs-tab) {
       border: none;
@@ -140,13 +138,5 @@ const activeKey = ref('')
     flex-wrap: wrap;
     display: flex;
   }
-}
-.a {
-  background-color: rgba(0, 0, 255, 0.2);
-  border: 3px solid #00f;
-  width: 90px;
-  margin: 20px;
-  height: 200px;
-  cursor: pointer;
 }
 </style>

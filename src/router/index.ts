@@ -8,29 +8,32 @@ const router = createRouter({
       path: '/Home',
       name: 'Home',
       meta: { title: '主页' },
-      component: () => import('@/components/Layout/index.vue')
+      component: () => import('@/components/Layout/index.vue'),
+      children: [
+        {
+          path: '/cardEntry',
+          name: 'cardEntry',
+          meta: { title: '车辆入场' },
+          components: { cardEntry: () => import('@/views/cardEnter/index.vue') }
+        },
+        {
+          path: '/cardLeave',
+          name: 'cardLeave',
+          meta: { title: '车辆离场' },
+          components: { cardLeave: () => import('@/views/cardLeave/index.vue') }
+        }
+      ]
     },
-    {
-      path: '/cardEntry',
-      name: 'cardEntry',
-      meta: { title: '车辆入场' },
-      component: () => import('@/components/Layout/index.vue')
-    },
-    {
-      path: '/cardLeave',
-      name: 'cardLeave',
-      meta: { title: '车辆离场' },
-      component: () => import('@/components/Layout/index.vue')
-    },
+
     {
       path: '/Register',
       name: 'Register',
-      component: () => import('@/views/Login-Register/Register.vue')
+      component: () => import('@/views/LoginRegister/Register.vue')
     },
     {
       path: '/Login',
       name: 'Login',
-      component: () => import('@/views/Login-Register/Login.vue')
+      component: () => import('@/views/LoginRegister/Login.vue')
     }
   ]
 })

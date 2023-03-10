@@ -2,9 +2,10 @@
 <script setup lang="ts">
 import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
+import { Message } from '@arco-design/web-vue'
 import plateForm from '@/components/Module/plateForm.vue'
 import fetch from '@/request/fetch'
-import { Message } from '@arco-design/web-vue'
+
 const router = useRouter()
 const licensePlate = ref('')
 const plateValidator = ref(false)
@@ -14,7 +15,7 @@ const login = () => {
   }
   fetch.post('/api/login', params).then((result: { res: any; message: any }) => {
     const { res, message } = result
-    ;(res && Message.success(message)) || Message.info(message)
+    ;(res && Message.success(message) && router.push('/Home')) || Message.info(message)
   })
 }
 </script>
@@ -27,7 +28,7 @@ const login = () => {
     </div>
     <a-space>
       <a-button @click="router.push('/Register')">注册</a-button>
-      <a-button type="primary" @click="login">登录</a-button>
+      <a-button type="primary" @click="login" :disabled="!plateValidator">登录</a-button>
     </a-space>
   </div>
 </template>

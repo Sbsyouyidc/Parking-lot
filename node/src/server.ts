@@ -2,6 +2,8 @@ import { connection } from './utils'
 import fs from 'fs'
 import path from 'path'
 import request from 'request'
+import dayjs from 'dayjs'
+
 import { getFileContentAsBase64, isExistence } from './utils'
 interface IData {
   [key: string]: string
@@ -87,5 +89,13 @@ export default {
         message: '车牌未存在；请先注册，绑定车牌',
         res: false
       })
+  },
+
+  //车位信息
+  parkingSpace: (req: any, res: any) => {
+    connection.execute('SELECT * FROM parkingSpace LIMIT 0,1000', (err: any, results: IData) => {
+      if (err) throw new Error(err)
+      res.send(results)
+    })
   }
 }

@@ -1,11 +1,11 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
-import { ref, reactive, computed, watch } from 'vue'
-import fetch from '@/request/fetch'
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import type { FileItem } from '@arco-design/web-vue/es/upload'
 import { Message } from '@arco-design/web-vue'
 import plateForm from '@/components/Module/plateForm.vue'
+import fetch from '@/request/fetch'
 const router = useRouter()
 const licensePlate = ref('')
 const imagePath = ref('')
@@ -28,13 +28,6 @@ const recognition = () => {
     ;(res && Message.success(message)) || Message.normal(message)
   })
 }
-
-watch(
-  () => plateValidator,
-  (val) => {
-    console.log(val)
-  }
-)
 </script>
 
 <template>

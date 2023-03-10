@@ -9,10 +9,10 @@ const emit = defineEmits<{ (e: 'on-collapse', name: boolean): void }>()
 const onCollapse = () => {
   emit('on-collapse', true)
 }
-const selectedKeys = ref('')
-watch(selectedKeys, (key) => {
-  router.push({ name: key[0] })
-})
+
+const click = (key: string) => {
+  router.push({ name: key })
+}
 </script>
 
 <template>
@@ -24,7 +24,7 @@ watch(selectedKeys, (key) => {
       show-collapse-button
       breakpoint="md"
       auto-switch
-      v-model:selected-keys="selectedKeys"
+      @menu-item-click="click"
       @collapse="onCollapse"
     >
       <a-sub-menu key="0">

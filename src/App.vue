@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { useCounterStore } from '@/stores/loading'
-const loading = useCounterStore()
+import { useLoadingStore } from '@/stores/loading'
+const loading = useLoadingStore()
 </script>
 
 <template>
-  <RouterView></RouterView>
-  <div class="spin" v-show="loading.getLoading">
+  <router-view></router-view>
+  <div class="spin" v-show="loading.isLoading">
     <a-spin :size="32" />
   </div>
 
@@ -16,7 +16,10 @@ const loading = useCounterStore()
 .spin {
   width: 100%;
   height: 100%;
-  position: relative;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 996;
   background-color: rgba(255, 255, 255, 0.849);
 }
 .arco-spin {

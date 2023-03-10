@@ -28,7 +28,7 @@ const emit = defineEmits<{
 
 watch(licensePlate, (val: string) => {
   emit('update:licensePlate', val)
-  emit('update:plateValidator', isValidator)
+  setTimeout(() => emit('update:plateValidator', isValidator.value), 800)
 })
 
 const inputItems = ref()

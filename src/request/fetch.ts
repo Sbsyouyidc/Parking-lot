@@ -1,6 +1,6 @@
 import { Message } from '@arco-design/web-vue'
-import { useCounterStore } from '@/stores/loading'
-const loading = useCounterStore()
+import { useLoadingStore } from '@/stores/loading'
+const loading = useLoadingStore()
 
 interface IParams {
   [Key: string]: string
