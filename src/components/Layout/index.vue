@@ -4,7 +4,7 @@ import { ref, watch, computed } from 'vue'
 import { RouterView, useRoute, useRouter } from 'vue-router'
 import headerMenu from './header/header-menu.vue'
 import siderMenu from './sider/sider-menu.vue'
-
+import sd from '@/views/cardEnter/index.vue'
 const router = useRouter()
 const route = useRoute()
 const isCollapsed = ref(false)
@@ -14,8 +14,6 @@ const activeKey = ref('')
 watch(
   () => route.name,
   (val) => {
-    console.log(route)
-
     const {
       meta: { title }
     } = route
@@ -61,13 +59,11 @@ const handleDelete = (key: string) => {
           @tab-click="(	
 key: string) => router.push({ name: key })"
         >
-          <KeepAlive>
-            <a-tab-pane v-for="(item, index) in data" :key="item.key" :title="item.title"
-              >{{ item }}
-              <!-- <RouterView :name="item.key"></RouterView> -->
-              <!-- <component :is="ds" /> -->
-            </a-tab-pane>
-          </KeepAlive>
+          <a-tab-pane v-for="(item, index) in data" :key="item.key" :title="item.title">
+            <RouterView v-slot="{ Component, route }">
+              <keep-alive> <component :is="route.name == item.key && Component" /> </keep-alive
+            ></RouterView>
+          </a-tab-pane>
         </a-tabs>
       </a-layout-content>
       <a-layout-footer></a-layout-footer>

@@ -77,12 +77,12 @@ export default {
     const { licensePlate } = req.body
     console.log(licensePlate)
     const boolean = await isExistence(licensePlate)
-    console.log(boolean)
     ;(boolean &&
       res.send({
         code: 200,
         message: '登陆成功',
-        res: true
+        res: true,
+        licensePlate
       })) ||
       res.send({
         code: 200,
@@ -97,5 +97,22 @@ export default {
       if (err) throw new Error(err)
       res.send(results)
     })
+  },
+
+  choosePlate: (req: any, res: any) => {
+    console.log(req.body, req.params)
+    const { plate } = req.body
+    const { id } = req.params
+    connection.query(
+      `UPDATE parkingspace SET ParkingPlate = '${plate}' WHERE id = '${id}'`,
+      (err: any, results: IData) => {
+        if (err) throw new Error(err)
+        res.send({
+          code: 200,
+          message: '入场成功',
+          res: true
+        })
+      }
+    )
   }
 }

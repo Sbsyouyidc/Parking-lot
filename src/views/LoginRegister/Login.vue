@@ -13,10 +13,18 @@ const login = () => {
   const params = {
     licensePlate: licensePlate.value
   }
-  fetch.post('/api/login', params).then((result: { res: any; message: any }) => {
-    const { res, message } = result
-    ;(res && Message.success(message) && router.push('/Home')) || Message.info(message)
-  })
+  fetch
+    .post('/api/login', params)
+    .then((result: { res: string; message: string; licensePlate: string }) => {
+      const { res, message, licensePlate } = result
+      if (res) {
+        localStorage.setItem('plate', licensePlate)
+        Message.success(message)
+        router.push('/Home')
+      } else {
+        Message.info(message)
+      }
+    })
 }
 </script>
 

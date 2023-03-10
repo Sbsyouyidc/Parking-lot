@@ -11,16 +11,10 @@ const router = createRouter({
       component: () => import('@/components/Layout/index.vue'),
       children: [
         {
-          path: '/cardEntry',
-          name: 'cardEntry',
+          path: '/cardAccess',
+          name: 'cardAccess',
           meta: { title: '车辆入场' },
-          components: { cardEntry: () => import('@/views/cardEnter/index.vue') }
-        },
-        {
-          path: '/cardLeave',
-          name: 'cardLeave',
-          meta: { title: '车辆离场' },
-          components: { cardLeave: () => import('@/views/cardLeave/index.vue') }
+          component: () => import('@/views/cardEnter/index.vue')
         }
       ]
     },

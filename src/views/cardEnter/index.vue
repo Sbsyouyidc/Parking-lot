@@ -6,19 +6,15 @@ import { useParkInfoStore } from '@/stores/parkInfo'
 import { onMounted } from 'vue'
 
 const store = useParkInfoStore()
-const parkSpaces = ref([])
+
 onMounted(async () => {
   await store.initStore()
-  parkSpaces.value = store.state
-})
-onActivated(() => {
-  console.log('sd')
 })
 </script>
 
 <template>
-  <div v-for="(item, index) in parkSpaces" :key="index">
-    <parkSpace />
+  <div v-for="(item, index) in store.state" :key="index">
+    <parkSpace :number="item.number" :id="item.id" :plate="item.ParkingPlate" />
   </div>
 </template>
 <style lang="less" scoped></style>

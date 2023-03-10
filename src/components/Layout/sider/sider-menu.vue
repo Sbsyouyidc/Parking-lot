@@ -20,7 +20,6 @@ const click = (key: string) => {
     <a-menu
       :style="{ width: '200px', height: '100%' }"
       :default-open-keys="['0']"
-      :default-selected-keys="['0_2']"
       show-collapse-button
       breakpoint="md"
       auto-switch
@@ -30,8 +29,7 @@ const click = (key: string) => {
       <a-sub-menu key="0">
         <template #icon><icon-apps></icon-apps></template>
         <template #title>车场管理</template>
-        <a-menu-item key="cardEntry">车辆入场</a-menu-item>
-        <a-menu-item key="cardLeave">车辆离场</a-menu-item>
+        <a-menu-item key="cardAccess">车辆出入</a-menu-item>
       </a-sub-menu>
       <a-sub-menu key="1">
         <template #icon><icon-apps></icon-apps></template>

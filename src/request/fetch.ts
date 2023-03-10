@@ -55,15 +55,14 @@ export default {
     }
     return Fetch(path, requestOptions)
   },
-  put: (path: string, params: IParams) => {
+  put: (path: string, params: IParams | null = null) => {
     const requestOptions = {
       headers,
       method: 'PUT',
-      body: initFetch(params),
       mode: 'cors' as RequestMode,
       redirect: 'manual' as RequestRedirect
     }
-
+    params && Object.assign(requestOptions, { body: initFetch(params) })
     return Fetch(path, requestOptions)
   },
   delete: (path: string) => {
