@@ -16,9 +16,11 @@ export type IParkSpaces =
 
 export const useParkInfoStore = defineStore('parkInfo', () => {
   const state = ref<IParkSpaces>([])
-  const plate = computed(() => localStorage.getItem('plate'))
+  const plate = ref()
   const spaceNumber = ref()
   const initStore = () => {
+    spaceNumber.value = localStorage.getItem('number')
+    plate.value = localStorage.getItem('plate')
     return fetch.get('/api/parkingSpace').then((res) => {
       state.value = res
     })

@@ -2,14 +2,13 @@
 <script setup lang="ts">
 import { ref, reactive } from 'vue'
 import fetch from '@/request/fetch'
-import { Message, Notification } from '@arco-design/web-vue'
+import { Notification } from '@arco-design/web-vue'
 import { useParkInfoStore } from '@/stores/parkInfo'
 type Props = { number: string | number; id: string; plate: string }
 
 const props = withDefaults(defineProps<Props>(), {})
 const store = useParkInfoStore()
 const visible = ref(false)
-const simple = ref(true)
 
 const handleClick = () => {
   if (props.plate) {
@@ -26,6 +25,7 @@ const handleOk = () => {
     .then((result: { res: any; message: any }) => {
       const { res, message } = result
       if (res) {
+        localStorage.setItem('number', props.number as string)
         store.spaceNumber = props.number
         Notification.success(message)
       } else {
@@ -42,24 +42,12 @@ const handleCancel = () => {
 </script>
 
 <template>
-  <div :class="[props.plate ? 'stopped' : 'not-stopped']" class="park" @click="handleClick">
-    <span v-if="props.plate" class="plate">{{ props.plate }}</span>
-    <span class="number" v-else>{{ number }}</span>
-
-    <a-modal
-      v-model:visible="visible"
-      @ok="handleOk"
-      @cancel="handleCancel"
-      :simple="simple"
-      body-class="body-class"
-    >
-      <template #title></template>
-      <span>
-        是否选择<span>{{ number }}</span
-        >车位
-      </span>
-    </a-modal>
-  </div>
+  <a-popconfirm content="是否选择此车位" @ok="handleOk" @cancel="handleCancel" :disabled="!visible">
+    <div :class="[props.plate ? 'stopped' : 'not-stopped']" class="park" @click="handleClick">
+      <span v-if="props.plate" class="plate">{{ props.plate }}</span>
+      <span class="number">{{ number }}</span>
+    </div></a-popconfirm
+  >
 </template>
 <style lang="less" scoped>
 .park {
@@ -68,18 +56,20 @@ const handleCancel = () => {
   height: 200px;
   cursor: pointer;
   position: relative;
-  & > span {
+  & > .number {
+    position: absolute;
+    font-weight: bold;
+    right: 0;
+    top: 0;
+    font-size: 15px;
+  }
+
+  & > .plate {
     transform: translate(-50%, -50%);
     position: absolute;
     font-weight: bold;
     left: 50%;
     top: 50%;
-  }
-  & > .number {
-    font-size: 20px;
-  }
-
-  & > .plate {
     font-size: 15px;
     white-space: nowrap;
   }

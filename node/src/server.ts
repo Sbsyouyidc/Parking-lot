@@ -3,9 +3,11 @@ import fs from 'fs'
 import path from 'path'
 import request from 'request'
 import dayjs from 'dayjs'
-// dependent on utc plugin
+import duration from 'dayjs/plugin/duration'
+import { getFileContentAsBase64, isExistence, Duration } from './utils'
 
-import { getFileContentAsBase64, isExistence } from './utils'
+dayjs.extend(duration)
+
 interface IData {
   [key: string]: string
 }
@@ -124,6 +126,7 @@ export default {
         }
       )
   },
+
   VehicleDeparture: async (req: any, res: any) => {
     const { number, plate } = req.params
     const boolean = await new Promise<boolean>((resolve, reject) => {
@@ -140,22 +143,16 @@ export default {
         `SELECT * FROM parkingspace where number = '${number}'`,
         (err: any, results: IData[]) => {
           if (err) throw new Error(err)
-          console.log(results[0])
-          const { number, StartParkingTime, EndtParkingTime } = results[0]
-          const end = dayjs(EndtParkingTime).format('YYYY-MM-DD HH:mm:ss')
+          const { number, StartParkingTime, EndParkingTime } = results[0]
+          const end = dayjs(EndParkingTime).format('YYYY-MM-DD HH:mm:ss')
           const start = dayjs(StartParkingTime).format('YYYY-MM-DD HH:mm:ss')
+
+          const duration = Duration(dayjs(EndParkingTime).diff(dayjs(StartParkingTime)))
           connection.query(
-            `INSERT INTO priceorder (LicensePlate, number, Price, StartParkingTime, EndParkingTime) VALUES ('${plate}', '${number}', '22', '${start}', '${end}')`,
+            `INSERT INTO priceorder (LicensePlate, number, Price, StartParkingTime, EndParkingTime,conditionTime) VALUES ('${plate}', '${number}', '22', '${start}', '${end}','${end}')`,
             (err: any, results: any) => {
               if (err) throw new Error(err)
-              console.log(results.insertId)
-              connection.query(
-                `SELECT * FROM priceorder where id = '${results.insertId}'`,
-                (err: any, results: IData[]) => {
-                  if (err) throw new Error(err)
-                  res.send(Object.assign(results[0], { res: true }))
-                }
-              )
+              res.send({ res: true, message: '离场成功', duration, end, start, number })
             }
           )
         }
