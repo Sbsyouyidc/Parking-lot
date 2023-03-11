@@ -9,7 +9,6 @@ import { getFileContentAsBase64, isExistence } from './utils'
 interface IData {
   [key: string]: string
 }
-;[]
 
 export default {
   recognition: async (req: any, res: any) => {
@@ -125,7 +124,42 @@ export default {
         }
       )
   },
-  VehicleDeparture: (req: any, res: any) => {
-    console.log(req.params)
+  VehicleDeparture: async (req: any, res: any) => {
+    const { number, plate } = req.params
+    const boolean = await new Promise<boolean>((resolve, reject) => {
+      connection.query(
+        `UPDATE parkingspace SET ParkingPlate = '' WHERE number = '${number}'`,
+        (err: any, results: IData) => {
+          if (err) reject(err)
+          resolve(true)
+        }
+      )
+    })
+    if (boolean) {
+      connection.query(
+        `SELECT * FROM parkingspace where number = '${number}'`,
+        (err: any, results: IData[]) => {
+          if (err) throw new Error(err)
+          console.log(results[0])
+          const { number, StartParkingTime, EndtParkingTime } = results[0]
+          const end = dayjs(EndtParkingTime).format('YYYY-MM-DD HH:mm:ss')
+          const start = dayjs(StartParkingTime).format('YYYY-MM-DD HH:mm:ss')
+          connection.query(
+            `INSERT INTO priceorder (LicensePlate, number, Price, StartParkingTime, EndParkingTime) VALUES ('${plate}', '${number}', '22', '${start}', '${end}')`,
+            (err: any, results: any) => {
+              if (err) throw new Error(err)
+              console.log(results.insertId)
+              connection.query(
+                `SELECT * FROM priceorder where id = '${results.insertId}'`,
+                (err: any, results: IData[]) => {
+                  if (err) throw new Error(err)
+                  res.send(Object.assign(results[0], { res: true }))
+                }
+              )
+            }
+          )
+        }
+      )
+    }
   }
 }

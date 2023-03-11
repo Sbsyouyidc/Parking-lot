@@ -5,10 +5,11 @@ import { useRouter } from 'vue-router'
 import { Message } from '@arco-design/web-vue'
 import plateForm from '@/components/Module/plateForm.vue'
 import fetch from '@/request/fetch'
-
+import { useParkInfoStore } from '@/stores/parkInfo'
 const router = useRouter()
 const licensePlate = ref('')
 const plateValidator = ref(false)
+const store = useParkInfoStore()
 const login = () => {
   const params = {
     licensePlate: licensePlate.value
@@ -18,9 +19,10 @@ const login = () => {
     .then((result: { res: string; message: string; licensePlate: string }) => {
       const { res, message, licensePlate } = result
       if (res) {
+        router.push('/Home')
+        store.plate = licensePlate
         localStorage.setItem('plate', licensePlate)
         Message.success(message)
-        router.push('/Home')
       } else {
         Message.info(message)
       }

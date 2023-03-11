@@ -21,11 +21,12 @@ const handleClick = () => {
 const handleOk = () => {
   fetch
     .put(`/api/parkingSpace/VehicleSelection/${props.id}`, {
-      plate: localStorage.getItem('plate') as string
+      plate: store.plate as string
     })
     .then((result: { res: any; message: any }) => {
       const { res, message } = result
       if (res) {
+        store.spaceNumber = props.number
         Notification.success(message)
       } else {
         Notification.warning(message)
