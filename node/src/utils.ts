@@ -1,5 +1,6 @@
 import service from 'mysql2'
 import fs from 'fs'
+import { type } from 'os'
 export const connection = service.createConnection({
   host: 'localhost',
   user: 'root',
@@ -7,9 +8,9 @@ export const connection = service.createConnection({
   database: 'parkinglot'
 })
 
-type IData = {
+interface IData {
   [key: string]: string
-}[]
+}
 
 export const getFileContentAsBase64 = (path: string) => {
   try {
@@ -19,11 +20,11 @@ export const getFileContentAsBase64 = (path: string) => {
   }
 }
 
-export const isExistence = (id: string) => {
+export const isExistence = (Table: string, Condition: string, id: string) => {
   return new Promise<boolean>((resolve, reject) => {
     connection.execute(
-      `SELECT * FROM card where licensePlate = '${id}'`,
-      (err: any, results: IData) => {
+      `SELECT * FROM ${Table} where ${Condition} = '${id}'`,
+      (err: any, results: IData[]) => {
         if (err) {
           reject(err)
         } else {

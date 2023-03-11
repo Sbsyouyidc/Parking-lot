@@ -130,9 +130,5 @@ key: string) => router.push({ name: key })"
     margin-top: 70px;
     padding: 0px 15px 0px 15px;
   }
-  & :deep(.arco-tabs-pane) {
-    flex-wrap: wrap;
-    display: flex;
-  }
 }
 </style>

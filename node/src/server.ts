@@ -3,6 +3,7 @@ import fs from 'fs'
 import path from 'path'
 import request from 'request'
 import dayjs from 'dayjs'
+// dependent on utc plugin
 
 import { getFileContentAsBase64, isExistence } from './utils'
 interface IData {
@@ -29,7 +30,7 @@ export default {
       if (error) throw new Error(error)
       const { number } = JSON.parse(response.body).words_result
       if (number == licensePlate) {
-        const boolean = await isExistence(licensePlate)
+        const boolean = await isExistence('card', 'licensePlate', licensePlate)
         ;(boolean &&
           res.send({
             code: 200,
@@ -76,7 +77,7 @@ export default {
   login: async (req: any, res: any) => {
     const { licensePlate } = req.body
     console.log(licensePlate)
-    const boolean = await isExistence(licensePlate)
+    const boolean = await isExistence('card', 'licensePlate', licensePlate)
     ;(boolean &&
       res.send({
         code: 200,
@@ -99,20 +100,32 @@ export default {
     })
   },
 
-  choosePlate: (req: any, res: any) => {
-    console.log(req.body, req.params)
+  VehicleSelection: async (req: any, res: any) => {
+    const time = dayjs().format('YYYY-MM-DD HH:mm:ss')
+
     const { plate } = req.body
     const { id } = req.params
-    connection.query(
-      `UPDATE parkingspace SET ParkingPlate = '${plate}' WHERE id = '${id}'`,
-      (err: any, results: IData) => {
-        if (err) throw new Error(err)
-        res.send({
-          code: 200,
-          message: '入场成功',
-          res: true
-        })
-      }
-    )
+    const boolean = await isExistence('parkingspace', 'parkingPlate', plate)
+    console.log(boolean)
+    ;(boolean &&
+      res.send({
+        code: 200,
+        message: '车辆已停放',
+        res: false
+      })) ||
+      connection.query(
+        `UPDATE parkingspace SET ParkingPlate = '${plate}' , StartParkingTime = '${time}' WHERE id = '${id}'`,
+        (err: any, results: IData) => {
+          if (err) throw new Error(err)
+          res.send({
+            code: 200,
+            message: '入场成功',
+            res: true
+          })
+        }
+      )
+  },
+  VehicleDeparture: (req: any, res: any) => {
+    console.log(req.params)
   }
 }

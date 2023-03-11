@@ -12,20 +12,25 @@ const visible = ref(false)
 const simple = ref(true)
 
 const handleClick = () => {
-  if (props.plate) return
-  visible.value = true
+  if (props.plate) {
+    return
+  } else {
+    visible.value = true
+  }
 }
 const handleOk = () => {
   fetch
-    .put(`/api/parkingSpace/Choose/${props.id}`, {
+    .put(`/api/parkingSpace/VehicleSelection/${props.id}`, {
       plate: localStorage.getItem('plate') as string
     })
     .then((result: { res: any; message: any }) => {
       const { res, message } = result
       if (res) {
-        Notification.info(message)
-        store.initStore()
+        Notification.success(message)
+      } else {
+        Notification.warning(message)
       }
+      store.initStore()
     })
 
   visible.value = false
@@ -37,7 +42,9 @@ const handleCancel = () => {
 
 <template>
   <div :class="[props.plate ? 'stopped' : 'not-stopped']" class="park" @click="handleClick">
-    <span class="number">{{ number }}</span>
+    <span v-if="props.plate" class="plate">{{ props.plate }}</span>
+    <span class="number" v-else>{{ number }}</span>
+
     <a-modal
       v-model:visible="visible"
       @ok="handleOk"
@@ -60,13 +67,20 @@ const handleCancel = () => {
   height: 200px;
   cursor: pointer;
   position: relative;
-  & > .number {
+  & > span {
+    transform: translate(-50%, -50%);
     position: absolute;
+    font-weight: bold;
     left: 50%;
     top: 50%;
+  }
+  & > .number {
     font-size: 20px;
-    transform: translate(-50%, -50%);
-    font-weight: bold;
+  }
+
+  & > .plate {
+    font-size: 15px;
+    white-space: nowrap;
   }
 }
 .not-stopped {
@@ -79,7 +93,7 @@ const handleCancel = () => {
 }
 
 .body-class {
-  & > span {
+  & > .number {
     font-size: medium;
     font-weight: 400;
   }

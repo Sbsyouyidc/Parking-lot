@@ -10,5 +10,6 @@ router.post('/recognition', server.recognition)
 router.post('/upload', upload.single('file'), server.upload)
 router.post('/login', server.login)
 router.get('/parkingSpace', server.parkingSpace)
-router.put('/parkingSpace/Choose/:id', server.choosePlate)
+router.put('/parkingSpace/VehicleSelection/:id', server.VehicleSelection)
+router.put('/parkingSpace/VehicleDeparture/:plate', server.VehicleDeparture)
 export default router

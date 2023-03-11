@@ -13,8 +13,17 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div v-for="(item, index) in store.state" :key="index">
-    <parkSpace :number="item.number" :id="item.id" :plate="item.ParkingPlate" />
+  <a-button type="primary">车辆离场</a-button>
+  <div class="cart-item">
+    <div v-for="(item, index) in store.state" :key="index">
+      <parkSpace :number="item.number" :id="item.id" :plate="item.ParkingPlate" />
+    </div>
   </div>
 </template>
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+.cart-item {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+</style>

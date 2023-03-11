@@ -13,8 +13,8 @@ const router = createRouter({
         {
           path: '/cardAccess',
           name: 'cardAccess',
-          meta: { title: '车辆入场' },
-          component: () => import('@/views/cardEnter/index.vue')
+          meta: { title: '车辆出入' },
+          component: () => import('@/views/cardAccess/index.vue')
         }
       ]
     },
