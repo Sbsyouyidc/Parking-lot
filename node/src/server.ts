@@ -127,8 +127,24 @@ export default {
       )
   },
 
+  VehicleDuration: async (req: any, res: any) => {
+    const { number } = req.query
+    connection.query(
+      `SELECT * FROM parkingspace where number = '${number}'`,
+      (err: any, results: IData[]) => {
+        if (err) throw new Error(err)
+        const { StartParkingTime } = results[0]
+        const end = dayjs().format('YYYY-MM-DD HH:mm:ss')
+        const start = dayjs(StartParkingTime).format('YYYY-MM-DD HH:mm:ss')
+        const duration = Duration(dayjs(end).diff(dayjs(start)))
+        res.send({ res: true, duration, end, start, number })
+      }
+    )
+  },
+
   VehicleDeparture: async (req: any, res: any) => {
     const { number, plate } = req.params
+    //将停车场的车牌变为null
     const boolean = await new Promise<boolean>((resolve, reject) => {
       connection.query(
         `UPDATE parkingspace SET ParkingPlate = '' WHERE number = '${number}'`,
@@ -139,6 +155,7 @@ export default {
       )
     })
     if (boolean) {
+      //清零将开始时间和结束时间取出
       connection.query(
         `SELECT * FROM parkingspace where number = '${number}'`,
         (err: any, results: IData[]) => {
@@ -146,8 +163,8 @@ export default {
           const { number, StartParkingTime, EndParkingTime } = results[0]
           const end = dayjs(EndParkingTime).format('YYYY-MM-DD HH:mm:ss')
           const start = dayjs(StartParkingTime).format('YYYY-MM-DD HH:mm:ss')
-
           const duration = Duration(dayjs(EndParkingTime).diff(dayjs(StartParkingTime)))
+          //将信息存入订单表
           connection.query(
             `INSERT INTO priceorder (LicensePlate, number, Price, StartParkingTime, EndParkingTime,conditionTime) VALUES ('${plate}', '${number}', '22', '${start}', '${end}','${end}')`,
             (err: any, results: any) => {

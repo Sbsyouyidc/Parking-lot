@@ -15,11 +15,7 @@ export const connection = service.createConnection({
 interface IData {
   [key: string]: string
 }
-interface ID {
-  $d: { [key: string]: string }
-  $l: string
-  $ms: string
-}
+
 export const getFileContentAsBase64 = (path: string) => {
   try {
     return fs.readFileSync(path, { encoding: 'base64' })
@@ -46,17 +42,24 @@ export const isExistence = (Table: string, Condition: string, id: string) => {
 export const Duration = (duration: number) => {
   const time = dayjs.duration(duration)
   if (time.asDays() >= 1) {
-    return Math.floor(time.asHours()) + '天'
+    return (
+      time.asHours() +
+      '天' +
+      time.hours() +
+      '小时' +
+      time.minutes() +
+      '分钟' +
+      time.seconds() +
+      '秒'
+    )
   }
   if (time.asHours() >= 1) {
-    return Math.floor(time.asHours()) + '小时'
+    return time.hours() + '小时' + time.minutes() + '分钟' + time.seconds() + '秒'
   }
   if (time.asMinutes() >= 1) {
-    return Math.floor(time.asMinutes()) + '分钟'
+    return time.minutes() + '分钟' + time.seconds() + '秒'
   }
   if (time.asSeconds() >= 1) {
-    return Math.floor(time.asSeconds()) + '秒'
-  } else {
-    return Math.floor(time.milliseconds()) + '毫秒'
+    return time.seconds() + '秒'
   }
 }

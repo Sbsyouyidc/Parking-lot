@@ -8,15 +8,7 @@ type Props = { number: string | number; id: string; plate: string }
 
 const props = withDefaults(defineProps<Props>(), {})
 const store = useParkInfoStore()
-const visible = ref(false)
 
-const handleClick = () => {
-  if (props.plate) {
-    return
-  } else {
-    visible.value = true
-  }
-}
 const handleOk = () => {
   fetch
     .put(`/api/parkingSpace/VehicleSelection/${props.id}`, {
@@ -25,25 +17,19 @@ const handleOk = () => {
     .then((result: { res: any; message: any }) => {
       const { res, message } = result
       if (res) {
-        localStorage.setItem('number', props.number as string)
-        store.spaceNumber = props.number
+        localStorage.setItem('spaceNumber', props.number as string)
         Notification.success(message)
       } else {
         Notification.warning(message)
       }
       store.initStore()
     })
-
-  visible.value = false
-}
-const handleCancel = () => {
-  visible.value = false
 }
 </script>
 
 <template>
-  <a-popconfirm content="是否选择此车位" @ok="handleOk" @cancel="handleCancel" :disabled="!visible">
-    <div :class="[props.plate ? 'stopped' : 'not-stopped']" class="park" @click="handleClick">
+  <a-popconfirm content="是否选择此车位" @ok="handleOk" :disabled="props.plate !== ''">
+    <div :class="[props.plate ? 'stopped' : 'not-stopped']" class="park">
       <span v-if="props.plate" class="plate">{{ props.plate }}</span>
       <span class="number">{{ number }}</span>
     </div></a-popconfirm

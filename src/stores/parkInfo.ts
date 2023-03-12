@@ -1,6 +1,8 @@
 import { ref, computed, reactive } from 'vue'
 import { defineStore } from 'pinia'
+import dayjs from 'dayjs'
 import fetch from '@/request/fetch'
+import { Duration } from '@/util/index'
 
 export type IParkSpaces =
   | {
@@ -18,12 +20,38 @@ export const useParkInfoStore = defineStore('parkInfo', () => {
   const state = ref<IParkSpaces>([])
   const plate = ref()
   const spaceNumber = ref()
-  const initStore = () => {
-    spaceNumber.value = localStorage.getItem('number')
+  const parkingData = ref({
+    number: '',
+    start: '',
+    end: '',
+    Price: '',
+    duration: ''
+  })
+
+  function initStore(): Promise<void> {
+    spaceNumber.value = localStorage.getItem('spaceNumber')
     plate.value = localStorage.getItem('plate')
     return fetch.get('/api/parkingSpace').then((res) => {
       state.value = res
     })
   }
-  return { initStore, state, spaceNumber, plate }
+
+  function VehicleDeparture(): Promise<void> {
+    if (parkingData.value.start) {
+      parkingData.value.end = dayjs().format('YYYY-MM-DD HH:mm:ss')
+      parkingData.value.duration = Duration(dayjs().diff(dayjs(parkingData.value.start)))
+      return Promise.resolve()
+    } else {
+      return fetch
+        .get(`/api/parkingSpace/VehicleDuration?number=${spaceNumber.value}`)
+        .then((result: any) => {
+          const { res } = result
+          if (res) {
+            parkingData.value = result
+          }
+        })
+    }
+  }
+
+  return { initStore, VehicleDeparture, state, spaceNumber, plate, parkingData }
 })

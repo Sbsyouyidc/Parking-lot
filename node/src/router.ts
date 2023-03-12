@@ -12,4 +12,5 @@ router.post('/login', server.login)
 router.get('/parkingSpace', server.parkingSpace)
 router.put('/parkingSpace/VehicleSelection/:id', server.VehicleSelection)
 router.put('/parkingSpace/VehicleDeparture/:number/:plate', server.VehicleDeparture)
+router.get('/parkingSpace/VehicleDuration', server.VehicleDuration)
 export default router

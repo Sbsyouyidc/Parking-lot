@@ -20,7 +20,6 @@ const login = () => {
       const { res, message, licensePlate } = result
       if (res) {
         router.push('/Home')
-        store.plate = licensePlate
         localStorage.setItem('plate', licensePlate)
         Message.success(message)
       } else {
