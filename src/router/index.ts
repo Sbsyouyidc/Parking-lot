@@ -21,6 +21,12 @@ const router = createRouter({
           name: 'orderRecord',
           meta: { title: '订单记录' },
           component: () => import('@/views/orderRecord/index.vue')
+        },
+        {
+          path: '/chargeStandard',
+          name: 'chargeStandard',
+          meta: { title: '收费标准' },
+          component: () => import('@/views/chargeStandard/index.vue')
         }
       ]
     },

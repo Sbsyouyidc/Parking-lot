@@ -85,7 +85,7 @@ const option = ref('')
 <template>
   <a-space size="large">
     <a-input-group>
-      <a-cascader
+      <a-select
         allow-clear
         :options="options"
         :style="{ width: '120px' }"
