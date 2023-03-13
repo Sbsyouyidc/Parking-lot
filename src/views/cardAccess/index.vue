@@ -3,10 +3,10 @@
 import { ref, reactive, computed } from 'vue'
 import parkSpace from '@/views/cardAccess/parkSpace.vue'
 import { useParkInfoStore } from '@/stores/parkInfo'
-import { onMounted } from 'vue'
+import { onActivated } from 'vue'
 import fetch from '@/request/fetch'
 
-onMounted(async () => {
+onActivated(async () => {
   await store.initStore()
 })
 
@@ -37,6 +37,7 @@ const VehicleDeparture = () => {
       if (res) {
         localStorage.setItem('spaceNumber', '')
         ChargeData.value = result
+        store.parkingData = { number: '', start: '', end: '', Price: '', duration: '' }
       }
     })
 }

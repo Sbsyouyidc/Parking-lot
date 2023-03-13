@@ -66,7 +66,6 @@ key: string) => router.push({ name: key })"
           </a-tab-pane>
         </a-tabs>
       </a-layout-content>
-      <a-layout-footer></a-layout-footer>
     </a-layout>
   </div>
 </template>
@@ -128,7 +127,7 @@ key: string) => router.push({ name: key })"
   }
   & :deep(.arco-tabs-content) {
     margin-top: 70px;
-    padding: 0px 15px 0px 15px;
+    padding: 0px 25px 0px 25px;
   }
 }
 </style>

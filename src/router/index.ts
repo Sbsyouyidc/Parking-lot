@@ -15,6 +15,12 @@ const router = createRouter({
           name: 'cardAccess',
           meta: { title: '车辆出入' },
           component: () => import('@/views/cardAccess/index.vue')
+        },
+        {
+          path: '/orderRecord',
+          name: 'orderRecord',
+          meta: { title: '订单记录' },
+          component: () => import('@/views/orderRecord/index.vue')
         }
       ]
     },

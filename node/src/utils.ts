@@ -12,7 +12,7 @@ export const connection = service.createConnection({
   database: 'parkinglot'
 })
 
-interface IData {
+export interface IData {
   [key: string]: string
 }
 

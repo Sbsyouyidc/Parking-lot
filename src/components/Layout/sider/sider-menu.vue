@@ -34,9 +34,9 @@ const click = (key: string) => {
       <a-sub-menu key="1">
         <template #icon><icon-apps></icon-apps></template>
         <template #title>信息查询管理</template>
+        <a-menu-item key="orderRecord">订单记录</a-menu-item>
         <a-menu-item key="1_0">车位查询</a-menu-item>
         <a-menu-item key="1_1">收费明细</a-menu-item>
-        <a-menu-item key="1_2">订单记录</a-menu-item>
       </a-sub-menu>
       <a-sub-menu key="2">
         <template #icon><icon-apps></icon-apps></template>

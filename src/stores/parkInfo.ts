@@ -39,7 +39,7 @@ export const useParkInfoStore = defineStore('parkInfo', () => {
   function VehicleDeparture(): Promise<void> {
     if (parkingData.value.start) {
       parkingData.value.end = dayjs().format('YYYY-MM-DD HH:mm:ss')
-      parkingData.value.duration = Duration(dayjs().diff(dayjs(parkingData.value.start)))
+      parkingData.value.duration = Duration(dayjs().diff(dayjs(parkingData.value.start))) as string
       return Promise.resolve()
     } else {
       return fetch

@@ -4,13 +4,9 @@ import path from 'path'
 import request from 'request'
 import dayjs from 'dayjs'
 import duration from 'dayjs/plugin/duration'
-import { getFileContentAsBase64, isExistence, Duration } from './utils'
+import { getFileContentAsBase64, isExistence, Duration, IData } from './utils'
 
 dayjs.extend(duration)
-
-interface IData {
-  [key: string]: string
-}
 
 export default {
   recognition: async (req: any, res: any) => {
