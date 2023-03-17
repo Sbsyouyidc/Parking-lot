@@ -92,7 +92,7 @@ const ad = ref()
 
 <template>
   <a-form :model="form" layout="vertical" size="medium" class="plate-form" :rules="rules" ref="ad">
-    <a-form-item field="plate" label="车牌号">
+    <a-form-item field="plate" label="车牌号" >
       <a-space size="small">
         <a-input max-length="1" v-model="form.plate.num1" />
         <a-input max-length="1" v-model="form.plate.num2" />

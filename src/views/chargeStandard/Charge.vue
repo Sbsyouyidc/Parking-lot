@@ -2,8 +2,8 @@
 <script setup lang="ts">
 import { ref, reactive, computed, toRefs, watch } from 'vue'
 import ChargeItem from './ChargeItem.vue'
-import { IconPlus, IconMinus } from '@arco-design/web-vue/es/icon'
-
+import { IconPlus, IconDelete } from '@arco-design/web-vue/es/icon'
+import fetch from '@/request/fetch'
 type IValue = {
   [key: string]: any
 }
@@ -14,33 +14,34 @@ const props = withDefaults(
   {}
 )
 const { data } = toRefs(props)
-const emit = defineEmits<{ (e: 'update:data', Object: any): void }>()
+const emit = defineEmits<{
+  (e: 'on-addItem', item: IValue, type: string): void
+  (e: 'on-allDelete', type: string): void
+}>()
 
-const onDelete = (id: any, type: string) => {
-  data.value[type].group = data.value[type].group.filter((item: any) => item.id !== id)
+const addItems = (type: string) => {
+  const id = data.value[type].group.length + 1
+  const item = { id, type, StartClock: '', EndClock: '', HourlyCharge: '' }
+  emit('on-addItem', item, type)
 }
-
-watch(data, (val) => {
-  console.log(val)
-  emit('update:data', val)
-})
 </script>
 
 <template>
-  <div>{{ data }}</div>
-  <div class="Charge" style="width: 900px">
-    <a-collapse v-for="(type, index) in Object.keys(data)" :key="index">
+  <div class="Charge" v-for="(type, index) in Object.keys(data)" :key="index">
+    <a-collapse>
       <!-- <a-input type="text" placeholder="Please enter something" /> -->
       <a-collapse-item :header="type" key="1">
         <div v-for="(childItem, indexc) in data[type].group" :key="indexc">
-          <ChargeItem :id="childItem.id" :type="type" @on-delete="onDelete" />
+          <ChargeItem :type="type" :item="childItem" v-bind="$attrs" />
         </div>
         <a-button-group>
-          <a-button @click="data[type].group.push({ id: '1', num: 1 })"><IconPlus /></a-button>
-          <a-button @click="data[type].group.pop()"><IconMinus /></a-button>
+          <a-button @click="addItems(type)"><IconPlus /></a-button>
         </a-button-group>
       </a-collapse-item>
     </a-collapse>
+    <a-button @click="() => emit('on-allDelete', type)">
+      <icon-delete />
+    </a-button>
   </div>
 </template>
 <style lang="less" scoped>
@@ -57,6 +58,15 @@ watch(data, (val) => {
     background-color: #ffffff;
     position: absolute;
     z-index: 10000;
+  }
+}
+.Charge {
+  max-width: 950px;
+  margin-right: 20px;
+  & > .arco-btn {
+    position: absolute;
+    right: -35px;
+    top: 10px;
   }
 }
 .arco-btn-group {

@@ -18,6 +18,8 @@ router.get('/parkingSpace/VehicleDuration', server.VehicleDuration)
 //订单
 router.get('/getOrderRecord', orderRecord.getOrderRecord)
 router.get('/getSearchOrder', orderRecord.getSearchOrder)
-router.get('/getAddOrder', orderRecord.getAddOrder)
+router.post('/postSaveOrder', orderRecord.postSaveOrder)
 router.get('/getAllOrder', orderRecord.getAllOrder)
+router.post('/postNewType', orderRecord.postNewType)
+router.delete('/deleType/:type', orderRecord.deleType)
 export default router

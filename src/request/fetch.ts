@@ -65,14 +65,14 @@ export default {
     params && Object.assign(requestOptions, { body: initFetch(params) })
     return Fetch(path, requestOptions)
   },
-  delete: (path: string) => {
+  delete: (path: string, params: IParams | null = null) => {
     const requestOptions = {
       headers,
       method: 'DELETE',
       mode: 'cors' as RequestMode,
       redirect: 'manual' as RequestRedirect
     }
-
+    params && Object.assign(requestOptions, { body: initFetch(params) })
     return Fetch(path, requestOptions)
   }
 }
