@@ -27,6 +27,12 @@ const router = createRouter({
           name: 'chargeStandard',
           meta: { title: '收费标准' },
           component: () => import('@/views/chargeStandard/index.vue')
+        },
+        {
+          path: '/ParkingManagement',
+          name: 'ParkingManagement',
+          meta: { title: '车位管理' },
+          component: () => import('@/views/ParkingManagement/index.vue')
         }
       ]
     },

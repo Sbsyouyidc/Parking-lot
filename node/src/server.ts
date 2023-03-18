@@ -129,11 +129,11 @@ export default {
       `SELECT * FROM parkingspace where number = '${number}'`,
       (err: any, results: IData[]) => {
         if (err) throw new Error(err)
-        const { StartParkingTime } = results[0]
+        const { StartParkingTime, type } = results[0]
         const end = dayjs().format('YYYY-MM-DD HH:mm:ss')
         const start = dayjs(StartParkingTime).format('YYYY-MM-DD HH:mm:ss')
         const duration = Duration(dayjs(end).diff(dayjs(start)))
-        res.send({ res: true, duration, end, start, number })
+        res.send({ res: true, duration, end, start, number, type })
       }
     )
   },

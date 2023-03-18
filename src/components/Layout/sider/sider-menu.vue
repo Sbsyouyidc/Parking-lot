@@ -49,7 +49,7 @@ const click = (key: string) => {
         <template #title>系统管理</template>
         <a-menu-item key="3_0">黑名单管理</a-menu-item>
         <a-menu-item key="chargeStandard">收费标准管理</a-menu-item>
-        <a-menu-item key="3_2">车位管理</a-menu-item>
+        <a-menu-item key="ParkingManagement">车位管理</a-menu-item>
       </a-sub-menu>
     </a-menu>
   </div>

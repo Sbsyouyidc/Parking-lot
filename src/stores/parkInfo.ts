@@ -1,4 +1,4 @@
-import { ref, computed, reactive } from 'vue'
+import { ref, computed, reactive, watch } from 'vue'
 import { defineStore } from 'pinia'
 import dayjs from 'dayjs'
 import fetch from '@/request/fetch'
@@ -25,7 +25,8 @@ export const useParkInfoStore = defineStore('parkInfo', () => {
     start: '',
     end: '',
     Price: '',
-    duration: ''
+    duration: '',
+    type: ''
   })
 
   function initStore(): Promise<void> {
@@ -39,7 +40,12 @@ export const useParkInfoStore = defineStore('parkInfo', () => {
   function VehicleDeparture(): Promise<void> {
     if (parkingData.value.start) {
       parkingData.value.end = dayjs().format('YYYY-MM-DD HH:mm:ss')
-      parkingData.value.duration = Duration(dayjs().diff(dayjs(parkingData.value.start))) as string
+      setInterval(() => {
+        parkingData.value.duration = Duration(
+          dayjs().diff(dayjs(parkingData.value.start))
+        ) as string
+      }, 1000)
+
       return Promise.resolve()
     } else {
       return fetch

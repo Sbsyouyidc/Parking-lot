@@ -37,7 +37,7 @@ const VehicleDeparture = () => {
       if (res) {
         localStorage.setItem('spaceNumber', '')
         ChargeData.value = result
-        store.parkingData = { number: '', start: '', end: '', Price: '', duration: '' }
+        store.parkingData = { number: '', start: '', end: '', Price: '', duration: '', type: '' }
       }
     })
 }
@@ -53,10 +53,10 @@ const VehicleDeparture = () => {
   >
     <template #title>停放详细</template>
     <a-descriptions layout="inline-vertical" bordered>
-      <a-descriptions-item label="停车位" span="2">{{ detailData.number }}</a-descriptions-item>
-      <a-descriptions-item label="停放时长" span="2">{{ detailData.duration }}</a-descriptions-item>
-      <a-descriptions-item label="开始时间">{{ detailData.start }}</a-descriptions-item>
-      <a-descriptions-item label="结束时间">{{ detailData.end }}</a-descriptions-item>
+      <a-descriptions-item label="停车位">{{ detailData.number }}</a-descriptions-item>
+      <a-descriptions-item label="车位类别">{{ detailData.type }}</a-descriptions-item>
+      <a-descriptions-item label="开始时间">{{ detailData.start }}</a-descriptions-item
+      ><a-descriptions-item label="停放时长">{{ detailData.duration }}</a-descriptions-item>
     </a-descriptions>
   </a-modal>
   <a-modal
@@ -89,7 +89,7 @@ const VehicleDeparture = () => {
 
   <div class="cart-item">
     <div v-for="(item, index) in store.state" :key="index">
-      <parkSpace :number="item.number" :id="item.id" :plate="item.ParkingPlate" />
+      <parkSpace :item="item" />
     </div>
   </div>
 </template>

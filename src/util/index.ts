@@ -16,14 +16,7 @@ export const Duration = (duration: number) => {
   const time = dayjs.duration(duration)
   if (time.asDays() >= 1) {
     return (
-      time.asHours() +
-      '天' +
-      time.hours() +
-      '小时' +
-      time.minutes() +
-      '分钟' +
-      time.seconds() +
-      '秒'
+      time.days() + '天' + time.hours() + '小时' + time.minutes() + '分钟' + time.seconds() + '秒'
     )
   }
   if (time.asHours() >= 1) {

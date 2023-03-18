@@ -1,23 +1,35 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { ref, reactive, toRefs } from 'vue'
 import fetch from '@/request/fetch'
 import { Notification } from '@arco-design/web-vue'
 import { useParkInfoStore } from '@/stores/parkInfo'
-type Props = { number: string | number; id: string; plate: string }
+type Props = {
+  item: {
+    id: string
+    number: string
+    status: string
+    ParkingPlate: string
+    type: string
+    creationTime: string
+    plate: string
+  }
+}
+const store = useParkInfoStore()
 
 const props = withDefaults(defineProps<Props>(), {})
-const store = useParkInfoStore()
+
+const { item } = toRefs(props)
 
 const handleOk = () => {
   fetch
-    .put(`/api/parkingSpace/VehicleSelection/${props.id}`, {
-      plate: store.plate as string
+    .put(`/api/parkingSpace/VehicleSelection/${item.value.id}`, {
+      plate: store.plate
     })
     .then((result: { res: any; message: any }) => {
       const { res, message } = result
       if (res) {
-        localStorage.setItem('spaceNumber', props.number as string)
+        localStorage.setItem('spaceNumber', item.value.number)
         Notification.success(message)
       } else {
         Notification.warning(message)
@@ -28,10 +40,10 @@ const handleOk = () => {
 </script>
 
 <template>
-  <a-popconfirm content="是否选择此车位" @ok="handleOk" :disabled="props.plate !== ''">
-    <div :class="[props.plate ? 'stopped' : 'not-stopped']" class="park">
-      <span v-if="props.plate" class="plate">{{ props.plate }}</span>
-      <span class="number">{{ number }}</span>
+  <a-popconfirm content="是否选择此车位" @ok="handleOk" :disabled="item.ParkingPlate !== ''">
+    <div :class="[item.ParkingPlate ? 'stopped' : 'not-stopped']" class="park">
+      <span v-if="item.ParkingPlate" class="plate">{{ item.ParkingPlate }}</span>
+      <span class="number">{{ item.number }}</span>
     </div></a-popconfirm
   >
 </template>

@@ -19,7 +19,6 @@ const props = withDefaults(
 const { item: from } = toRefs(props)
 const emit = defineEmits<{
   (e: 'on-delete', id: string, type: string): void
-  (e: 'update:change', from: object): void
 }>()
 
 const id = computed(() => props.item.id)
