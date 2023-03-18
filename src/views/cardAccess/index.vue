@@ -18,7 +18,7 @@ const ChargeData = ref({
   number: '',
   start: '',
   end: '',
-  Price: '',
+  price: '',
   duration: ''
 })
 
@@ -31,13 +31,17 @@ const Departure = () => {
 const VehicleDeparture = () => {
   visible1.value = true
   fetch
-    .put(`/api/parkingSpace/VehicleDeparture/${store.spaceNumber}/${store.plate}`)
+    .put(`/api/parkingSpace/VehicleDeparture/${store.spaceNumber}`, {
+      plate: store.plate,
+      type: store.type
+    })
     .then((result: any) => {
       const { res } = result
       if (res) {
         localStorage.setItem('spaceNumber', '')
         ChargeData.value = result
         store.parkingData = { number: '', start: '', end: '', Price: '', duration: '', type: '' }
+        store.initStore()
       }
     })
 }
@@ -65,7 +69,6 @@ const VehicleDeparture = () => {
     @ok="
       () => {
         visible1 = false
-        store.initStore()
       }
     "
     @cancel="() => (visible1 = false)"
@@ -74,7 +77,7 @@ const VehicleDeparture = () => {
     <template #title>车辆离场</template>
     <a-descriptions layout="inline-vertical" bordered>
       <a-descriptions-item label="停车位">{{ ChargeData.number }}</a-descriptions-item>
-      <a-descriptions-item label="停车费用" span="2">{{ ChargeData.Price }}</a-descriptions-item>
+      <a-descriptions-item label="停车费用" span="2">{{ ChargeData.price }}</a-descriptions-item>
       <a-descriptions-item label="开始时间" span="2">{{ ChargeData.start }}</a-descriptions-item>
       <a-descriptions-item label="结束时间" span="2">{{ ChargeData.end }}</a-descriptions-item>
       <a-descriptions-item label="停放时长">{{ ChargeData.duration }}</a-descriptions-item>

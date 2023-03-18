@@ -4,7 +4,7 @@ import path from 'path'
 import request from 'request'
 import dayjs from 'dayjs'
 import duration from 'dayjs/plugin/duration'
-import { getFileContentAsBase64, isExistence, Duration, IData } from './utils'
+import { getFileContentAsBase64, isExistence, Duration, IData, Price } from './utils'
 
 dayjs.extend(duration)
 
@@ -139,7 +139,8 @@ export default {
   },
 
   VehicleDeparture: async (req: any, res: any) => {
-    const { number, plate } = req.params
+    const { number } = req.params
+    const { plate, type } = req.body
     //将停车场的车牌变为null
     const boolean = await new Promise<boolean>((resolve, reject) => {
       connection.query(
@@ -154,18 +155,21 @@ export default {
       //清零将开始时间和结束时间取出
       connection.query(
         `SELECT * FROM parkingspace where number = '${number}'`,
-        (err: any, results: IData[]) => {
+        async (err: any, results: IData[]) => {
           if (err) throw new Error(err)
           const { number, StartParkingTime, EndParkingTime } = results[0]
           const end = dayjs(EndParkingTime).format('YYYY-MM-DD HH:mm:ss')
           const start = dayjs(StartParkingTime).format('YYYY-MM-DD HH:mm:ss')
           const duration = Duration(dayjs(EndParkingTime).diff(dayjs(StartParkingTime)))
+          const price = await Price(dayjs(EndParkingTime).diff(dayjs(StartParkingTime)), type)
+          console.log(price)
+
           //将信息存入订单表
           connection.query(
-            `INSERT INTO priceorder (LicensePlate, number, Price, StartParkingTime, EndParkingTime,conditionTime) VALUES ('${plate}', '${number}', '22', '${start}', '${end}','${end}')`,
+            `INSERT INTO priceorder (LicensePlate, number, Price, StartParkingTime, EndParkingTime,conditionTime) VALUES ('${plate}', '${number}', '${price}', '${start}', '${end}','${end}')`,
             (err: any, results: any) => {
               if (err) throw new Error(err)
-              res.send({ res: true, message: '离场成功', duration, end, start, number })
+              res.send({ res: true, message: '离场成功', duration, end, start, number, price })
             }
           )
         }

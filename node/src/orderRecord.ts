@@ -4,8 +4,7 @@ import path from 'path'
 import request from 'request'
 import dayjs from 'dayjs'
 import duration from 'dayjs/plugin/duration'
-import { isExistence, Duration, IData } from './utils'
-import { type } from 'os'
+import { isExistence, IData } from './utils'
 
 dayjs.extend(duration)
 
@@ -18,9 +17,9 @@ export default {
     })
   },
   getSearchOrder: (req: any, res: any) => {
-    const { id = '%', number = '%', LicensePlate = '%' } = req.query
+    const { id = '%', number = '%', LicensePlate = '%', StartParkingTime = '%' } = req.query
     connection.query(
-      `SELECT * FROM priceorder where CONCAT(id,LicensePlate,number) LIKE  CONCAT('${id}','${LicensePlate}','${number}')`,
+      `SELECT * FROM priceorder where CONCAT(id,LicensePlate,number,StartParkingTime) LIKE  CONCAT('${id}','${LicensePlate}','${number}','%${StartParkingTime}%')`,
       (err: any, results: IData[]) => {
         if (err) throw new Error(err)
 

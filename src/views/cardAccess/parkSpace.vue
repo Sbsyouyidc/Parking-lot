@@ -29,6 +29,7 @@ const handleOk = () => {
     .then((result: { res: any; message: any }) => {
       const { res, message } = result
       if (res) {
+        store.type = item.value.type
         localStorage.setItem('spaceNumber', item.value.number)
         Notification.success(message)
       } else {

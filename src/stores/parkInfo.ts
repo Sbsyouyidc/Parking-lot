@@ -20,6 +20,7 @@ export const useParkInfoStore = defineStore('parkInfo', () => {
   const state = ref<IParkSpaces>([])
   const plate = ref()
   const spaceNumber = ref()
+  const type = ref()
   const parkingData = ref({
     number: '',
     start: '',
@@ -59,5 +60,5 @@ export const useParkInfoStore = defineStore('parkInfo', () => {
     }
   }
 
-  return { initStore, VehicleDeparture, state, spaceNumber, plate, parkingData }
+  return { initStore, VehicleDeparture, state, spaceNumber, plate, parkingData, type }
 })
