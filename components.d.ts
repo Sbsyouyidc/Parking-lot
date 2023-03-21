@@ -13,6 +13,7 @@ declare module '@vue/runtime-core' {
     AAvatar: typeof import('@arco-design/web-vue')['Avatar']
     AButton: typeof import('@arco-design/web-vue')['Button']
     AButtonGroup: typeof import('@arco-design/web-vue')['ButtonGroup']
+    ACard: typeof import('@arco-design/web-vue')['Card']
     ACascader: typeof import('@arco-design/web-vue')['Cascader']
     ACascaderallowClear: typeof import('@arco-design/web-vue')['CascaderallowClear']
     ACheckbox: typeof import('@arco-design/web-vue')['Checkbox']
