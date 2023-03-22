@@ -1,81 +1,75 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
-import { ref, reactive, onActivated, nextTick, computed } from 'vue'
-
-let index = 0
-let curIndex: string
-const ctx = ref()
+import { ref, reactive, onMounted, nextTick } from 'vue'
+import editCard from './editCard.vue'
+import editItem from './editItem.vue'
+import { useManaGement } from '@/stores/management'
+import { storeToRefs } from 'pinia'
 let offset = {
   x: 0,
   y: 0
 }
+const store = useManaGement()
 
-let client = {
+const { data } = storeToRefs(store)
+const client = reactive({
   x: 0,
-  y: 0
-}
-onActivated(() => {
+  y: 0,
+  height: 0
+})
+onMounted(async () => {
+  await store.initStore()
   nextTick(() => {
-    ctx.value = document.querySelector('#tutorial') as HTMLCanvasElement
-    const { left, top } = ctx.value.getBoundingClientRect()
+    const ctx = document.querySelector('#tutorial') as HTMLCanvasElement
+    const { left, top, height } = ctx.getBoundingClientRect()
     client.x = left
     client.y = top
+    client.height = height
   })
 })
 
-ondragstart = (e: any) => {
-  curIndex = e.target.dataset.index
+const dragStart = (e: any) => {
   offset.x = e.layerX
   offset.y = e.layerY
 }
 
 const drop = (e: { clientX: any; clientY: any }) => {
-  if (curIndex == '1123') {
-    const cloneNode = document.querySelector('.card')?.cloneNode(true) as Element
-    cloneNode.setAttribute('data-index', index.toString())
-    cloneNode.setAttribute('draggable', 'false')
-    index++
-    const { clientX, clientY } = e
-    cloneNode.setAttribute(
-      'style',
-      `position: absolute;left:${clientX - client.x - offset.x}px;top:${
-        clientY - client.y - offset.y
-      }px`
-    )
-    ctx.value.appendChild(cloneNode)
-  }
+  const id = data.value.length
+  store.$patch((state) => {
+    state.data.push({
+      EndParkingTime: '',
+      ParkingPlate: '',
+      StartParkingTime: '',
+      coordinates: { X: 0, Y: 0 },
+      creationTime: '',
+      id: id + 1,
+      number: '',
+      status: 'true',
+      type: ''
+    })
+  })
+
+  const { clientX, clientY } = e
+  const left = clientX - client.x - offset.x
+  const top = clientY - client.y - offset.y
+  store.$patch((state) => {
+    state.data[id].coordinates.X = left
+    state.data[id].coordinates.Y = top
+  })
 }
 
-ondragover = (e) => {
+const dragOver = (e: DragEvent) => {
   e.preventDefault()
-}
-
-onmousedown = (e: any) => {
-  curIndex = e.target.dataset.index
-  console.log(e)
-
-  if (curIndex !== '1123') {
-    const ew = e
-    const { layerX, layerY } = e
-    const xe = layerX
-    const ye = layerY
-
-    document.onmousemove = (e: any) => {
-      const { clientX, clientY } = e
-      ew.target.style.left = clientX - xe - client.x + 'px'
-      ew.target.style.top = clientY - ye - client.y + 'px'
-    }
-    document.onmouseup = () => {
-      document.onmousemove = document.onmousedown = null
-    }
-  }
 }
 </script>
 
 <template>
   <div class="parking-management">
-    <div class="card box-shadow" color="green" draggable="true" data-index="1123">车位</div>
-    <div id="tutorial" @drop="drop"></div>
+    <div class="card box-shadow" draggable="true" @dragstart="dragStart">车位</div>
+    <div id="tutorial" @drop="drop" @dragover="dragOver">
+      <edit-item :client="client" />
+    </div>
+    <editCard :height="client.height" />
   </div>
 </template>
 <style lang="less" scoped>
@@ -84,18 +78,19 @@ onmousedown = (e: any) => {
 }
 #tutorial {
   flex: 1;
+  margin: 0px 10px 0 10px;
   height: 600px;
   position: relative;
   border: 1px solid #74717163;
   overflow: auto;
-  margin: 20px;
 }
 .card {
-  cursor: pointer;
-  text-align: center;
-  line-height: 30px;
   width: 90px;
   height: 30px;
-  background-color: aquamarine;
+  text-align: center;
+}
+
+.arco-collapse {
+  border: none;
 }
 </style>

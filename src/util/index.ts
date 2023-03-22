@@ -29,3 +29,30 @@ export const Duration = (duration: number) => {
     return time.seconds() + '秒'
   }
 }
+export const debounce = (func: () => void, wait: number) => {
+  let timer: NodeJS.Timeout | null = null
+  return function () {
+    if (timer) {
+      clearTimeout(timer)
+      timer = null
+    }
+    timer = setTimeout(() => {
+      func()
+    }, wait)
+  }
+}
+
+export const throttle = (func: () => void, wait: number) => {
+  let lastTime = 0
+  return function () {
+    const nowTime = new Date().getTime()
+    // cd剩余时间
+    // 如果剩余时间大于间隔时间，也就是说可以再次执行函数
+    if (nowTime - lastTime >= wait) {
+      func()
+      // 将上一次函数执行的时间设置为nowTime，这样下次才能重新进入cd
+      lastTime = nowTime
+      console.log(lastTime)
+    }
+  }
+}
