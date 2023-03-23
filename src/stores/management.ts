@@ -1,7 +1,7 @@
-import { computed, ref, reactive } from 'vue'
+import { computed, ref, reactive, toRaw } from 'vue'
 import { defineStore } from 'pinia'
 import fetch from '@/request/fetch'
-
+import { Message } from '@arco-design/web-vue'
 type IData = {
   EndParkingTime: string
   ParkingPlate: string
@@ -29,10 +29,34 @@ export const useManaGement = defineStore('management', () => {
 
   const data = ref<IData[]>([])
 
-  function initStore(): Promise<void> {
-    return fetch.get('/api/parkingSpace').then((res) => {
-      data.value = res
-    })
+  const Order = ref([])
+  function initStore() {
+    return Promise.all([fetch.get('/api/parkingSpace'), fetch.get('/api/getAllOrder')]).then(
+      ([res, obj]) => {
+        data.value = res
+        Order.value = obj.data
+      }
+    )
   }
-  return { curItem, initStore, data }
+
+  function save(): Promise<void> {
+    return fetch
+      .post('/api/postSaveParking', { params: JSON.stringify(data.value) })
+      .then((results) => {
+        const { res, message } = results
+        res && Message.success(message)
+      })
+  }
+
+  const orderOptions = computed(() => {
+    const res = []
+    for (const key in Order.value) {
+      const params = {
+        label: key
+      }
+      res.push(params)
+    }
+    return res
+  })
+  return { curItem, initStore, save, data, Order, orderOptions }
 })

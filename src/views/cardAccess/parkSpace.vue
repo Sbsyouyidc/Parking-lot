@@ -41,12 +41,19 @@ const handleOk = () => {
 </script>
 
 <template>
-  <a-popconfirm content="是否选择此车位" @ok="handleOk" :disabled="item.ParkingPlate !== ''">
-    <div :class="[item.ParkingPlate ? 'stopped' : 'not-stopped']" class="park">
-      <span v-if="item.ParkingPlate" class="plate">{{ item.ParkingPlate }}</span>
-      <span class="number">{{ item.number }}</span>
-    </div></a-popconfirm
-  >
+  <div>
+    <a-popconfirm
+      content="是否选择此车位"
+      @ok="handleOk"
+      :disabled="item.ParkingPlate !== null"
+      v-if="item.status == 'true'"
+    >
+      <div :class="[item.ParkingPlate ? 'stopped' : 'not-stopped']" class="park">
+        <span v-if="item.ParkingPlate" class="plate">{{ item.ParkingPlate }}</span>
+        <span class="number">{{ item.number }}</span>
+      </div></a-popconfirm
+    >
+  </div>
 </template>
 <style lang="less" scoped>
 .park {

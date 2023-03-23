@@ -91,13 +91,12 @@ const VehicleDeparture = () => {
   >
 
   <div class="cart-item">
-    <div v-for="(item, index) in store.state" :key="index">
-      <parkSpace :item="item" />
-    </div>
+    <parkSpace :item="item" v-for="(item, index) in store.state" :key="index" />
   </div>
 </template>
 <style lang="less" scoped>
 .cart-item {
+  position: relative;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;

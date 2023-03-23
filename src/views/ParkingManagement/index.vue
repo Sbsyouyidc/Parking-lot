@@ -65,15 +65,19 @@ const dragOver = (e: DragEvent) => {
 
 <template>
   <div class="parking-management">
-    <div class="card box-shadow" draggable="true" @dragstart="dragStart">车位</div>
-    <div id="tutorial" @drop="drop" @dragover="dragOver">
-      <edit-item :client="client" />
-    </div>
-    <editCard :height="client.height" />
+    <a-button type="primary" @click="store.save">保存</a-button>
+    <main>
+      <div class="card box-shadow" draggable="true" @dragstart="dragStart">车位</div>
+      <div id="tutorial" @drop="drop" @dragover="dragOver">
+        <edit-item :client="client" />
+      </div>
+      <editCard :height="client.height" />
+    </main>
   </div>
 </template>
 <style lang="less" scoped>
-.parking-management {
+main {
+  margin-top: 10px;
   display: flex;
 }
 #tutorial {
@@ -81,7 +85,7 @@ const dragOver = (e: DragEvent) => {
   margin: 0px 10px 0 10px;
   height: 600px;
   position: relative;
-  border: 1px solid #74717163;
+  background-color: rgb(240, 238, 238);
   overflow: auto;
 }
 .card {

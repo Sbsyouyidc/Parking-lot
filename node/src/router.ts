@@ -22,4 +22,6 @@ router.post('/postSaveOrder', orderRecord.postSaveOrder)
 router.get('/getAllOrder', orderRecord.getAllOrder)
 router.post('/postNewType', orderRecord.postNewType)
 router.delete('/deleType/:type', orderRecord.deleType)
+//车位
+router.post('/postSaveParking', server.postSaveParking)
 export default router

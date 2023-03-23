@@ -144,7 +144,7 @@ export default {
     //将停车场的车牌变为null
     const boolean = await new Promise<boolean>((resolve, reject) => {
       connection.query(
-        `UPDATE parkingspace SET ParkingPlate = '' WHERE number = '${number}'`,
+        `UPDATE parkingspace SET ParkingPlate = null WHERE number = '${number}'`,
         (err: any, results: IData) => {
           if (err) reject(err)
           resolve(true)
@@ -175,5 +175,41 @@ export default {
         }
       )
     }
+  },
+
+  //保存车位信息
+  postSaveParking: (req: any, res: any) => {
+    const { params } = req.body
+    const array = JSON.parse(params)
+
+    array.forEach(
+      async (item: { id: any; number?: any; status?: any; type?: any; coordinates?: any }) => {
+        const { id, number, status, type, coordinates } = item
+        const boolean = await isExistence('parkingspace', 'id', id)
+        const objStr = JSON.stringify(coordinates)
+        if (boolean) {
+          console.log(JSON.stringify(coordinates))
+
+          connection.execute(
+            `UPDATE parkingspace SET number = '${number}', status = '${status}', type = '${type}' ,coordinates = '${objStr}' WHERE id = ${id}`,
+            (err) => {
+              if (err) throw new Error(err)
+            }
+          )
+        } else {
+          const time = dayjs().format('YYYY-MM-DD HH:mm:ss')
+          connection.execute(
+            `INSERT INTO parkingspace(id, number,status, type ,coordinates, creationTime) VALUES (${id}, '${number}', '${status}', '${type}','${objStr}','${time}')`,
+            (err) => {
+              if (err) throw new Error(err)
+            }
+          )
+        }
+      }
+    )
+    res.send({
+      res: true,
+      message: '保存成功'
+    })
   }
 }

@@ -1,7 +1,5 @@
 import { connection } from './utils'
-import fs from 'fs'
-import path from 'path'
-import request from 'request'
+
 import dayjs from 'dayjs'
 import duration from 'dayjs/plugin/duration'
 import { isExistence, IData } from './utils'
@@ -30,19 +28,19 @@ export default {
   postSaveOrder: (req: any, res: any) => {
     const { params } = req.body
     const Object = JSON.parse(params)
+
     for (const key in Object) {
       const length = Object[key].group.length
       Object[key].group.forEach(
         async (element: { id: any; StartClock: any; EndClock: any; HourlyCharge: any }) => {
-          const { id, StartClock, EndClock, HourlyCharge } = element
-          const boolean = await isExistence('charge_standard', 'id', id)
-          if (boolean) {
+          const { id = null, StartClock, EndClock, HourlyCharge } = element
+          if (id) {
             connection.execute(
               `UPDATE charge_standard SET StartClock = '${StartClock}', EndClock = '${EndClock}', HourlyCharge = '${HourlyCharge}' WHERE id = '${id}'`
             )
           } else {
             connection.execute(
-              `INSERT INTO charge_standard(id, type, StartClock, EndClock, HourlyCharge) VALUES ('${id}', '${key}', '${StartClock}', '${EndClock}', '${HourlyCharge}')`
+              `INSERT INTO charge_standard( type, StartClock, EndClock, HourlyCharge) VALUES ( '${key}', '${StartClock}', '${EndClock}', '${HourlyCharge}')`
             )
           }
         }
@@ -77,7 +75,7 @@ export default {
     const boolean = await isExistence('charge_standard', 'type', type)
     ;(boolean && res.send({ res: false, message: '已存在类别' })) ||
       connection.execute(
-        `INSERT INTO charge_standard(id, type) VALUES (1, '${type}')`,
+        `INSERT INTO charge_standard( type) VALUES ( '${type}')`,
         (err, result) => {
           if (err) throw Error(err)
           res.send({ res: true, message: '新建成功' })

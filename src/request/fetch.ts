@@ -3,7 +3,7 @@ import { useLoadingStore } from '@/stores/loading'
 const loading = useLoadingStore()
 
 interface IParams {
-  [Key: string]: string
+  [Key: string]: any
 }
 const headers = new Headers({
   'Content-Type': 'application/x-www-form-urlencoded',

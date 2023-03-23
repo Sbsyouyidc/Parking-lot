@@ -20,8 +20,7 @@ const emit = defineEmits<{
 }>()
 
 const addItems = (type: string) => {
-  const id = data.value[type].group.length + 1
-  const item = { id, type, StartClock: '', EndClock: '', HourlyCharge: '' }
+  const item = { type, StartClock: '', EndClock: '', HourlyCharge: '' }
   emit('on-addItem', item, type)
 }
 </script>
@@ -32,7 +31,7 @@ const addItems = (type: string) => {
       <!-- <a-input type="text" placeholder="Please enter something" /> -->
       <a-collapse-item :header="type" key="1">
         <div v-for="(childItem, indexc) in data[type].group" :key="indexc">
-          <ChargeItem :type="type" :item="childItem" v-bind="$attrs" />
+          <ChargeItem :type="type" :item="childItem" :index="indexc" v-bind="$attrs" />
         </div>
         <a-button-group>
           <a-button @click="addItems(type)"><IconPlus /></a-button>

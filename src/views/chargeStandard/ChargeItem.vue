@@ -12,6 +12,7 @@ const props = withDefaults(
       EndClock: string
       HourlyCharge: string
     }
+    index: number
     type: string
   }>(),
   {}
@@ -21,10 +22,8 @@ const emit = defineEmits<{
   (e: 'on-delete', id: string, type: string): void
 }>()
 
-const id = computed(() => props.item.id)
-
 const click = () => {
-  emit('on-delete', id.value, props.type)
+  emit('on-delete', props.index, props.type)
 }
 </script>
 
@@ -40,7 +39,7 @@ const click = () => {
       <a-input :style="{ maxWidth: '220px' }" allow-clear v-model="from.HourlyCharge">
         <template #append> 元/小时 </template>
       </a-input>
-      <span class="iii" v-if="Number(id) !== 1">
+      <span class="iii" v-if="index !== 0">
         <a-button @click="click"><IconMinus /></a-button
       ></span>
       <span class="iii" v-else></span>

@@ -34,13 +34,22 @@ const collapsed = reactive({
       </a-input></a-space
     >
     <div class="filed">编号</div>
-    <a-space> <a-input v-model="curItem.number"> </a-input></a-space>
+    <a-input v-model="curItem.number"> </a-input>
     <div class="filed">启用状态</div>
     <a-space>
       <a-switch v-model="curItem.status" checked-value="true" unchecked-value="false"> </a-switch
     ></a-space>
     <div class="filed">收费类型</div>
-    <a-space> <a-input v-model="curItem.type"> </a-input></a-space>
+    <div>
+      <a-select v-model="curItem.type" placeholder="Please select ...">
+        <a-option
+          v-for="item of store.orderOptions"
+          :key="item"
+          :value="item.label"
+          :label="item.label"
+        />
+      </a-select>
+    </div>
   </a-menu>
 </template>
 <style lang="less" scoped>

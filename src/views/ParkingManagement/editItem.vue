@@ -2,13 +2,13 @@
 <script setup lang="ts">
 import { ref, reactive, computed } from 'vue'
 import { useManaGement } from '@/stores/management'
-
+import { storeToRefs } from 'pinia'
 type Props = {
   client: { x: number; y: number }
 }
 
 const store = useManaGement()
-const data = computed(() => store.data)
+const { data } = storeToRefs(store)
 const props = withDefaults(defineProps<Props>(), {})
 
 const mouserDown = (event: MouseEvent, index: number) => {
@@ -45,8 +45,9 @@ const mouserDown = (event: MouseEvent, index: number) => {
 <style lang="less" scoped>
 .edit-item {
   cursor: pointer;
-  text-align: center;
-  line-height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 100px;
   height: 40px;
   position: absolute;

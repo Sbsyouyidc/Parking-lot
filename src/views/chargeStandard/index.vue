@@ -36,8 +36,8 @@ const addItem = (item: object, type: string) => {
   data.value[type].group.push(item)
 }
 
-const deleteItem = (id: string, type: string) => {
-  data.value[type].group = data.value[type].group.filter((item: any) => item.id !== id)
+const deleteItem = (index_0: number, type: string) => {
+  data.value[type].group = data.value[type].group.filter((item: any, index) => index !== index_0)
 }
 
 const handleOk = () => {
