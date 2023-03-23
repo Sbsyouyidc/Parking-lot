@@ -53,7 +53,6 @@ const handleOk = () => {
 <style lang="less" scoped>
 .park {
   width: 90px;
-  margin: 20px;
   height: 40px;
   cursor: pointer;
   position: absolute;
@@ -77,11 +76,11 @@ const handleOk = () => {
 }
 .not-stopped {
   background-color: rgba(0, 0, 255, 0.2);
-  border: 3px dashed #00f;
+  border: 2px dashed #00f;
 }
 .stopped {
   background-color: rgba(255, 0, 13, 0.2);
-  border: 3px dashed rgb(238, 5, 5);
+  border: 2px dashed rgb(238, 5, 5);
 }
 
 .body-class {

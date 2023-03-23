@@ -24,7 +24,7 @@ const getOrderRecord = (): Promise<void> => {
     data.value = res
   })
 }
-const pagination = { pageSize: 15 }
+const pagination = { pageSize: 14 }
 const columns: TableColumnData[] = [
   {
     title: '订单号',

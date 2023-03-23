@@ -68,7 +68,7 @@ export const Price = (duration: number, type: string) => {
           if (err) throw new Error(err)
           const res = results.reduce((right, left) => {
             const { StartClock, EndClock, HourlyCharge } = left
-            if (Remaining > 1) {
+            if (Remaining >= 1) {
               if (EndClock == '以后') {
                 return (right += Remaining * HourlyCharge)
               } else {
@@ -86,6 +86,8 @@ export const Price = (duration: number, type: string) => {
               return right
             }
           }, 0)
+          console.log(res)
+
           resolve(res)
         }
       )

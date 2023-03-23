@@ -98,6 +98,8 @@ const VehicleDeparture = () => {
 .cart {
   position: relative;
   height: 600px;
+  margin: 10px;
+  background-color: #f0eeee;
 }
 :deep(.arco-modal .modal) {
   background-color: red;
