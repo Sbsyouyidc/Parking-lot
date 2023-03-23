@@ -84,8 +84,6 @@ export default {
   },
   deleType: (req: any, res: any) => {
     const { type } = req.params
-    console.log(type)
-
     connection.query(`DELETE FROM charge_standard WHERE type = '${type}'`, (err) => {
       res.send({ res: true, message: '删除成功' })
     })

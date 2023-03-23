@@ -12,7 +12,6 @@ app.use('/api', router)
 
 //错误
 app.use((err: { message: string }, req: any, res: { send: (arg0: string) => void }, next: any) => {
-  console.log('发生了错误！' + err.message)
   res.send('Error：' + err.message)
 })
 app.listen(3000, () => {

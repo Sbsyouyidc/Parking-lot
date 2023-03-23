@@ -52,7 +52,6 @@ export const throttle = (func: () => void, wait: number) => {
       func()
       // 将上一次函数执行的时间设置为nowTime，这样下次才能重新进入cd
       lastTime = nowTime
-      console.log(lastTime)
     }
   }
 }

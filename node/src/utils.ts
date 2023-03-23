@@ -59,7 +59,6 @@ export const Duration = (duration: number) => {
 export const Price = (duration: number, type: string) => {
   return new Promise<number>((resolve, reject) => {
     let Remaining = Math.floor(dayjs.duration(duration).asSeconds() as any)
-    console.log(Remaining)
     if (Remaining < 1) {
       resolve(0)
     } else {

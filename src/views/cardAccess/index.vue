@@ -90,16 +90,14 @@ const VehicleDeparture = () => {
     ></a-button-group
   >
 
-  <div class="cart-item">
+  <div class="cart">
     <parkSpace :item="item" v-for="(item, index) in store.state" :key="index" />
   </div>
 </template>
 <style lang="less" scoped>
-.cart-item {
+.cart {
   position: relative;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  height: 600px;
 }
 :deep(.arco-modal .modal) {
   background-color: red;

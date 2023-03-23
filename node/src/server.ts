@@ -73,7 +73,6 @@ export default {
   //登录
   login: async (req: any, res: any) => {
     const { licensePlate } = req.body
-    console.log(licensePlate)
     const boolean = await isExistence('card', 'licensePlate', licensePlate)
     ;(boolean &&
       res.send({
@@ -103,7 +102,6 @@ export default {
     const { plate } = req.body
     const { id } = req.params
     const boolean = await isExistence('parkingspace', 'parkingPlate', plate)
-    console.log(boolean)
     ;(boolean &&
       res.send({
         code: 200,
@@ -162,7 +160,6 @@ export default {
           const start = dayjs(StartParkingTime).format('YYYY-MM-DD HH:mm:ss')
           const duration = Duration(dayjs(EndParkingTime).diff(dayjs(StartParkingTime)))
           const price = await Price(dayjs(EndParkingTime).diff(dayjs(StartParkingTime)), type)
-          console.log(price)
 
           //将信息存入订单表
           connection.query(
@@ -188,7 +185,6 @@ export default {
         const boolean = await isExistence('parkingspace', 'id', id)
         const objStr = JSON.stringify(coordinates)
         if (boolean) {
-          console.log(JSON.stringify(coordinates))
 
           connection.execute(
             `UPDATE parkingspace SET number = '${number}', status = '${status}', type = '${type}' ,coordinates = '${objStr}' WHERE id = ${id}`,

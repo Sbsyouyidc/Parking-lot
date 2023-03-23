@@ -4,16 +4,9 @@ import { ref, reactive, toRefs } from 'vue'
 import fetch from '@/request/fetch'
 import { Notification } from '@arco-design/web-vue'
 import { useParkInfoStore } from '@/stores/parkInfo'
+import type { IData } from '@/stores/management'
 type Props = {
-  item: {
-    id: string
-    number: string
-    status: string
-    ParkingPlate: string
-    type: string
-    creationTime: string
-    plate: string
-  }
+  item: IData
 }
 const store = useParkInfoStore()
 
@@ -41,27 +34,29 @@ const handleOk = () => {
 </script>
 
 <template>
-  <div>
-    <a-popconfirm
-      content="是否选择此车位"
-      @ok="handleOk"
-      :disabled="item.ParkingPlate !== null"
-      v-if="item.status == 'true'"
+  <a-popconfirm
+    content="是否选择此车位"
+    @ok="handleOk"
+    :disabled="item.ParkingPlate !== null"
+    v-if="item.status == 'true'"
+  >
+    <div
+      :class="[item.ParkingPlate ? 'stopped' : 'not-stopped']"
+      class="park"
+      :style="{ left: item.coordinates.X + 'px', top: item.coordinates.Y + 'px' }"
     >
-      <div :class="[item.ParkingPlate ? 'stopped' : 'not-stopped']" class="park">
-        <span v-if="item.ParkingPlate" class="plate">{{ item.ParkingPlate }}</span>
-        <span class="number">{{ item.number }}</span>
-      </div></a-popconfirm
-    >
-  </div>
+      <span v-if="item.ParkingPlate" class="plate">{{ item.ParkingPlate }}</span>
+      <span class="number">{{ item.number }}</span>
+    </div></a-popconfirm
+  >
 </template>
 <style lang="less" scoped>
 .park {
   width: 90px;
   margin: 20px;
-  height: 200px;
+  height: 40px;
   cursor: pointer;
-  position: relative;
+  position: absolute;
   & > .number {
     position: absolute;
     font-weight: bold;

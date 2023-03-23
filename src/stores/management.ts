@@ -2,13 +2,13 @@ import { computed, ref, reactive, toRaw } from 'vue'
 import { defineStore } from 'pinia'
 import fetch from '@/request/fetch'
 import { Message } from '@arco-design/web-vue'
-type IData = {
+export type IData = {
   EndParkingTime: string
   ParkingPlate: string
   StartParkingTime: string
   coordinates: { X: number; Y: number }
   creationTime: string
-  id: number | string
+  id: any
   number: string
   status: string
   type: string

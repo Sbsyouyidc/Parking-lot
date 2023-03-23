@@ -77,7 +77,6 @@ const rules = {
           cb('请输入正确车牌号')
         }
         if (isLegal) {
-          console.log(licensePlate.value)
           isValidator.value = true
         } else {
           isValidator.value = false

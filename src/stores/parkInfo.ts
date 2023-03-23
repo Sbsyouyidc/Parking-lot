@@ -3,21 +3,9 @@ import { defineStore } from 'pinia'
 import dayjs from 'dayjs'
 import fetch from '@/request/fetch'
 import { Duration } from '@/util/index'
-
-export type IParkSpaces =
-  | {
-      id: string
-      number: string
-      status: string
-      ParkingPlate: string
-      type: string
-      creationTime: string
-      plate: string
-    }[]
-  | []
-
+import type { IData } from './management'
 export const useParkInfoStore = defineStore('parkInfo', () => {
-  const state = ref<IParkSpaces>([])
+  const state = ref<IData[]>([])
   const plate = ref()
   const spaceNumber = ref()
   const type = ref()
@@ -38,14 +26,13 @@ export const useParkInfoStore = defineStore('parkInfo', () => {
     })
   }
 
+  setInterval(() => {
+    parkingData.value.duration = Duration(dayjs().diff(dayjs(parkingData.value.start))) as string
+  }, 1000)
+
   function VehicleDeparture(): Promise<void> {
     if (parkingData.value.start) {
       parkingData.value.end = dayjs().format('YYYY-MM-DD HH:mm:ss')
-      setInterval(() => {
-        parkingData.value.duration = Duration(
-          dayjs().diff(dayjs(parkingData.value.start))
-        ) as string
-      }, 1000)
 
       return Promise.resolve()
     } else {
