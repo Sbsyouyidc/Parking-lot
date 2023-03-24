@@ -31,19 +31,22 @@ export const useParkInfoStore = defineStore('parkInfo', () => {
   }, 1000)
 
   function VehicleDeparture(): Promise<void> {
-    if (parkingData.value.start) {
-      parkingData.value.end = dayjs().format('YYYY-MM-DD HH:mm:ss')
-
-      return Promise.resolve()
+    if (spaceNumber.value) {
+      if (parkingData.value.start) {
+        parkingData.value.end = dayjs().format('YYYY-MM-DD HH:mm:ss')
+        return Promise.resolve()
+      } else {
+        return fetch
+          .get(`/api/parkingSpace/VehicleDuration?number=${spaceNumber.value}`)
+          .then((result: any) => {
+            const { res } = result
+            if (res) {
+              parkingData.value = result
+            }
+          })
+      }
     } else {
-      return fetch
-        .get(`/api/parkingSpace/VehicleDuration?number=${spaceNumber.value}`)
-        .then((result: any) => {
-          const { res } = result
-          if (res) {
-            parkingData.value = result
-          }
-        })
+      return Promise.resolve()
     }
   }
 

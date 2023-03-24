@@ -5,6 +5,7 @@ import fetch from '@/request/fetch'
 import { Notification } from '@arco-design/web-vue'
 import { useParkInfoStore } from '@/stores/parkInfo'
 import type { IData } from '@/stores/management'
+import dayjs from 'dayjs'
 type Props = {
   item: IData
 }
@@ -25,35 +26,76 @@ const handleOk = () => {
         store.type = item.value.type
         localStorage.setItem('spaceNumber', item.value.number)
         Notification.success(message)
+        store.initStore()
+        store.VehicleDeparture().then(() => {
+          visible.value = true
+        })
       } else {
         Notification.warning(message)
       }
-      store.initStore()
     })
 }
+
+const visible = ref(false)
+
+const handleClick = () => {
+  visible.value = true
+}
+
+const handleCancel = () => {
+  visible.value = false
+}
+
+const data = [
+  {
+    label: '车位编号',
+    value: item.value.number
+  },
+  {
+    label: '车位类别',
+    value: item.value.type
+  },
+  {
+    label: '开始时间',
+    value: dayjs(item.value.StartParkingTime).format('YYYY-MM-DD HH:mm:ss')
+  },
+  {
+    label: '停车',
+    value: item.value.ParkingPlate
+  }
+]
 </script>
 
 <template>
-  <a-popconfirm
-    content="是否选择此车位"
+  <a-drawer
+    :width="340"
+    :visible="visible"
     @ok="handleOk"
-    :disabled="item.ParkingPlate !== null"
-    v-if="item.status == 'true'"
+    @cancel="handleCancel"
+    unmountOnClose
+    popup-container=".card-access"
+    size="large"
   >
-    <div
-      :class="[item.ParkingPlate ? 'stopped' : 'not-stopped']"
-      class="park"
-      :style="{ left: item.coordinates.X + 'px', top: item.coordinates.Y + 'px' }"
-    >
-      <span v-if="item.ParkingPlate" class="plate">{{ item.ParkingPlate }}</span>
-      <span class="number">{{ item.number }}</span>
-    </div></a-popconfirm
+    <template #title> 车位详细 </template>
+    <div>
+      <a-descriptions style="margin-top: 20px" :data="data" :column="1" />
+    </div>
+  </a-drawer>
+
+  <div
+    :class="[item.ParkingPlate ? 'stopped' : 'not-stopped']"
+    class="park"
+    :style="{ left: item.coordinates.X + 'px', top: item.coordinates.Y + 'px' }"
+    @click="handleClick"
   >
+    <span v-if="item.ParkingPlate" class="plate">{{ item.ParkingPlate }}</span>
+    <span class="number">{{ item.number }}</span>
+  </div>
 </template>
 <style lang="less" scoped>
 .park {
-  width: 90px;
-  height: 40px;
+  width: 120px;
+  height: 60px;
   cursor: pointer;
   position: absolute;
   & > .number {

@@ -5,15 +5,15 @@ import parkSpace from '@/views/cardAccess/parkSpace.vue'
 import { useParkInfoStore } from '@/stores/parkInfo'
 import { onActivated } from 'vue'
 import fetch from '@/request/fetch'
-
+import spaceDetail from './spaceDetail.vue'
 onActivated(async () => {
   await store.initStore()
+  await store.VehicleDeparture()
+
 })
 
 const visible = ref(false)
-const visible1 = ref(false)
 const store = useParkInfoStore()
-const detailData = computed(() => store.parkingData)
 const ChargeData = ref({
   number: '',
   start: '',
@@ -22,14 +22,8 @@ const ChargeData = ref({
   duration: ''
 })
 
-const Departure = () => {
-  store.VehicleDeparture().then(() => {
-    visible.value = true
-  })
-}
-
 const VehicleDeparture = () => {
-  visible1.value = true
+  visible.value = true
   fetch
     .put(`/api/parkingSpace/VehicleDeparture/${store.spaceNumber}`, {
       plate: store.plate,
@@ -51,27 +45,12 @@ const VehicleDeparture = () => {
   <a-modal
     modal-class="modal"
     v-model:visible="visible"
-    @ok="() => (visible = false)"
-    @cancel="() => (visible = false)"
-    title-align="start"
-  >
-    <template #title>停放详细</template>
-    <a-descriptions layout="inline-vertical" bordered>
-      <a-descriptions-item label="停车位">{{ detailData.number }}</a-descriptions-item>
-      <a-descriptions-item label="车位类别">{{ detailData.type }}</a-descriptions-item>
-      <a-descriptions-item label="开始时间">{{ detailData.start }}</a-descriptions-item
-      ><a-descriptions-item label="停放时长">{{ detailData.duration }}</a-descriptions-item>
-    </a-descriptions>
-  </a-modal>
-  <a-modal
-    modal-class="modal"
-    v-model:visible="visible1"
     @ok="
       () => {
-        visible1 = false
+        visible = false
       }
     "
-    @cancel="() => (visible1 = false)"
+    @cancel="() => (visible = false)"
     title-align="start"
   >
     <template #title>车辆离场</template>
@@ -83,19 +62,15 @@ const VehicleDeparture = () => {
       <a-descriptions-item label="停放时长">{{ ChargeData.duration }}</a-descriptions-item>
     </a-descriptions>
   </a-modal>
-  <a-button-group>
-    <a-button @click="Departure" :disabled="!store.spaceNumber">停放详细</a-button>
-    <a-button type="primary" @click="VehicleDeparture" :disabled="!store.spaceNumber"
-      >离场</a-button
-    ></a-button-group
-  >
 
-  <div class="cart">
+  <a-button type="primary" @click="VehicleDeparture" :disabled="!store.spaceNumber">离场</a-button>
+  <spaceDetail />
+  <div class="card-access">
     <parkSpace :item="item" v-for="(item, index) in store.state" :key="index" />
   </div>
 </template>
 <style lang="less" scoped>
-.cart {
+.card-access {
   position: relative;
   height: 600px;
   margin: 10px;
