@@ -64,7 +64,7 @@ const VehicleDeparture = () => {
 
   <a-button type="primary" @click="VehicleDeparture" :disabled="!store.spaceNumber">离场</a-button>
   <spaceDetail />
-  <div class="card-access">
+  <div class="card-access box-shadow-inset">
     <parkSpace :item="item" v-for="(item, index) in store.state" :key="index" />
   </div>
 </template>
@@ -74,6 +74,7 @@ const VehicleDeparture = () => {
   height: 600px;
   margin: 10px;
   background-color: #f0eeee;
+  border-radius: 5px;
 }
 :deep(.arco-modal .modal) {
   background-color: red;
