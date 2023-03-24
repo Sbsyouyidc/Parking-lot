@@ -9,7 +9,6 @@ import spaceDetail from './spaceDetail.vue'
 onActivated(async () => {
   await store.initStore()
   await store.VehicleDeparture()
-
 })
 
 const visible = ref(false)

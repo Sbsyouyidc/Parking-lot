@@ -1,6 +1,6 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
-import { ref, reactive, toRefs } from 'vue'
+import { ref, computed, toRefs } from 'vue'
 import fetch from '@/request/fetch'
 import { Notification } from '@arco-design/web-vue'
 import { useParkInfoStore } from '@/stores/parkInfo'
@@ -46,7 +46,7 @@ const handleCancel = () => {
   visible.value = false
 }
 
-const data = [
+const data = computed(() => [
   {
     label: '车位编号',
     value: item.value.number
@@ -63,7 +63,7 @@ const data = [
     label: '停车',
     value: item.value.ParkingPlate
   }
-]
+])
 </script>
 
 <template>
@@ -83,6 +83,7 @@ const data = [
   </a-drawer>
 
   <div
+    v-if="item.status == 'true'"
     :class="[item.ParkingPlate ? 'stopped' : 'not-stopped']"
     class="park"
     :style="{ left: item.coordinates.X + 'px', top: item.coordinates.Y + 'px' }"
