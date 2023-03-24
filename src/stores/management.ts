@@ -8,44 +8,49 @@ export type IData = {
   StartParkingTime: string
   coordinates: { X: number; Y: number }
   creationTime: string
-  id: any
+  id?: number
+  index?: number
   number: string
   status: string
   type: string
 }
 
 export const useManaGement = defineStore('management', () => {
-  const curItem = reactive({
+  const curItem = ref<IData>({
     EndParkingTime: '',
     ParkingPlate: '',
     StartParkingTime: '',
     coordinates: { X: 0, Y: 0 },
     creationTime: '',
-    id: '',
     number: '',
     status: 'true',
     type: ''
   })
 
-  const data = ref<IData[]>([])
+  const data = reactive<{ oldItem: IData[]; newItem: IData[]; deletedItem: IData[] }>({
+    oldItem: [],
+    newItem: [],
+    deletedItem: []
+  })
 
   const Order = ref([])
+
   function initStore() {
     return Promise.all([fetch.get('/api/parkingSpace'), fetch.get('/api/getAllOrder')]).then(
       ([res, obj]) => {
-        data.value = res
+        data.newItem = []
+        data.deletedItem = []
+        data.oldItem = res
         Order.value = obj.data
       }
     )
   }
 
   function save(): Promise<void> {
-    return fetch
-      .post('/api/postSaveParking', { params: JSON.stringify(data.value) })
-      .then((results) => {
-        const { res, message } = results
-        res && Message.success(message)
-      })
+    return fetch.post('/api/postSaveParking', { params: JSON.stringify(data) }).then((results) => {
+      const { res, message } = results
+      res && Message.success(message)
+    })
   }
 
   const orderOptions = computed(() => {
@@ -58,5 +63,14 @@ export const useManaGement = defineStore('management', () => {
     }
     return res
   })
-  return { curItem, initStore, save, data, Order, orderOptions }
+
+  function deleteItem(id: number) {
+    console.log(id)
+
+    data.deletedItem.push(data.oldItem.find((item) => item.id == id) as IData)
+    data.oldItem = data.oldItem.filter((item) => item.id !== id)
+  }
+
+  const concatData = computed(() => [...data.oldItem, ...data.newItem])
+  return { curItem, initStore, save, data, Order, orderOptions, deleteItem, concatData }
 })

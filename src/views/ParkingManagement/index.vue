@@ -1,6 +1,6 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
-import { ref, reactive, onMounted, nextTick } from 'vue'
+import { ref, reactive, onMounted, nextTick, onActivated } from 'vue'
 import editCard from './editCard.vue'
 import editItem from './editItem.vue'
 import { useManaGement } from '@/stores/management'
@@ -17,7 +17,7 @@ const client = reactive({
   y: 0,
   height: 0
 })
-onMounted(async () => {
+onActivated(async () => {
   await store.initStore()
   nextTick(() => {
     const ctx = document.querySelector('#tutorial') as HTMLCanvasElement
@@ -34,18 +34,18 @@ const dragStart = (e: any) => {
 }
 
 const drop = (e: { clientX: any; clientY: any }) => {
-  const id = data.value.length
+  const index = data.value.newItem.length
   store.$patch((state) => {
-    state.data.push({
+    state.data.newItem.push({
       EndParkingTime: '',
       ParkingPlate: '',
       StartParkingTime: '',
       coordinates: { X: 0, Y: 0 },
       creationTime: '',
-      id: id + 1,
       number: '',
       status: 'true',
-      type: ''
+      type: '',
+      index
     })
   })
 
@@ -53,19 +53,25 @@ const drop = (e: { clientX: any; clientY: any }) => {
   const left = clientX - client.x - offset.x
   const top = clientY - client.y - offset.y
   store.$patch((state) => {
-    state.data[id].coordinates.X = left
-    state.data[id].coordinates.Y = top
+    state.data.newItem[index].coordinates.X = left
+    state.data.newItem[index].coordinates.Y = top
   })
 }
 
 const dragOver = (e: DragEvent) => {
   e.preventDefault()
 }
+
+const save = () => {
+  store.save().then(() => {
+    store.initStore()
+  })
+}
 </script>
 
 <template>
   <div class="parking-management">
-    <a-button type="primary" @click="store.save">保存</a-button>
+    <a-button type="primary" @click="save">保存</a-button>
     <main>
       <div class="card box-shadow" draggable="true" @dragstart="dragStart">车位</div>
       <div id="tutorial" @drop="drop" @dragover="dragOver">

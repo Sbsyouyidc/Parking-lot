@@ -47,8 +47,10 @@ export default {
       )
       connection.execute(`SELECT * FROM charge_standard WHERE type = '${key}'`, (err, results) => {
         if (results.length > length) {
-          for (let index = length + 1; index <= results.length; index++) {
-            connection.execute(`DELETE FROM charge_standard WHERE id = '${index}'`)
+          for (let index = length; index < results.length; index++) {
+            console.log(index)
+
+            connection.execute(`DELETE FROM charge_standard WHERE id = '${results[index].id}'`)
           }
         }
       })

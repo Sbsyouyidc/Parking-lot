@@ -8,22 +8,32 @@ type Props = {
 }
 
 const store = useManaGement()
-const { data } = storeToRefs(store)
+const { concatData, data } = storeToRefs(store)
 const props = withDefaults(defineProps<Props>(), {})
 
 const mouserDown = (event: MouseEvent, index: number) => {
   const { offsetX, offsetY } = event
-  store.curItem = data.value[index]
+  const type = concatData.value[index].id ? 'oldItem' : 'newItem'
+  let indexOf = 0
+  if (type == 'oldItem') {
+    const id = concatData.value[index].id
+    indexOf = data.value[type].findIndex((item) => item.id == id)
+  } else {
+    indexOf = concatData.value[index].index as number
+  }
+
+  store.curItem = data.value[type][indexOf]
   document.onmousemove = (payload: any) => {
     const { clientX, clientY } = payload
     const left = clientX - offsetX - props.client.x < 0 ? 0 : clientX - offsetX - props.client.x
     const top = clientY - offsetY - props.client.y < 0 ? 0 : clientY - offsetY - props.client.y
     store.$patch((state) => {
-      state.curItem = data.value[index]
-      state.data[index].coordinates.X = left
-      state.data[index].coordinates.Y = top
+      state.data[type][indexOf].coordinates.X = left
+      state.data[type][indexOf].coordinates.Y = top
+      state.curItem = state.data[type][indexOf]
     })
   }
+
   document.onmouseup = () => {
     document.onmousemove = document.onmousedown = null
   }
@@ -33,11 +43,14 @@ const mouserDown = (event: MouseEvent, index: number) => {
 <template>
   <div
     class="edit-item"
-    v-for="(item, index) in data"
+    v-for="(item, index) in concatData"
     :key="index"
     @mousedown="mouserDown($event, index)"
-    :style="{ left: data[index].coordinates.X + 'px', top: data[index].coordinates.Y + 'px' }"
-    :class="[data[index].status == 'true' ? 'use' : 'unUse']"
+    :style="{
+      left: concatData[index].coordinates.X + 'px',
+      top: concatData[index].coordinates.Y + 'px'
+    }"
+    :class="[concatData[index].status == 'true' ? 'use' : 'unUse']"
   >
     {{ item.number }}
   </div>

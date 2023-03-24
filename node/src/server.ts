@@ -8,6 +8,17 @@ import { getFileContentAsBase64, isExistence, Duration, IData, Price } from './u
 
 dayjs.extend(duration)
 
+interface IParking {
+  EndParkingTime: string
+  ParkingPlate: string
+  StartParkingTime: string
+  coordinates: { X: number; Y: number }
+  creationTime: string
+  id?: number
+  number: string
+  status: string
+  type: string
+}
 export default {
   recognition: async (req: any, res: any) => {
     const { licensePlate, imagePath } = req.body
@@ -177,32 +188,36 @@ export default {
   //保存车位信息
   postSaveParking: (req: any, res: any) => {
     const { params } = req.body
-    const array = JSON.parse(params)
 
-    array.forEach(
-      async (item: { id: any; number?: any; status?: any; type?: any; coordinates?: any }) => {
-        const { id, number, status, type, coordinates } = item
-        const boolean = await isExistence('parkingspace', 'id', id)
-        const objStr = JSON.stringify(coordinates)
-        if (boolean) {
+    const { oldItem, newItem, deletedItem } = JSON.parse(params)
+    console.log(oldItem, newItem, deletedItem)
 
-          connection.execute(
-            `UPDATE parkingspace SET number = '${number}', status = '${status}', type = '${type}' ,coordinates = '${objStr}' WHERE id = ${id}`,
-            (err) => {
-              if (err) throw new Error(err)
-            }
-          )
-        } else {
-          const time = dayjs().format('YYYY-MM-DD HH:mm:ss')
-          connection.execute(
-            `INSERT INTO parkingspace(id, number,status, type ,coordinates, creationTime) VALUES (${id}, '${number}', '${status}', '${type}','${objStr}','${time}')`,
-            (err) => {
-              if (err) throw new Error(err)
-            }
-          )
+    oldItem.forEach((item: IParking) => {
+      const str = JSON.stringify(item.coordinates)
+      connection.execute(
+        `UPDATE parkingspace SET number = '${item.number}', status = '${item.status}', type = '${item.type}' ,coordinates = '${str}' WHERE id = ${item.id}`,
+        (err) => {
+          if (err) throw new Error(err)
         }
-      }
-    )
+      )
+    })
+    newItem.forEach((item: IParking) => {
+      const str = JSON.stringify(item.coordinates)
+      const time = dayjs().format('YYYY-MM-DD HH:mm:ss')
+      connection.execute(
+        `INSERT INTO parkingspace( number,status, type ,coordinates, creationTime) VALUES ( '${item.number}', '${item.status}', '${item.type}','${str}','${time}')`,
+        (err) => {
+          if (err) throw new Error(err)
+        }
+      )
+    })
+
+    deletedItem.forEach((item: IParking) => {
+      connection.execute(`DELETE FROM parkingspace WHERE id = ${item.id}`, (err) => {
+        if (err) throw new Error(err)
+      })
+    })
+
     res.send({
       res: true,
       message: '保存成功'
