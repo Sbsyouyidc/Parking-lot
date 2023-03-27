@@ -1,8 +1,7 @@
-import { connection, newUser } from './utils'
 import fs from 'fs'
 import dayjs from 'dayjs'
 import duration from 'dayjs/plugin/duration'
-import { recognition, isExistence, Duration, IData, Price } from './utils'
+import { recognition, isExistence, Duration, IData, Price, connection } from './utils'
 
 dayjs.extend(duration)
 
@@ -197,25 +196,19 @@ export default {
   },
 
   postNewUser: async (req: any, res: any) => {
-    const { name, password, type, imagePath = null } = req.body
-
-    const boolean = await isExistence('user', 'userName', name)
+    const { username, password, type, image = null } = req.body
+    const boolean = await isExistence('user', 'username', username)
     if (boolean) {
       res.send({
         res: false,
         message: '用户名已存在'
       })
     } else {
-      if (imagePath) {
-        const IdentificationRes = await recognition(imagePath)
-        if (IdentificationRes.includes('error')) {
-          res.send({
-            res: false,
-            message: IdentificationRes
-          })
-        } else {
+      if (image) {
+        try {
+          const IdentificationRes = await recognition(image)
           connection.query(
-            `INSERT INTO user(userName, passWord, image, type, LicensePlate) VALUES ('${name}', '${password}','${imagePath}', '${type}', '${IdentificationRes}')`,
+            `INSERT INTO user(username, password, image, type, LicensePlate) VALUES ('${username}', '${password}','${image}', '${type}', '${IdentificationRes}')`,
             (err: any, result) => {
               if (err) throw new Error(err)
               res.send({
@@ -224,10 +217,15 @@ export default {
               })
             }
           )
+        } catch (error) {
+          res.send({
+            res: false,
+            message: error
+          })
         }
       } else {
         connection.query(
-          `INSERT INTO user(userName, passWord,type) VALUES ('${name}', '${password}', '${type}')`,
+          `INSERT INTO user(username, password,type) VALUES ('${username}', '${password}', '${type}')`,
           (err: any, result) => {
             if (err) throw new Error(err)
             res.send({
@@ -237,5 +235,29 @@ export default {
         )
       }
     }
+  },
+  putUpdateUser: (req: any, res: any) => {
+    const { username, password, type, image: new_image, Id, LicensePlate } = req.body
+    connection.query(`SELECT * FROM user where Id = '${Id}'`, async (err, result: any) => {
+      const { image } = result[0]
+      try {
+        const IdentificationRes = image !== new_image ? await recognition(new_image) : LicensePlate
+        connection.query(
+          `UPDATE user SET username = '${username}', password = '${password}',type = '${type}' ,image='${new_image}' , LicensePlate='${IdentificationRes}' WHERE Id = ${Id}`,
+          (err: any, result) => {
+            if (err) throw new Error(err)
+            res.send({
+              res: true,
+              message: '修改成功'
+            })
+          }
+        )
+      } catch (error) {
+        res.send({
+          res: false,
+          message: error
+        })
+      }
+    })
   }
 }

@@ -2,21 +2,24 @@
 <script setup lang="ts">
 import { ref, reactive, watch, toRaw } from 'vue'
 import type { FileItem, ValidatedError } from '@arco-design/web-vue'
-import fetch from '@/request/fetch'
 import { useUserManage } from '@/stores/userManage'
-import { Message } from '@arco-design/web-vue'
+import { storeToRefs } from 'pinia'
 const store = useUserManage()
-const visible = ref(false)
+const { visible, form } = storeToRefs(store)
 
 const handleClick = () => {
-  fetch.post('/api/postNewUser', toRaw(form)).then((result:any) => {
-    const { res, message } = result
-    ;(res && store.initStore()) || Message.error(message)
-  })
+  store.options()
 }
 
 const handleChange = () => {
-  visible.value = !visible.value
+  store.visible = !visible.value
+  store.type = 'add'
+  store.form = {
+    username: '',
+    password: '',
+    type: '',
+    image: ''
+  }
 }
 
 const before = () => {
@@ -34,10 +37,11 @@ const successLoad = (fileItem: FileItem) => {
   const {
     response: { path }
   } = fileItem
-  form.imagePath = path
+
+  form.value.image = path
 }
 const imagePath = ref('')
-const form = reactive({ name: '', password: '', type: '', imagePath: '' })
+
 const formRef = ref()
 const selectOptions = reactive([
   {
@@ -48,8 +52,8 @@ const selectOptions = reactive([
   }
 ])
 
-const rules: { password: any[]; type: any[]; name: any[]; imagePath?: any[] } = {
-  name: [
+const rules: { password: any[]; type: any[]; username: any[]; image?: any[] } = {
+  username: [
     { required: true, message: 'name is required' },
     { minLength: 5, message: 'must be greater than 5 characters' }
   ],
@@ -58,7 +62,7 @@ const rules: { password: any[]; type: any[]; name: any[]; imagePath?: any[] } = 
     { required: true, message: 'name is required' },
     { minLength: 5, message: 'must be greater than 5 characters' }
   ],
-  imagePath: [{ required: true, message: 'name is required' }]
+  image: [{ required: true, message: 'name is required' }]
 }
 </script>
 
@@ -73,8 +77,8 @@ const rules: { password: any[]; type: any[]; name: any[]; imagePath?: any[] } = 
     >
       <template #title> Title </template>
       <a-form :model="form" ref="formRef" :rules="rules">
-        <a-form-item field="name" label="用户名">
-          <a-input v-model="form.name" />
+        <a-form-item field="username" label="用户名">
+          <a-input v-model="form.username" />
         </a-form-item>
         <a-form-item field="password" label="密码">
           <a-input-password
@@ -92,12 +96,13 @@ const rules: { password: any[]; type: any[]; name: any[]; imagePath?: any[] } = 
               :key="index"
           /></a-select>
         </a-form-item>
-        <a-form-item field="imagePath" label="车牌图片" v-if="form.type === '普通用户'">
+        <a-form-item field="image" label="车牌图片" v-if="form.type === '普通用户'">
           <a-upload
             action="/api/upload"
             :limit="1"
             list-type="picture"
             @success="successLoad"
+            :default-file-list="store.file"
             :on-before-remove="
               () => {
                 imagePath = ''

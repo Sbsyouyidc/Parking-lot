@@ -12,8 +12,8 @@ const store = useUserManage()
       <template #columns>
         <a-table-column title="Id" data-index="Id"></a-table-column>
         <a-table-column title="用户类型" data-index="type"></a-table-column>
-        <a-table-column title="用户名" data-index="userName"></a-table-column>
-        <a-table-column title="密码" data-index="passWord"></a-table-column>
+        <a-table-column title="用户名" data-index="username"></a-table-column>
+        <a-table-column title="密码" data-index="password"></a-table-column>
         <a-table-column title="车牌" data-index="LicensePlate"></a-table-column>
         <a-table-column title="车牌图片" data-index="image"
           ><template #cell="{ record }">
@@ -27,7 +27,8 @@ const store = useUserManage()
         <a-table-column title="操作" fixed="right" width="120">
           <template #cell="{ record }">
             <a-space size="medium">
-              <icon-edit /><icon-delete @click="store.deleteUser(record.Id)"
+              <icon-edit @click="store.edit(JSON.parse(JSON.stringify(record)))" /><icon-delete
+                @click="store.deleteUser(record.Id)"
             /></a-space>
           </template>
         </a-table-column>
