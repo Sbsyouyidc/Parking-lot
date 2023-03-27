@@ -33,6 +33,12 @@ const router = createRouter({
           name: 'ParkingManagement',
           meta: { title: '车位管理' },
           component: () => import('@/views/ParkingManagement/index.vue')
+        },
+        {
+          path: '/UserManagement',
+          name: 'UserManagement',
+          meta: { title: '用户管理' },
+          component: () => import('@/views/userManagement/index.vue')
         }
       ]
     },

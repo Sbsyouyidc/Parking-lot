@@ -10,10 +10,6 @@ type Props = {
 
 const { curItem } = storeToRefs(store)
 const props = withDefaults(defineProps<Props>(), {})
-const collapsed = reactive({
-  default: true,
-  change: true
-})
 
 const deleteItem = (id: number | undefined, index: number | undefined) => {
   if (id) {
@@ -29,15 +25,7 @@ const deleteItem = (id: number | undefined, index: number | undefined) => {
 </script>
 
 <template>
-  <a-menu
-    class="edit-card"
-    mode="pop"
-    :default-collapsed="collapsed.default"
-    v-model:collapsed="collapsed.change"
-    :style="{ width: '200px', height: props.height + 'px' }"
-    show-collapse-button
-    breakpoint="xl"
-  >
+  <a-menu class="edit-card" mode="pop" :style="{ width: '200px', height: props.height + 'px' }">
     <div class="filed">
       坐标
       <a-space>

@@ -42,7 +42,7 @@ const click = (key: string) => {
         <template #icon><icon-apps></icon-apps></template>
         <template #title>信息维护管理</template>
         <a-menu-item key="2_0">个人信息</a-menu-item>
-        <a-menu-item key="2_0">用户管理</a-menu-item>
+        <a-menu-item key="UserManagement">用户管理</a-menu-item>
       </a-sub-menu>
       <a-sub-menu key="3">
         <template #icon><icon-apps></icon-apps></template>

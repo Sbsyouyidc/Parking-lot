@@ -1,10 +1,8 @@
-import { connection } from './utils'
+import { connection, newUser } from './utils'
 import fs from 'fs'
-import path from 'path'
-import request from 'request'
 import dayjs from 'dayjs'
 import duration from 'dayjs/plugin/duration'
-import { getFileContentAsBase64, isExistence, Duration, IData, Price } from './utils'
+import { recognition, isExistence, Duration, IData, Price } from './utils'
 
 dayjs.extend(duration)
 
@@ -20,52 +18,6 @@ interface IParking {
   type: string
 }
 export default {
-  recognition: async (req: any, res: any) => {
-    const { licensePlate, imagePath } = req.body
-    const image = getFileContentAsBase64(path.join(__dirname, '../public/images', imagePath))
-    const options = {
-      method: 'POST',
-      url: 'https://aip.baidubce.com/rest/2.0/ocr/v1/license_plate?access_token=24.d4b8277a543061c7899826015549c5e4.2592000.1680698095.282335-30317694',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        Accept: 'application/json'
-      },
-      form: {
-        image
-      }
-    }
-    request(options, async (error, response) => {
-      if (error) throw new Error(error)
-      const { number } = JSON.parse(response.body).words_result
-      if (number == licensePlate) {
-        const boolean = await isExistence('card', 'licensePlate', licensePlate)
-        ;(boolean &&
-          res.send({
-            code: 200,
-            message: '已存在车牌',
-            res: false
-          })) ||
-          connection.query(
-            `INSERT INTO card(LicensePlate,image ) VALUES ('${licensePlate}', '${imagePath}')`,
-            (err: any, results: IData) => {
-              if (err) throw new Error(err)
-              res.send({
-                code: 200,
-                message: '注册成功',
-                res: true
-              })
-            }
-          )
-      } else {
-        res.send({
-          code: 200,
-          message: '车牌识别不匹配',
-          res: false
-        })
-      }
-    })
-  },
-
   //上传
   upload: (req: any, res: any) => {
     const { originalname, path: filePath, destination } = req.file
@@ -84,7 +36,7 @@ export default {
   //登录
   login: async (req: any, res: any) => {
     const { licensePlate } = req.body
-    const boolean = await isExistence('card', 'licensePlate', licensePlate)
+    const boolean = await isExistence('user', 'licensePlate', licensePlate)
     ;(boolean &&
       res.send({
         code: 200,
@@ -222,5 +174,68 @@ export default {
       res: true,
       message: '保存成功'
     })
+  },
+
+  //获取用户列表
+  getAllUser: (req: any, res: any) => {
+    connection.query('SELECT * FROM user', (err: any, result) => {
+      if (err) throw new Error(err)
+      res.send(result)
+    })
+  },
+
+  //删除车牌
+  deleteUserPlate: (req: any, res: any) => {
+    const { id } = req.params
+    connection.query(`DELETE FROM user WHERE Id = ${id}`, (err: any, result) => {
+      if (err) throw new Error(err)
+      res.send({
+        res: true,
+        message: '删除成功'
+      })
+    })
+  },
+
+  postNewUser: async (req: any, res: any) => {
+    const { name, password, type, imagePath = null } = req.body
+
+    const boolean = await isExistence('user', 'userName', name)
+    if (boolean) {
+      res.send({
+        res: false,
+        message: '用户名已存在'
+      })
+    } else {
+      if (imagePath) {
+        const IdentificationRes = await recognition(imagePath)
+        if (IdentificationRes.includes('error')) {
+          res.send({
+            res: false,
+            message: IdentificationRes
+          })
+        } else {
+          connection.query(
+            `INSERT INTO user(userName, passWord, image, type, LicensePlate) VALUES ('${name}', '${password}','${imagePath}', '${type}', '${IdentificationRes}')`,
+            (err: any, result) => {
+              if (err) throw new Error(err)
+              res.send({
+                res: true,
+                message: IdentificationRes
+              })
+            }
+          )
+        }
+      } else {
+        connection.query(
+          `INSERT INTO user(userName, passWord,type) VALUES ('${name}', '${password}', '${type}')`,
+          (err: any, result) => {
+            if (err) throw new Error(err)
+            res.send({
+              res: true
+            })
+          }
+        )
+      }
+    }
   }
 }

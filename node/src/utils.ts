@@ -1,7 +1,9 @@
 import service from 'mysql2'
 import fs from 'fs'
-import duration from 'dayjs/plugin/duration'
 import dayjs from 'dayjs'
+import path from 'path'
+import request from 'request'
+import duration from 'dayjs/plugin/duration'
 
 dayjs.extend(duration)
 export const connection = service.createConnection({
@@ -92,5 +94,43 @@ export const Price = (duration: number, type: string) => {
         }
       )
     }
+  })
+}
+
+export const newUser = (params: {
+  newName: string
+  password: string
+  type: string
+  imagePath?: string
+}) => {
+  const { newName, password, type, imagePath = null } = params
+  recognition('')
+}
+export const recognition = (imagePath: string) => {
+  return new Promise<any>((resolve, reject) => {
+    const image = getFileContentAsBase64(path.join(__dirname, '../public/images', imagePath))
+
+    const options = {
+      method: 'POST',
+      url: 'https://aip.baidubce.com/rest/2.0/ocr/v1/license_plate?access_token=24.d4b8277a543061c7899826015549c5e4.2592000.1680698095.282335-30317694',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        Accept: 'application/json'
+      },
+      form: {
+        image
+      }
+    }
+    request(options, async (error, response) => {
+      if (error) throw new Error(error)
+      const object = JSON.parse(response.body)
+      if (object.words_result) {
+        const { number } = object.words_result
+        const boolean = await isExistence('user', 'licensePlate', number)
+        ;(boolean && resolve('车牌已存在')) || resolve(number)
+      } else {
+        resolve('未识别到车牌')
+      }
+    })
   })
 }

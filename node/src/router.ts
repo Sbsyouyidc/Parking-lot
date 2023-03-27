@@ -7,7 +7,7 @@ import multer from 'multer'
 import path from 'path'
 const upload = multer({ dest: path.join(__dirname, '../public/images') })
 
-router.post('/recognition', server.recognition)
+// router.post('/recognition', server.recognition)
 router.post('/upload', upload.single('file'), server.upload)
 router.post('/login', server.login)
 router.get('/parkingSpace', server.parkingSpace)
@@ -24,4 +24,8 @@ router.post('/postNewType', orderRecord.postNewType)
 router.delete('/deleType/:type', orderRecord.deleType)
 //车位
 router.post('/postSaveParking', server.postSaveParking)
+//用户
+router.get('/getAllUser', server.getAllUser)
+router.delete('/deleteUserPlate/:id', server.deleteUserPlate)
+router.post('/postNewUser', server.postNewUser)
 export default router
