@@ -84,26 +84,24 @@ const option = ref('')
 </script>
 
 <template>
-  <a-space size="large">
-    <a-input-group>
-      <a-select
-        allow-clear
-        :options="options"
-        :style="{ width: '120px' }"
-        v-model:model-value="option"
-        default-value=""
-        placeholder="查询类别"
-      />
-      <a-input-search
-        :style="{ width: '220px' }"
-        button-text="搜索"
-        search-button
-        placeholder="查询条件"
-        @search="getOrderRecord"
-        v-model:model-value="value"
-      />
-    </a-input-group>
-  </a-space>
+  <a-input-group>
+    <a-select
+      allow-clear
+      :options="options"
+      :style="{ width: '120px' }"
+      v-model:model-value="option"
+      default-value=""
+      placeholder="查询类别"
+    />
+    <a-input-search
+      :style="{ width: '220px' }"
+      button-text="搜索"
+      search-button
+      placeholder="查询条件"
+      @search="getOrderRecord"
+      v-model:model-value="value"
+    />
+  </a-input-group>
 
   <a-table :columns="columns" :data="data" :pagination="pagination" />
 </template>

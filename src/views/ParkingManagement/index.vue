@@ -17,7 +17,7 @@ const client = reactive({
   y: 0,
   height: 0
 })
-onActivated(async () => {
+onMounted(async () => {
   await store.initStore()
   nextTick(() => {
     const ctx = document.querySelector('#tutorial') as HTMLCanvasElement

@@ -50,5 +50,16 @@ export const useParkInfoStore = defineStore('parkInfo', () => {
     }
   }
 
-  return { initStore, VehicleDeparture, state, spaceNumber, plate, parkingData, type }
+  //搜索车位
+  function searchSpace(type: string, id: string) {
+    console.log(type, id)
+    if (id && type) {
+      fetch.get(`/api/getSearchPark?${type}=${id}`).then((result) => {
+        state.value = result
+      })
+    } else {
+      initStore()
+    }
+  }
+  return { initStore, VehicleDeparture, searchSpace, state, spaceNumber, plate, parkingData, type }
 })

@@ -100,11 +100,12 @@ export default {
 
   VehicleDeparture: async (req: any, res: any) => {
     const { number } = req.params
+    console.log(number)
     const { plate, type } = req.body
     //将停车场的车牌变为null
     const boolean = await new Promise<boolean>((resolve, reject) => {
       connection.query(
-        `UPDATE parkingspace SET ParkingPlate = null WHERE number = '${number}'`,
+        `UPDATE parkingspace SET ParkingPlate = Null WHERE number = '${number}'`,
         (err: any, results: IData) => {
           if (err) reject(err)
           resolve(true)
@@ -122,7 +123,9 @@ export default {
           const start = dayjs(StartParkingTime).format('YYYY-MM-DD HH:mm:ss')
           const duration = Duration(dayjs(EndParkingTime).diff(dayjs(StartParkingTime)))
           const price = await Price(dayjs(EndParkingTime).diff(dayjs(StartParkingTime)), type)
-
+          connection.query(
+            `UPDATE parkingspace SET StartParkingTime = Null WHERE number = '${number}'`
+          )
           //将信息存入订单表
           connection.query(
             `INSERT INTO priceorder (LicensePlate, number, Price, StartParkingTime, EndParkingTime,conditionTime) VALUES ('${plate}', '${number}', '${price}', '${start}', '${end}','${end}')`,
@@ -236,28 +239,45 @@ export default {
       }
     }
   },
+
   putUpdateUser: (req: any, res: any) => {
     const { username, password, type, image: new_image, Id, LicensePlate } = req.body
-    connection.query(`SELECT * FROM user where Id = '${Id}'`, async (err, result: any) => {
-      const { image } = result[0]
-      try {
-        const IdentificationRes = image !== new_image ? await recognition(new_image) : LicensePlate
-        connection.query(
-          `UPDATE user SET username = '${username}', password = '${password}',type = '${type}' ,image='${new_image}' , LicensePlate='${IdentificationRes}' WHERE Id = ${Id}`,
-          (err: any, result) => {
-            if (err) throw new Error(err)
-            res.send({
-              res: true,
-              message: '修改成功'
-            })
-          }
-        )
-      } catch (error) {
-        res.send({
-          res: false,
-          message: error
-        })
-      }
-    })
+    if (type == '管理员') {
+      connection.query(
+        `UPDATE user SET username = '${username}', password = '${password}',type = '${type}' ,image= Null , LicensePlate= Null WHERE Id = ${Id}`,
+        (err: any, result) => {
+          if (err) throw new Error(err)
+          res.send({
+            res: true,
+            message: '修改成功'
+          })
+        }
+      )
+    } else {
+      connection.query(`SELECT * FROM user where Id = '${Id}'`, async (err, result: any) => {
+        const { image } = result[0]
+        try {
+          const IdentificationRes =
+            image !== new_image ? await recognition(new_image) : LicensePlate
+          console.log(IdentificationRes)
+
+          connection.query(
+            `UPDATE user SET username = '${username}', password = '${password}',type = '${type}' ,image='${new_image}' , LicensePlate='${IdentificationRes}' WHERE Id = ${Id}`,
+            (err: any, result) => {
+              if (err) throw new Error(err)
+              res.send({
+                res: true,
+                message: '修改成功'
+              })
+            }
+          )
+        } catch (error) {
+          res.send({
+            res: false,
+            message: error
+          })
+        }
+      })
+    }
   }
 }

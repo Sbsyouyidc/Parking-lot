@@ -39,6 +39,18 @@ const router = createRouter({
           name: 'UserManagement',
           meta: { title: '用户管理' },
           component: () => import('@/views/userManagement/index.vue')
+        },
+        {
+          path: '/ParkingInquiry',
+          name: 'ParkingInquiry',
+          meta: { title: '车位查询' },
+          component: () => import('@/views/parkingInquiry/index.vue')
+        },
+        {
+          path: '/FeeDetails',
+          name: 'FeeDetails',
+          meta: { title: '收费明细' },
+          component: () => import('@/views/feeDetails/index.vue')
         }
       ]
     },

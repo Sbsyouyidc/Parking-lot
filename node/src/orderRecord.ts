@@ -20,7 +20,6 @@ export default {
       `SELECT * FROM priceorder where CONCAT(id,LicensePlate,number,StartParkingTime) LIKE  CONCAT('${id}','${LicensePlate}','${number}','%${StartParkingTime}%')`,
       (err: any, results: IData[]) => {
         if (err) throw new Error(err)
-
         res.send(results)
       }
     )
@@ -89,5 +88,21 @@ export default {
     connection.query(`DELETE FROM charge_standard WHERE type = '${type}'`, (err) => {
       res.send({ res: true, message: '删除成功' })
     })
+  },
+  //车位查询
+  getSearchPark: (req: any, res: any) => {
+    const { number = '%', ParkingPlate = '%' } = req.query
+    connection.query(
+      `SELECT * FROM parkingspace where CONCAT(ParkingPlate,number) LIKE  CONCAT('${ParkingPlate}','${number}')`,
+      (err: any, results: IData[]) => {
+        if (err) throw new Error(err)
+        res.send(results)
+      }
+    )
+  },
+
+  //收费详细
+  getChargeDetails:(req:any,res:any)=>{
+    
   }
 }

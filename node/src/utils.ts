@@ -88,8 +88,6 @@ export const Price = (duration: number, type: string) => {
               return right
             }
           }, 0)
-          console.log(res)
-
           resolve(res)
         }
       )
@@ -97,6 +95,67 @@ export const Price = (duration: number, type: string) => {
   })
 }
 
+export const PriceDetail = (duration: number, type: string) => {
+  return new Promise<number>((resolve, reject) => {
+    let Remaining = Math.floor(dayjs.duration(duration).asSeconds() as any)
+    const old_r = Remaining
+    if (Remaining < 1) {
+      resolve(0)
+    } else {
+      connection.execute(
+        `SELECT * FROM charge_standard WHERE  type = '${type}'`,
+        (err, results) => {
+          if (err) throw new Error(err)
+          const res = results.reduce(
+            (right, left) => {
+              const { StartClock, EndClock, HourlyCharge } = left
+              const obj = {
+                StartClock
+              }
+              if (Remaining > 1) {
+                if (EndClock == '以后') {
+                  return (right = [
+                    ...right,
+                    Object.assign(obj, {
+                      settlement: Remaining + '*' + HourlyCharge,
+                      EndClock: old_r
+                    })
+                  ])
+                } else {
+                  const interval = EndClock - StartClock
+                  if (interval > Remaining) {
+                    const tiem = Remaining
+                    Remaining = 0
+                    return (right = [
+                      ...right,
+                      Object.assign(obj, {
+                        EndClock,
+                        settlement: tiem + '*' + HourlyCharge
+                      })
+                    ])
+                  } else {
+                    Remaining -= interval
+                    return (right = [
+                      ...right,
+                      Object.assign(obj, {
+                        EndClock,
+                        settlement: interval + '*' + HourlyCharge
+                      })
+                    ])
+                  }
+                }
+              } else {
+                return right
+              }
+            },
+            [{ Remaining }]
+          )
+          resolve(res)
+        }
+      )
+    }
+  })
+}
 export const recognition = (imagePath: string) => {
   return new Promise<any>((resolve, reject) => {
     const image = getFileContentAsBase64(path.join(__dirname, '../public/images', imagePath))

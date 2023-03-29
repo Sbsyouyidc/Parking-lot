@@ -23,6 +23,7 @@ router.post('/postNewType', orderRecord.postNewType)
 router.delete('/deleType/:type', orderRecord.deleType)
 //车位
 router.post('/postSaveParking', server.postSaveParking)
+router.get('/getSearchPark', orderRecord.getSearchPark)
 //用户
 router.get('/getAllUser', server.getAllUser)
 router.delete('/deleteUserPlate/:id', server.deleteUserPlate)
