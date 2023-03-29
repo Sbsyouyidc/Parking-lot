@@ -29,4 +29,5 @@ router.get('/getAllUser', server.getAllUser)
 router.delete('/deleteUserPlate/:id', server.deleteUserPlate)
 router.post('/postNewUser', server.postNewUser)
 router.put('/putUpdateUser', server.putUpdateUser)
+router.get('/getChargeDetails', orderRecord.getChargeDetails)
 export default router

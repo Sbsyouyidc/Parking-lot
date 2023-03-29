@@ -17,6 +17,10 @@ export const useParkInfoStore = defineStore('parkInfo', () => {
     duration: '',
     type: ''
   })
+  const ChargeDetails = ref<{
+    Price: string
+    PriceDetails: { [key: string]: string }[]
+  }>({ Price: '', PriceDetails: [] })
 
   function initStore(): Promise<void> {
     spaceNumber.value = localStorage.getItem('spaceNumber')
@@ -61,5 +65,25 @@ export const useParkInfoStore = defineStore('parkInfo', () => {
       initStore()
     }
   }
-  return { initStore, VehicleDeparture, searchSpace, state, spaceNumber, plate, parkingData, type }
+
+  //搜索
+  function search(id: string) {
+    fetch.get(`/api/getChargeDetails?id=${id}`).then((result) => {
+      const { PriceDetails, Price } = result
+      ChargeDetails.value = { PriceDetails, Price }
+    })
+  }
+
+  return {
+    initStore,
+    VehicleDeparture,
+    searchSpace,
+    search,
+    state,
+    spaceNumber,
+    plate,
+    parkingData,
+    type,
+    ChargeDetails
+  }
 })

@@ -2,7 +2,7 @@ import { connection } from './utils'
 
 import dayjs from 'dayjs'
 import duration from 'dayjs/plugin/duration'
-import { isExistence, IData } from './utils'
+import { isExistence, IData, PriceDetail } from './utils'
 
 dayjs.extend(duration)
 
@@ -102,7 +102,29 @@ export default {
   },
 
   //收费详细
-  getChargeDetails:(req:any,res:any)=>{
-    
+  getChargeDetails: (req: any, res: any) => {
+    const { id } = req.query
+    connection.query(`SELECT * FROM priceorder WHERE id = ${id}`, (err, result_1: any) => {
+      const { number, StartParkingTime, EndParkingTime, Price } = result_1[0]
+      connection.query(
+        `SELECT * FROM parkingspace WHERE number = '${number}'`,
+        async (err, result_2: any) => {
+  
+
+          const { type } = result_2[0]
+          const PriceDetails = await PriceDetail(
+            dayjs(EndParkingTime).diff(dayjs(StartParkingTime)),
+            type
+          )
+          res.send({
+            res: true,
+            PriceDetails,
+            Price
+          })
+        }
+      )
+    })
+
+    // const   PriceDetail(duration,type)
   }
 }

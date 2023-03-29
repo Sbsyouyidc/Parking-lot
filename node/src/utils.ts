@@ -148,7 +148,7 @@ export const PriceDetail = (duration: number, type: string) => {
                 return right
               }
             },
-            [{ Remaining }]
+            [{ Remaining: duration }]
           )
           resolve(res)
         }
