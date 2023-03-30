@@ -109,8 +109,6 @@ export default {
       connection.query(
         `SELECT * FROM parkingspace WHERE number = '${number}'`,
         async (err, result_2: any) => {
-  
-
           const { type } = result_2[0]
           const PriceDetails = await PriceDetail(
             dayjs(EndParkingTime).diff(dayjs(StartParkingTime)),

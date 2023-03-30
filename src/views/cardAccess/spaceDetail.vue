@@ -12,7 +12,8 @@ const { parkingData } = storeToRefs(store)
     <a-descriptions-item label="停车位">{{ parkingData.number }}</a-descriptions-item>
     <a-descriptions-item label="车位类别">{{ parkingData.type }}</a-descriptions-item>
     <a-descriptions-item label="开始时间">{{ parkingData.start }}</a-descriptions-item
-    ><a-descriptions-item label="停放时长">{{ parkingData.duration }}</a-descriptions-item>
+    ><a-descriptions-item label="停放时长">{{ parkingData.duration }}</a-descriptions-item
+    ><a-descriptions-item label="操作"> <a-button>离场</a-button></a-descriptions-item>
   </a-descriptions>
 </template>
 <style lang="less" scoped></style>

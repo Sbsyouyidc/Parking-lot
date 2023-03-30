@@ -4,7 +4,6 @@ import { ref, watch, computed } from 'vue'
 import { RouterView, useRoute, useRouter } from 'vue-router'
 import headerMenu from './header/header-menu.vue'
 import siderMenu from './sider/sider-menu.vue'
-import sd from '@/views/cardEnter/index.vue'
 const router = useRouter()
 const route = useRoute()
 const isCollapsed = ref(false)

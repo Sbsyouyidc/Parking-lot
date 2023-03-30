@@ -1,9 +1,10 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
-import { ref, computed, toRefs } from 'vue'
+import { ref, toRefs } from 'vue'
 import fetch from '@/request/fetch'
 import { Notification } from '@arco-design/web-vue'
 import { useParkInfoStore } from '@/stores/parkInfo'
+
 import type { IData } from '@/stores/management'
 import dayjs from 'dayjs'
 type Props = {
@@ -18,7 +19,7 @@ const { item } = toRefs(props)
 const handleOk = () => {
   fetch
     .put(`/api/parkingSpace/VehicleSelection/${item.value.id}`, {
-      plate: store.plate
+      plate: input.value
     })
     .then((result: { res: any; message: any }) => {
       const { res, message } = result
@@ -46,24 +47,7 @@ const handleCancel = () => {
   visible.value = false
 }
 
-const data = computed(() => [
-  {
-    label: '车位编号',
-    value: item.value.number
-  },
-  {
-    label: '车位类别',
-    value: item.value.type
-  },
-  {
-    label: '开始时间',
-    value: dayjs(item.value.StartParkingTime).format('YYYY-MM-DD HH:mm:ss')
-  },
-  {
-    label: '停车',
-    value: item.value.ParkingPlate
-  }
-])
+const input = ref('')
 </script>
 
 <template>
@@ -78,7 +62,16 @@ const data = computed(() => [
   >
     <template #title> 车位详细 </template>
     <div>
-      <a-descriptions style="margin-top: 20px" :data="data" :column="1" />
+      <a-descriptions style="margin-top: 20px" :column="1">
+        <a-descriptions-item label="车位编号"> {{ item.number }} </a-descriptions-item>
+        <a-descriptions-item label="开始时间">
+          {{ dayjs(item.StartParkingTime).format('YYYY-MM-DD HH:mm:ss') }}
+        </a-descriptions-item>
+        <a-descriptions-item label="车位类别"> {{ item.type }} </a-descriptions-item>
+        <a-descriptions-item label="停车">
+          <span v-if="item.ParkingPlate">{{ item.ParkingPlate }}</span>
+          <a-input v-else v-model="input"></a-input> </a-descriptions-item
+      ></a-descriptions>
     </div>
   </a-drawer>
 

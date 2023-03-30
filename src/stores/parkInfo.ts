@@ -2,7 +2,6 @@ import { ref, computed, reactive, watch } from 'vue'
 import { defineStore } from 'pinia'
 import dayjs from 'dayjs'
 import fetch from '@/request/fetch'
-import { Duration } from '@/util/index'
 import type { IData } from './management'
 export const useParkInfoStore = defineStore('parkInfo', () => {
   const state = ref<IData[]>([])
@@ -17,6 +16,8 @@ export const useParkInfoStore = defineStore('parkInfo', () => {
     duration: '',
     type: ''
   })
+
+  const parkingArray = ref<any[]>([])
   const ChargeDetails = ref<{
     Price: string
     PriceDetails: { [key: string]: string }[]
@@ -30,10 +31,6 @@ export const useParkInfoStore = defineStore('parkInfo', () => {
     })
   }
 
-  setInterval(() => {
-    parkingData.value.duration = Duration(dayjs().diff(dayjs(parkingData.value.start))) as string
-  }, 1000)
-
   function VehicleDeparture(): Promise<void> {
     if (spaceNumber.value) {
       if (parkingData.value.start) {
@@ -46,6 +43,7 @@ export const useParkInfoStore = defineStore('parkInfo', () => {
             const { res } = result
             if (res) {
               parkingData.value = result
+              parkingArray.value.push(result)
             }
           })
       }
@@ -79,6 +77,7 @@ export const useParkInfoStore = defineStore('parkInfo', () => {
     VehicleDeparture,
     searchSpace,
     search,
+    parkingArray,
     state,
     spaceNumber,
     plate,
