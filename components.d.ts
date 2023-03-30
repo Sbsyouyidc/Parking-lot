@@ -14,6 +14,7 @@ declare module '@vue/runtime-core' {
     AButton: typeof import('@arco-design/web-vue')['Button']
     AButtonGroup: typeof import('@arco-design/web-vue')['ButtonGroup']
     ACard: typeof import('@arco-design/web-vue')['Card']
+    ACardGrid: typeof import('@arco-design/web-vue')['CardGrid']
     ACascader: typeof import('@arco-design/web-vue')['Cascader']
     ACascaderallowClear: typeof import('@arco-design/web-vue')['CascaderallowClear']
     ACheckbox: typeof import('@arco-design/web-vue')['Checkbox']

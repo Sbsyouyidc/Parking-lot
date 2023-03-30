@@ -112,7 +112,7 @@ export const PriceDetail = (duration: number, type: string) => {
               const obj = {
                 StartClock
               }
-              if (Remaining > 1) {
+              if (Remaining >= 1) {
                 if (EndClock == '以后') {
                   return (right = [
                     ...right,

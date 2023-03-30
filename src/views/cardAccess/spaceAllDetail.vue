@@ -62,7 +62,7 @@ setInterval(() => (duration.value = Duration(dayjs().diff(dayjs(item.value.Start
     </a-descriptions>
   </a-modal>
 
-  <a-descriptions layout="inline-horizontal" bordered :column="{ xs: 1, md: 3, lg: 4 }">
+  <a-descriptions layout="inline-horizontal" bordered :column="1">
     <a-descriptions-item label="停车位">{{ item.number }}</a-descriptions-item>
     <a-descriptions-item label="车位类别">{{ item.type }}</a-descriptions-item>
     <a-descriptions-item label="车牌">{{ item.ParkingPlate }}</a-descriptions-item>
@@ -77,4 +77,8 @@ setInterval(() => (duration.value = Duration(dayjs().diff(dayjs(item.value.Start
     >
   </a-descriptions>
 </template>
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+.arco-descriptions {
+  margin-right: 5px;
+}
+</style>

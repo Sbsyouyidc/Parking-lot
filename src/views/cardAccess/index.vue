@@ -21,7 +21,10 @@ const filter = computed(() =>
 </script>
 
 <template>
-  <spaceAllDetail v-for="(item, index) in filter" :key="index" :item="item" />
+  <div class="all-detail">
+    <spaceAllDetail v-for="(item, index) in filter" :key="index" :item="item" />
+  </div>
+
   <div class="card-access box-shadow-inset">
     <parkSpace :item="item" v-for="(item, index) in store.state" :key="index" />
   </div>
@@ -40,5 +43,8 @@ const filter = computed(() =>
     border-top: 3px solid red;
     background-color: aqua;
   }
+}
+.all-detail {
+  display: flex;
 }
 </style>
