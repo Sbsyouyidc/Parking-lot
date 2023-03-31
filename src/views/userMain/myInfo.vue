@@ -4,6 +4,6 @@ import { ref, reactive } from 'vue'
 </script>
 
 <template>
-  <a-layout-footer>Footer</a-layout-footer>
+  <div class="my-main"></div>
 </template>
 <style lang="less" scoped></style>

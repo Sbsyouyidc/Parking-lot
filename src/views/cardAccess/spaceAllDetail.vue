@@ -3,8 +3,10 @@
 import { ref, toRefs } from 'vue'
 import { Duration } from '@/util/index'
 import { useParkInfoStore } from '@/stores/parkInfo'
+import { useUserMainStore } from '@/stores/userMain'
 import dayjs from 'dayjs'
 import fetch from '@/request/fetch'
+const userStore = useUserMainStore()
 const store = useParkInfoStore()
 const props = defineProps<{
   item: any
@@ -18,22 +20,28 @@ const ChargeData = ref({
   price: '',
   duration: ''
 })
-
+const params = ref({})
 const visible = ref(false)
 const VehicleDeparture = (number: any) => {
   visible.value = true
-  fetch
-    .put(`/api/parkingSpace/VehicleDeparture/${number}`, {
+  if (userStore.plate) {
+    params.value = {
+      plate: userStore.plate,
+      type: userStore.type
+    }
+  } else {
+    params.value = {
       plate: item.value.ParkingPlate,
       type: item.value.type
-    })
-    .then((result: any) => {
-      const { res } = result
-      if (res) {
-        ChargeData.value = result
-        store.parkingData = { number: '', start: '', end: '', Price: '', duration: '', type: '' }
-      }
-    })
+    }
+  }
+  fetch.put(`/api/parkingSpace/VehicleDeparture/${number}`, params.value).then((result: any) => {
+    const { res } = result
+    if (res) {
+      ChargeData.value = result
+      store.parkingData = { number: '', start: '', end: '', Price: '', duration: '', type: '' }
+    }
+  })
 }
 
 const duration = ref('')

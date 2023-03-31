@@ -34,18 +34,19 @@ export default {
 
   //登录
   login: async (req: any, res: any) => {
-    const { licensePlate } = req.body
-    const boolean = await isExistence('user', 'licensePlate', licensePlate)
+    const { username, password } = req.body
+    const boolean = await isExistence('user', 'username', username)
     ;(boolean &&
-      res.send({
-        code: 200,
-        message: '登陆成功',
-        res: true,
-        licensePlate
+      connection.query(`SELECT * FROM user WHERE username = '${username}'`, (err, results: any) => {
+        res.send({
+          message: '登陆成功',
+          res: true,
+          arr: results[0]
+        })
       })) ||
       res.send({
         code: 200,
-        message: '车牌未存在；请先注册，绑定车牌',
+        message: '用户不存在',
         res: false
       })
   },

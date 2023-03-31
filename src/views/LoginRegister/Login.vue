@@ -3,41 +3,47 @@
 import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { Message } from '@arco-design/web-vue'
-import plateForm from '@/components/Module/plateForm.vue'
 import fetch from '@/request/fetch'
-import { useParkInfoStore } from '@/stores/parkInfo'
+
 const router = useRouter()
-const licensePlate = ref('')
-const plateValidator = ref(false)
-const store = useParkInfoStore()
 const login = () => {
-  const params = {
-    licensePlate: licensePlate.value
-  }
-  fetch
-    .post('/api/login', params)
-    .then((result: { res: string; message: string; licensePlate: string }) => {
-      const { res, message, licensePlate } = result
-      if (res) {
-        router.push('/Home')
-        localStorage.setItem('plate', licensePlate)
-        Message.success(message)
+  fetch.post('/api/login', form).then((result: { res: string; message: string; arr: any }) => {
+    const { res, message, arr } = result
+    if (res) {
+      if (arr.LicensePlate) {
+        localStorage.setItem('plate', arr.LicensePlate)
+        router.push('/userMain')
       } else {
-        Message.info(message)
+        router.push('/Home')
       }
-    })
+      Message.success(message)
+    } else {
+      Message.info(message)
+    }
+  })
 }
+const form = reactive({
+  username: '',
+  password: ''
+})
 </script>
 
 <template>
   <div class="main box-shadow">
     <a-typography-title :heading="4">登录</a-typography-title>
     <div class="main-body">
-      <plateForm v-model:licensePlate="licensePlate" v-model:plateValidator="plateValidator" />
+      <a-form :model="form" :style="{ width: '300px' }">
+        <a-form-item field="username" label="用户名">
+          <a-input v-model="form.username" />
+        </a-form-item>
+        <a-form-item field="password" label="密码">
+          <a-input v-model="form.password" />
+        </a-form-item>
+      </a-form>
     </div>
     <a-space>
       <a-button @click="router.push('/Register')">注册</a-button>
-      <a-button type="primary" @click="login" :disabled="!plateValidator">登录</a-button>
+      <a-button type="primary" @click="login">登录</a-button>
     </a-space>
   </div>
 </template>

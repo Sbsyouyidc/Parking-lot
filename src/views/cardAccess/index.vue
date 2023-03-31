@@ -1,6 +1,6 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
-import { ref, reactive, computed } from 'vue'
+import { ref, reactive, computed, onMounted } from 'vue'
 import parkSpace from '@/views/cardAccess/parkSpace.vue'
 import { useParkInfoStore } from '@/stores/parkInfo'
 import { onActivated } from 'vue'
@@ -10,7 +10,10 @@ onActivated(async () => {
   await store.initStore()
   await store.VehicleDeparture()
 })
-
+onMounted(async () => {
+  await store.initStore()
+  await store.VehicleDeparture()
+})
 const store = useParkInfoStore()
 
 const { state } = storeToRefs(store)

@@ -71,6 +71,7 @@ declare module '@vue/runtime-core' {
     ATypographyTitle: typeof import('@arco-design/web-vue')['TypographyTitle']
     AUpload: typeof import('@arco-design/web-vue')['Upload']
     Footer: typeof import('./src/components/Layout/footer/index.vue')['default']
+    Header: typeof import('./src/components/Layout/header/index.vue')['default']
     HeaderMenu: typeof import('./src/components/Layout/header/header-menu.vue')['default']
     Layout: typeof import('./src/components/Layout/index.vue')['default']
     ParkSpace: typeof import('./src/components/Module/parkSpace.vue')['default']

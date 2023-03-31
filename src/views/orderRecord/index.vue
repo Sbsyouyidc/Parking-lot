@@ -9,6 +9,9 @@ import { Duration } from '@/util'
 onActivated(() => {
   getOrderRecord()
 })
+onMounted(() => {
+  getOrderRecord()
+})
 const getOrderRecord = (): Promise<void> => {
   return fetch.get(`/api/getSearchOrder?${option.value}=${value.value}`).then((res: any[]) => {
     res.forEach((item: { [key: string]: any }) => {

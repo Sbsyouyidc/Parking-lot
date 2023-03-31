@@ -1,15 +1,12 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import type { FileItem } from '@arco-design/web-vue/es/upload'
 import { Message } from '@arco-design/web-vue'
-import plateForm from '@/components/Module/plateForm.vue'
 import fetch from '@/request/fetch'
 const router = useRouter()
-const licensePlate = ref('')
 const imagePath = ref('')
-const plateValidator = ref(false)
 
 const successLoad = (fileItem: FileItem) => {
   const {
@@ -20,7 +17,8 @@ const successLoad = (fileItem: FileItem) => {
 
 const recognition = () => {
   const params = {
-    licensePlate: licensePlate.value,
+    username: '',
+    password: '',
     imagePath: imagePath.value
   }
   fetch.post('/api/recognition', params).then((result: any) => {
@@ -28,42 +26,41 @@ const recognition = () => {
     ;(res && Message.success(message)) || Message.normal(message)
   })
 }
+const form = reactive({
+  username: '',
+  password: ''
+})
 </script>
 
 <template>
   <div class="main box-shadow">
     <a-page-header title="注册" @back="() => router.replace({ name: 'Login' })"></a-page-header>
 
-    <a-col :span="13">
-      <a-alert>This is an info alert.</a-alert>
-    </a-col>
     <div class="main-body">
-      <div class="plate">
-        <plateForm
-          v-model:licensePlate="licensePlate"
-          v-model:plateValidator="plateValidator"
-        ></plateForm>
-      </div>
-
-      <div class="divider">
-        <div class="divider-body"></div>
-      </div>
-      <div class="upload">
-        <a-upload
-          action="/api/upload"
-          :limit="1"
-          list-type="picture"
-          @success="successLoad"
-          :on-before-remove="
-            () => {
-              imagePath = ''
-              return true
-            }
-          "
-        />
-      </div>
+      <a-form :model="form" layout="vertical" :style="{ width: '300px' }">
+        <a-form-item field="username" label="用户名">
+          <a-input v-model="form.username" />
+        </a-form-item>
+        <a-form-item field="password" label="密码">
+          <a-input v-model="form.password" />
+        </a-form-item>
+        <a-form-item label="车牌上传">
+          <a-upload
+            action="/api/upload"
+            :limit="1"
+            list-type="picture"
+            @success="successLoad"
+            :on-before-remove="
+              () => {
+                imagePath = ''
+                return true
+              }
+            "
+          />
+        </a-form-item>
+      </a-form>
     </div>
-    <a-button @click="recognition" :disabled="!plateValidator">车牌绑定</a-button>
+    <a-button @click="recognition">注册</a-button>
   </div>
 </template>
 <style lang="less" scoped>

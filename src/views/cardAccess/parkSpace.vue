@@ -1,16 +1,26 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
-import { ref, toRefs } from 'vue'
+import { ref, toRefs, watchEffect, nextTick } from 'vue'
 import fetch from '@/request/fetch'
 import { Notification } from '@arco-design/web-vue'
 import { useParkInfoStore } from '@/stores/parkInfo'
-
+import { useUserMainStore } from '@/stores/userMain'
 import type { IData } from '@/stores/management'
 import dayjs from 'dayjs'
 type Props = {
   item: IData
 }
+
 const store = useParkInfoStore()
+const userStore = useUserMainStore()
+
+watchEffect(() => {
+  nextTick(() => {
+    if (userStore.plate) {
+      input.value = userStore.plate
+    }
+  })
+})
 
 const props = withDefaults(defineProps<Props>(), {})
 
@@ -88,8 +98,8 @@ const input = ref('')
 </template>
 <style lang="less" scoped>
 .park {
-  width: 120px;
-  height: 60px;
+  width: 90px;
+  height: 30px;
   cursor: pointer;
   position: absolute;
   & > .number {

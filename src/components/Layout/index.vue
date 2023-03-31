@@ -65,7 +65,7 @@ key: string) => router.push({ name: key })"
           </a-tab-pane>
         </a-tabs>
       </a-layout-content>
-      <a-layout-footer></a-layout-footer>
+      <!-- <a-layout-footer></a-layout-footer> -->
     </a-layout>
   </div>
 </template>
