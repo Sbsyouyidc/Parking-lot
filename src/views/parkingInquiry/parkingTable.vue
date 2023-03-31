@@ -36,7 +36,6 @@ const filterable = {
     :pagination="{ pageSize: 14 }"
   >
     <template #columns>
-      <a-table-column title="id" data-index="id"></a-table-column>
       <a-table-column title="编号" data-index="number"></a-table-column
       ><a-table-column title="收费标准" data-index="type"></a-table-column>
       <a-table-column title="停放详细" data-index="StartParkingTime">

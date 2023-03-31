@@ -57,25 +57,37 @@ const router = createRouter({
     {
       path: '/userMain',
       name: 'userMain',
+      redirect: 'userCardAccess',
       component: () => import('@/views/userMain/index.vue'),
       children: [
         {
           path: '/userCardAccess',
           name: 'userCardAccess',
-          meta: { title: '车辆出入' },
+
           component: () => import('@/views/cardAccess/index.vue')
         },
         {
           path: '/userFeeDetails',
           name: 'userFeeDetails',
-          meta: { title: '收费明细' },
+
           component: () => import('@/views/feeDetails/index.vue')
         },
         {
           path: '/userOrderRecord',
           name: 'userOrderRecord',
-          meta: { title: '订单记录' },
+
           component: () => import('@/views/userMain/userOrderRecord.vue')
+        },
+        {
+          path: '/userMyInfo',
+          name: 'userMyInfo',
+          component: () => import('@/views/userMain/myInfo.vue')
+        },
+        {
+          path: '/userParkingInquiry',
+          name: 'userParkingInquiry',
+          meta: { title: '车位查询' },
+          component: () => import('@/views/parkingInquiry/index.vue')
         }
       ]
     },

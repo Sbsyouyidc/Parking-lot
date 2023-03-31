@@ -3,7 +3,7 @@
 import { ref, reactive, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserMainStore } from '@/stores/userMain'
-const store = useUserMainStore()
+
 const router = useRouter()
 </script>
 
@@ -15,11 +15,11 @@ const router = useRouter()
     <a-layout-footer
       ><div class="item" @click="router.push({ name: 'userCardAccess' })">选择车位</div>
       <a-divider direction="vertical" />
-      <div class="item" @click="router.push({ name: 'userFeeDetails' })">车位查询</div>
+      <div class="item" @click="router.push({ name: 'userParkingInquiry' })">车位查询</div>
       <a-divider direction="vertical" />
       <div class="item" @click="router.push({ name: 'userOrderRecord' })">订单查询</div>
       <a-divider direction="vertical" />
-      <div class="item" @click="router.push({ name: 'userInfo' })">我的</div></a-layout-footer
+      <div class="item" @click="router.push({ name: 'userMyInfo' })">我的</div></a-layout-footer
     >
   </a-layout>
 </template>

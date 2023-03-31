@@ -4,7 +4,8 @@ import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { Message } from '@arco-design/web-vue'
 import fetch from '@/request/fetch'
-
+import { useUserMainStore } from '@/stores/userMain'
+const store = useUserMainStore()
 const router = useRouter()
 const login = () => {
   fetch.post('/api/login', form).then((result: { res: string; message: string; arr: any }) => {
@@ -12,6 +13,7 @@ const login = () => {
     if (res) {
       if (arr.LicensePlate) {
         localStorage.setItem('plate', arr.LicensePlate)
+        localStorage.setItem('myState', JSON.stringify(arr))
         router.push('/userMain')
       } else {
         router.push('/Home')

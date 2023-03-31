@@ -3,6 +3,7 @@ import { defineStore } from 'pinia'
 import { useParkInfoStore } from '@/stores/parkInfo'
 
 export const useUserMainStore = defineStore('userMain', () => {
+  const mySate = computed<any>(() => JSON.parse(localStorage.getItem('myState') as string))
   const filter = computed(() => {
     const store = useParkInfoStore()
     return store.state.filter((item) => item.ParkingPlate == plate.value)
@@ -10,5 +11,5 @@ export const useUserMainStore = defineStore('userMain', () => {
   const plate = computed(() => localStorage.getItem('plate'))
 
   const type = computed(() => filter.value[0].type)
-  return { plate, filter, type }
+  return { plate, filter, type, mySate }
 })
