@@ -2,7 +2,7 @@ import fs from 'fs'
 import dayjs from 'dayjs'
 import duration from 'dayjs/plugin/duration'
 import { recognition, isExistence, Duration, IData, Price, connection } from './utils'
-
+import { black } from './sql'
 dayjs.extend(duration)
 
 interface IParking {
@@ -280,5 +280,26 @@ export default {
         }
       })
     }
+  },
+
+  //黑名单
+  getAllBlack: (req: any, res: any) => {
+    connection.query(black.selectAll, (err, result) => {
+      if (err) {
+        res.send({ res: false, result: [] })
+      } else {
+        res.send({ res: true, result })
+      }
+    })
+  },
+  deleteBlack: (req: any, res: any) => {
+    const { id } = req.params
+    connection.query(black.delete, [id], (err, result) => {
+      if (err) {
+        res.send({ res: false })
+      } else {
+        res.send({ res: true })
+      }
+    })
   }
 }

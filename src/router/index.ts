@@ -51,6 +51,12 @@ const router = createRouter({
           name: 'FeeDetails',
           meta: { title: '收费明细' },
           component: () => import('@/views/feeDetails/index.vue')
+        },
+        {
+          path: '/BlackList',
+          name: 'BlackList',
+          meta: { title: '黑名单' },
+          component: () => import('@/views/blackList/index.vue')
         }
       ]
     },
