@@ -301,5 +301,26 @@ export default {
         res.send({ res: true })
       }
     })
+  },
+  postBlack: (req: any, res: any) => {
+    const params = req.body
+    connection.query(black.insert, [params], (err, result) => {
+      if (err) {
+        res.send({ res: false })
+      } else {
+        res.send({ res: true })
+      }
+    })
+  },
+  putBlack: (req: any, res: any) => {
+    const { id, ...params } = req.body
+    console.log(id, params)
+    connection.query(black.update, [params, id], (err, result) => {
+      if (err) {
+        res.send({ res: false })
+      } else {
+        res.send({ res: true })
+      }
+    })
   }
 }

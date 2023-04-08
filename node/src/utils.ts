@@ -173,8 +173,10 @@ export const recognition = (imagePath: string) => {
     request(options, async (error, response) => {
       if (error) throw new Error(error)
       const object = JSON.parse(response.body)
+      console.log(object)
       if (object.words_result) {
         const { number } = object.words_result
+
         const boolean = await isExistence('user', 'licensePlate', number)
         ;(boolean && reject('车牌已存在')) || resolve(number)
       } else {

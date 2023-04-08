@@ -21,6 +21,7 @@ declare module '@vue/runtime-core' {
     ACol: typeof import('@arco-design/web-vue')['Col']
     ACollapse: typeof import('@arco-design/web-vue')['Collapse']
     ACollapseItem: typeof import('@arco-design/web-vue')['CollapseItem']
+    ADatePicker: typeof import('@arco-design/web-vue')['DatePicker']
     ADescriptionItems: typeof import('@arco-design/web-vue')['DescriptionItems']
     ADescriptions: typeof import('@arco-design/web-vue')['Descriptions']
     ADescriptionsItem: typeof import('@arco-design/web-vue')['DescriptionsItem']

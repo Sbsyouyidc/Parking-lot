@@ -33,4 +33,6 @@ router.get('/getChargeDetails', orderRecord.getChargeDetails)
 
 router.get('/getAllBlack', server.getAllBlack)
 router.delete('/deleteBlack/:id', server.deleteBlack)
+router.post('/postBlack', server.postBlack)
+router.put('/putBlack', server.putBlack)
 export default router

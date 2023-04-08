@@ -10,11 +10,28 @@ onMounted(() => {
 })
 
 const visible = ref(false)
+const type = ref('')
+const optionItem = (form: object) => {
+  if (type.value == 'add') {
+    store.postItem(form)
+  } else {
+    store.putItem(form)
+  }
+}
+const showEdit = (record: object) => {
+  type.value = 'edit'
+  store.form = record
+  visible.value = !visible.value
+}
+
+const add = () => {
+  ;(visible.value = !visible.value), (type.value = 'add')
+}
 </script>
 
 <template>
-  <a-button @click="visible = !visible">新增</a-button>
-  <modal :visible_f="visible" />
+  <a-button @click="add">新增</a-button>
+  <modal :visible_f="visible" @optionItem="optionItem" />
   <div class="black-list">
     <a-table :data="store.state" style="margin-top: 30px">
       <template #columns>
@@ -24,7 +41,7 @@ const visible = ref(false)
         <a-table-column title="操作" fixed="right" width="150">
           <template #cell="{ record }">
             <a-space size="medium">
-              <icon-edit @click="store.editItem()" /><icon-delete
+              <icon-edit @click="showEdit({ ...record })" /><icon-delete
                 @click="store.deletedItem(record.id)"
             /></a-space>
           </template>
