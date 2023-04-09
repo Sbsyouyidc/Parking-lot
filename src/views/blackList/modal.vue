@@ -26,6 +26,7 @@ const handleCancel = () => {
   visible.value = false
   store.form.licenseplate = ''
   store.form.Irregularities = ''
+  store.form.dateTime = ''
   store.$patch((state) => {
     delete state.form.id
   })
@@ -54,16 +55,8 @@ watch(
   }
 )
 
-function onSelect(dateString, date) {
-  console.log('onSelect', dateString, date)
-}
-
-function onChange(dateString, date) {
-  console.log('onChange: ', dateString, date)
-}
-
-function onOk(dateString, date) {
-  console.log('onOk: ', dateString, date)
+const onOk = (dateString: any, date: any) => {
+  store.form.dateTime = dateString
 }
 </script>
 
@@ -78,14 +71,12 @@ function onOk(dateString, date) {
         <a-form-item label="违规行为" field="Irregularities">
           <a-textarea v-model="store.form.Irregularities" :auto-size="{ minRows: 4 }"></a-textarea>
         </a-form-item>
-        <a-form-item label="违规行为" field="Irregularities">
+        <a-form-item label="违规时间" field="dateTime">
           <a-date-picker
+            v-model="store.form.dateTime"
             style="width: 220px; margin: 0 24px 24px 0"
             show-time
-            :time-picker-props="{ defaultValue: '09:09:06' }"
             format="YYYY-MM-DD HH:mm:ss"
-            @change="onChange"
-            @select="onSelect"
             @ok="onOk"
           />
         </a-form-item>

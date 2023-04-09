@@ -8,6 +8,7 @@ export const useBlackStore = defineStore('black', () => {
     id?: number
     licenseplate?: string
     Irregularities?: string
+    dateTime?: string
   }>({
     licenseplate: '',
     Irregularities: ''

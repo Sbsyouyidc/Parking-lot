@@ -1,6 +1,7 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue'
+import dayjs from 'dayjs'
 import { IconEdit, IconDelete } from '@arco-design/web-vue/es/icon'
 import { useBlackStore } from '@/stores/black'
 import modal from './modal.vue'
@@ -33,11 +34,16 @@ const add = () => {
   <a-button @click="add">新增</a-button>
   <modal :visible_f="visible" @optionItem="optionItem" />
   <div class="black-list">
-    <a-table :data="store.state" style="margin-top: 30px">
+    <a-table :data="store.state" style="margin-top: 30px" :pagination="{ pageSize: 15 }">
       <template #columns>
         <a-table-column title="id" data-index="id"></a-table-column>
         <a-table-column title="车牌" data-index="licenseplate"></a-table-column>
         <a-table-column title="违规行为" data-index="Irregularities"></a-table-column>
+        <a-table-column title="违规时间" data-index="dateTime">
+          <template #cell="{ record }">
+            {{ dayjs(record.dateTime).format('YYYY-MM-DD HH:mm:ss') }}
+          </template></a-table-column
+        >
         <a-table-column title="操作" fixed="right" width="150">
           <template #cell="{ record }">
             <a-space size="medium">
