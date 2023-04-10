@@ -24,16 +24,16 @@ const filter = computed(() =>
 </script>
 
 <template>
-  <div class="all-detail">
-    <spaceAllDetail v-for="(item, index) in filter" :key="index" :item="item" />
-  </div>
-
   <div class="card-access box-shadow-inset">
     <parkSpace :item="item" v-for="(item, index) in store.state" :key="index" />
+  </div>
+  <div class="all-detail">
+    <spaceAllDetail v-for="(item, index) in filter" :key="index" :item="item" />
   </div>
 </template>
 <style lang="less" scoped>
 .card-access {
+  overflow: auto;
   position: relative;
   height: 600px;
   margin: 10px;

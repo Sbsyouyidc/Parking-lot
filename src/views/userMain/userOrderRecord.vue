@@ -45,11 +45,19 @@ const search = (id: string) => {
       ><div>订单号 {{ item.id }}</div>
       <div>车牌号 {{ item.LicensePlate }}</div>
       <div>车位编号 {{ item.number }}</div>
-      <div>车费 {{ item.Price }}</div>
-      <div>开始时间 {{ item.StartParkingTime }}</div>
-      <div>结束时间 {{ item.EndParkingTime }}</div>
-      <div>结束时间 {{ item.duration }}</div></a-card
-    >
+      <div>
+        <span>开始时间 {{ item.StartParkingTime }}</span>
+        <span class="price"> 车费 ￥{{ item.Price }}</span>
+      </div>
+    </a-card>
   </div>
 </template>
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+.arco-card {
+  margin: 15px;
+  & .price {
+    float: right;
+    font-weight: bold;
+  }
+}
+</style>

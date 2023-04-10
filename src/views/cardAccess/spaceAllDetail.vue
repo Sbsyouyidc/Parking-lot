@@ -50,7 +50,7 @@ setInterval(() => (duration.value = Duration(dayjs().diff(dayjs(item.value.Start
 
 <template>
   <a-modal
-    modal-class="modal"
+    width="auto"
     v-model:visible="visible"
     @ok="
       () => {

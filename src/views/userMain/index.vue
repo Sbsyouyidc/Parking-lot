@@ -26,6 +26,7 @@ const router = useRouter()
 <style lang="less" scoped>
 .user-main :deep(.arco-layout-header),
 .user-main :deep(.arco-layout-content) {
+  overflow: auto;
   display: flex;
   flex-direction: column;
   font-size: 16px;

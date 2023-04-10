@@ -26,17 +26,32 @@ const data = ref([
 
 <template>
   <div class="my-main">
-    <a-image width="100" :src="`http://localhost:3000/static/images/${mySate.image}`"></a-image>
-    <a-descriptions style="margin-top: 20px" :data="data" :column="1"> </a-descriptions
-    ><a-button type="primary">编辑</a-button>
+    <a-list>
+      <a-list-item>
+        <span>车牌 </span>
+        <a-image
+          class="right"
+          width="100"
+          :src="`http://localhost:3000/static/images/${mySate.image}`"
+        ></a-image>
+      </a-list-item>
+      <a-list-item v-for="item in data" :key="item">
+        <span>{{ item.label }}</span>
+        <span class="right">{{ item.value }}</span>
+      </a-list-item>
+    </a-list>
   </div>
 </template>
 <style lang="less" scoped>
 .my-main {
-  margin-top: 30px;
+  margin: 30px 15px 0 15px;
   height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+}
+.arco-list-wrapper {
+  border-radius: 10px;
+  background-color: #ffffffe6;
+}
+.right {
+  float: right;
 }
 </style>

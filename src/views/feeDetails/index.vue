@@ -33,4 +33,8 @@ watchEffect(() => {
     <resDetail :obj="store.ChargeDetails" v-if="store.ChargeDetails.Price" :id="id" />
   </div>
 </template>
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+.arco-input-search {
+  margin-bottom: 20px;
+}
+</style>
