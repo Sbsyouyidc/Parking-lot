@@ -2,13 +2,13 @@
 <script setup lang="ts">
 import { ref, reactive, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import { useUserMainStore } from '@/stores/userMain'
 
 const router = useRouter()
 </script>
 
 <template>
   <a-layout class="user-main" style="height: 100%">
+    <a-layout-header class="box-shadow">11111111111111 </a-layout-header>
     <a-layout-content>
       <keep-alive><RouterView /></keep-alive>
     </a-layout-content>
@@ -59,5 +59,10 @@ const router = useRouter()
 
 .user-main :deep(.arco-layout-footer) {
   height: 64px;
+}
+.user-main :deep(.arco-layout-header) {
+  text-align: center;
+  margin-bottom: 2px;
+  line-height: 45px;
 }
 </style>

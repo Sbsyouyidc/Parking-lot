@@ -1,6 +1,7 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
 import { ref, reactive, computed, onMounted } from 'vue'
+import { IconEmpty } from '@arco-design/web-vue/es/icon'
 import { useUserMainStore } from '@/stores/userMain'
 import { useRouter } from 'vue-router'
 import dayjs from 'dayjs'
@@ -41,15 +42,22 @@ const search = (id: string) => {
 
 <template>
   <div class="user-order-record">
-    <a-card v-for="item in filter" :key="item.id" @click="search(item.id)"
-      ><div>订单号 {{ item.id }}</div>
-      <div>车牌号 {{ item.LicensePlate }}</div>
-      <div>车位编号 {{ item.number }}</div>
-      <div>
-        <span>开始时间 {{ item.StartParkingTime }}</span>
-        <span class="price"> 车费 ￥{{ item.Price }}</span>
-      </div>
-    </a-card>
+    <div v-if="filter.length !== 0">
+      <a-card v-for="item in filter" :key="item.id" @click="search(item.id)"
+        ><div>订单号 {{ item.id }}</div>
+        <div>车牌号 {{ item.LicensePlate }}</div>
+        <div>车位编号 {{ item.number }}</div>
+        <div>
+          <span>开始时间 {{ item.StartParkingTime }}</span>
+          <span class="price"> 车费 ￥{{ item.Price }}</span>
+        </div>
+      </a-card>
+    </div>
+    <a-result title="暂无订单" v-else>
+      <template #icon>
+        <IconEmpty />
+      </template>
+    </a-result>
   </div>
 </template>
 <style lang="less" scoped>
