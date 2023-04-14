@@ -10,10 +10,10 @@ onActivated(async () => {
   await store.initStore()
   await store.VehicleDeparture()
 })
-onMounted(async () => {
-  await store.initStore()
-  await store.VehicleDeparture()
-})
+// onMounted(async () => {
+//   await store.initStore()
+//   await store.VehicleDeparture()
+// })
 const store = useParkInfoStore()
 
 const { state } = storeToRefs(store)

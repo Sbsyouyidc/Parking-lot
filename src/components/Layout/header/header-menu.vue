@@ -14,8 +14,8 @@ const click = (key: string) => {
       <a-menu-item key="0" :style="{ padding: 0, marginRight: '38px' }" disabled> </a-menu-item>
       <a-menu-item key="Home">管理员</a-menu-item>
       <a-menu-item key="userMain">用户</a-menu-item>
-      <a-menu-item key="1">面版</a-menu-item>
-      <a-menu-item key="2">监控</a-menu-item>
+      <a-menu-item key="Panel">面版</a-menu-item>
+      <a-menu-item key="Monitoring">监控</a-menu-item>
     </a-menu>
   </div>
 </template>

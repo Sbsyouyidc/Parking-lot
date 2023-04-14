@@ -316,6 +316,8 @@ export default {
     const { id, ...params } = req.body
     console.log(id, params)
     connection.query(black.update, [params, id], (err, result) => {
+      console.log(err)
+
       if (err) {
         res.send({ res: false })
       } else {

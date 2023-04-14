@@ -5,6 +5,7 @@ import fetch from '@/request/fetch'
 import { Notification } from '@arco-design/web-vue'
 import { useParkInfoStore } from '@/stores/parkInfo'
 import { useUserMainStore } from '@/stores/userMain'
+import plateSelect from '@/components/Module/plateSelect.vue'
 import type { IData } from '@/stores/management'
 import dayjs from 'dayjs'
 type Props = {
@@ -80,8 +81,9 @@ const input = ref('')
         <a-descriptions-item label="车位类别"> {{ item.type }} </a-descriptions-item>
         <a-descriptions-item label="停车">
           <span v-if="item.ParkingPlate">{{ item.ParkingPlate }}</span>
-          <a-input v-else v-model="input"></a-input> </a-descriptions-item
-      ></a-descriptions>
+          <plateSelect @on-change="(val) => (input = val)" />
+        </a-descriptions-item>
+      </a-descriptions>
     </div>
   </a-drawer>
 

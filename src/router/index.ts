@@ -57,6 +57,18 @@ const router = createRouter({
           name: 'BlackList',
           meta: { title: '黑名单' },
           component: () => import('@/views/blackList/index.vue')
+        },
+        {
+          path: '/Panel',
+          name: 'Panel',
+          meta: { title: '面板' },
+          component: () => import('@/views/panel/index.vue')
+        },
+        {
+          path: '/Monitoring',
+          name: 'Monitoring',
+          meta: { title: '监控' },
+          component: () => import('@/views/monitoring/index.vue')
         }
       ]
     },

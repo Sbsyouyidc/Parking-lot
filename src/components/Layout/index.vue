@@ -28,7 +28,7 @@ const handleDelete = (key: string) => {
   const index = data.value.findIndex((item) => item.key == key)
   data.value = data.value.filter((item) => item.key !== key)
   if (data.value.length === 0) {
-    router.push({ name: 'Home' })
+    router.push({ name: 'Panel' })
   } else if (index == data.value.length) {
     activeKey.value = data.value[index - 1].key
     router.push({ name: data.value[index - 1].key })

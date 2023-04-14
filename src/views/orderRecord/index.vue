@@ -109,7 +109,7 @@ const option = ref('')
   <a-table :columns="columns" :data="data" :pagination="pagination" />
 </template>
 <style lang="less" scoped>
-.arco-space {
-  margin-bottom: 10px;
+.arco-input-group {
+  margin-bottom: 20px;
 }
 </style>
