@@ -21,7 +21,10 @@ onActivated(() => {
       </template>
       <div class="show-item">
         <div class="showPanel" v-for="(item, index) of store.detail" :key="index">
-          <div class="showPanel-body">
+          <div
+            class="showPanel-body"
+            :style="{ 'background-color': `rgb(var(--arcoblue-${6 - index}))` }"
+          >
             <div class="title">{{ item.label }}</div>
             <div class="body">{{ item.num }}</div>
           </div>
@@ -47,7 +50,6 @@ onActivated(() => {
     font-size: large;
     font-weight: bold;
     border-radius: 10px;
-    background-color: rgb(var(--arcoblue-6));
     color: white;
   }
   flex: 1;

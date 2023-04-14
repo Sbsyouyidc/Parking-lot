@@ -6,13 +6,16 @@ import { storeToRefs } from 'pinia'
 type Props = {
   client: { x: number; y: number }
 }
-
+const curIndex = ref<number>()
 const store = useManaGement()
 const { concatData, data } = storeToRefs(store)
 const props = withDefaults(defineProps<Props>(), {})
 
 const mouserDown = (event: MouseEvent, index: number) => {
   const { offsetX, offsetY } = event
+  curIndex.value = event.target.dataset.index as number
+  console.log(curIndex.value)
+
   const type = concatData.value[index].id ? 'oldItem' : 'newItem'
   let indexOf = 0
   if (type == 'oldItem') {
@@ -42,7 +45,6 @@ const mouserDown = (event: MouseEvent, index: number) => {
 
 <template>
   <div
-    class="edit-item"
     v-for="(item, index) in concatData"
     :key="index"
     @mousedown="mouserDown($event, index)"
@@ -50,7 +52,12 @@ const mouserDown = (event: MouseEvent, index: number) => {
       left: concatData[index].coordinates.X + 'px',
       top: concatData[index].coordinates.Y + 'px'
     }"
-    :class="[concatData[index].status == 'true' ? 'use' : 'unUse']"
+    class="edit-item"
+    :class="[
+      concatData[index].status == 'true' ? 'use' : 'unUse',
+      index == curIndex ? 'select' : ''
+    ]"
+    :data-index="index"
   >
     {{ item.number }}
   </div>
@@ -75,5 +82,8 @@ const mouserDown = (event: MouseEvent, index: number) => {
 .unUse {
   background-color: rgba(82, 82, 82, 0.2);
   border: 2px dashed rgb(86, 86, 88);
+}
+.select {
+  box-shadow: 1px 1px 7px 1px #7e7e7ec7;
 }
 </style>
