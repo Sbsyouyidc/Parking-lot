@@ -7,7 +7,9 @@ import router from './router'
 import './assets/main.css'
 import '@arco-design/web-vue/dist/arco.css'
 import ArcoVue from '@arco-design/web-vue'
-
+window._AMapSecurityConfig = {
+  securityJsCode: 'fefb3cefd090204e48b676b025ebd5a7'
+}
 const app = createApp(App)
 Notification._context = app._context
 
