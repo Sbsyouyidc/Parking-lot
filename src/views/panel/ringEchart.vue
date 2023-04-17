@@ -1,6 +1,6 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
-import { onMounted, computed } from 'vue'
+import { onMounted, computed, onActivated } from 'vue'
 import * as echarts from 'echarts/core'
 import {
   TitleComponent,
@@ -33,12 +33,18 @@ echarts.use([
   UniversalTransition
 ])
 
-onMounted(async () => {
+onMounted(() => {
+  init()
+})
+onActivated(() => {
+  init()
+})
+const init = async () => {
   await store.getOrderRecord()
   const myChart = echarts.init(document.getElementById('main') as HTMLElement)
   window.addEventListener('resize', myChart.resize)
   myChart.setOption(option.value)
-})
+}
 
 const option = computed(() => {
   return {
