@@ -9,6 +9,7 @@ import { useBlackStore } from '@/stores/black'
 import plateSelect from '@/components/Module/plateSelect.vue'
 import type { IData } from '@/stores/management'
 import model from './model.vue'
+import { storeToRefs } from 'pinia'
 import dayjs from 'dayjs'
 type Props = {
   item: IData
@@ -29,13 +30,11 @@ watchEffect(() => {
 const props = withDefaults(defineProps<Props>(), {})
 
 const { item } = toRefs(props)
-
-let filter: any[] = []
+const { filterBlack } = storeToRefs(blackStore)
 
 const handleOk = async () => {
-  const { result: blackArray } = await blackStore.blackArray(input.value)
-  filter = blackArray.filter((item: { status: number }) => item.status !== 1)
-  if (filter.length >= 3) {
+ await blackStore.blackArray(input.value)
+  if (filterBlack.value.length >= 3) {
     visible_model.value = !visible_model.value
     return
   }
@@ -103,7 +102,7 @@ const visible_model = ref(true)
       {{ '未处理违规记录已到上线，请先处理违规记录' }}
     </div>
     <div>
-      {{ '上限为3次，目前为' + filter.length + '次' }}
+      {{ '上限为3次，目前为' + filterBlack.length + '次' }}
     </div></model
   >
   <div

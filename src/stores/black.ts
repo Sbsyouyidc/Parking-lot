@@ -18,6 +18,16 @@ export const useBlackStore = defineStore('black', () => {
     Irregularities: '',
     status: 0
   })
+  const plateBlack = ref<
+    {
+      Irregularities: string
+      dateTime: string
+      id: number
+      licenseplate: string
+      status: number
+    }[]
+  >([])
+
   const status = [
     { label: '待处理', value: 0, color: '#f53f3f' },
     { label: '已处理', value: 1, color: '#00b42a' }
@@ -58,8 +68,23 @@ export const useBlackStore = defineStore('black', () => {
 
   function blackArray(input: string) {
     return fetch.get(`api/getBlackPlate?plate=${input}`).then((result) => {
-      return result
+      plateBlack.value = result.arr
     })
   }
-  return { state, initStore, deletedItem, putItem, postItem, form, status, blackArray }
+
+  const filterBlack = computed(() =>
+    plateBlack.value.filter((item: { status: number }) => item.status !== 1)
+  )
+  return {
+    state,
+    initStore,
+    deletedItem,
+    putItem,
+    postItem,
+    form,
+    status,
+    blackArray,
+    plateBlack,
+    filterBlack
+  }
 })

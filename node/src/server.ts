@@ -332,7 +332,7 @@ export default {
       if (err) {
         res.send({ res: false })
       } else {
-        res.send({ res: true, result })
+        res.send({ res: true, arr: result })
       }
     })
   }
