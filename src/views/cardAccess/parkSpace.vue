@@ -5,8 +5,10 @@ import fetch from '@/request/fetch'
 import { Notification } from '@arco-design/web-vue'
 import { useParkInfoStore } from '@/stores/parkInfo'
 import { useUserMainStore } from '@/stores/userMain'
+import { useBlackStore } from '@/stores/black'
 import plateSelect from '@/components/Module/plateSelect.vue'
 import type { IData } from '@/stores/management'
+import model from './model.vue'
 import dayjs from 'dayjs'
 type Props = {
   item: IData
@@ -14,6 +16,7 @@ type Props = {
 
 const store = useParkInfoStore()
 const userStore = useUserMainStore()
+const blackStore = useBlackStore()
 
 watchEffect(() => {
   nextTick(() => {
@@ -27,7 +30,15 @@ const props = withDefaults(defineProps<Props>(), {})
 
 const { item } = toRefs(props)
 
-const handleOk = () => {
+let filter: any[] = []
+
+const handleOk = async () => {
+  const { result: blackArray } = await blackStore.blackArray(input.value)
+  filter = blackArray.filter((item: { status: number }) => item.status !== 1)
+  if (filter.length >= 3) {
+    visible_model.value = !visible_model.value
+    return
+  }
   fetch
     .put(`/api/parkingSpace/VehicleSelection/${item.value.id}`, {
       plate: input.value
@@ -59,6 +70,7 @@ const handleCancel = () => {
 }
 
 const input = ref('')
+const visible_model = ref(true)
 </script>
 
 <template>
@@ -86,7 +98,14 @@ const input = ref('')
       </a-descriptions>
     </div>
   </a-drawer>
-
+  <model :visible="visible_model">
+    <div>
+      {{ '未处理违规记录已到上线，请先处理违规记录' }}
+    </div>
+    <div>
+      {{ '上限为3次，目前为' + filter.length + '次' }}
+    </div></model
+  >
   <div
     v-if="item.status == 'true'"
     :class="[item.ParkingPlate ? 'stopped' : 'not-stopped']"

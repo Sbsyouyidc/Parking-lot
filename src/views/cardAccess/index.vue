@@ -6,14 +6,12 @@ import { useParkInfoStore } from '@/stores/parkInfo'
 import { onActivated } from 'vue'
 import spaceAllDetail from './spaceAllDetail.vue'
 import { storeToRefs } from 'pinia'
+
 onActivated(async () => {
   await store.initStore()
   await store.VehicleDeparture()
 })
-// onMounted(async () => {
-//   await store.initStore()
-//   await store.VehicleDeparture()
-// })
+
 const store = useParkInfoStore()
 
 const { state } = storeToRefs(store)

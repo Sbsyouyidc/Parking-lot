@@ -35,4 +35,5 @@ router.get('/getAllBlack', server.getAllBlack)
 router.delete('/deleteBlack/:id', server.deleteBlack)
 router.post('/postBlack', server.postBlack)
 router.put('/putBlack', server.putBlack)
+router.get('/getBlackPlate', server.getBlackPlate)
 export default router

@@ -73,6 +73,16 @@ const onOk = (dateString: any, date: any) => {
         <a-form-item label="违规行为" field="Irregularities">
           <a-textarea v-model="store.form.Irregularities" :auto-size="{ minRows: 4 }"></a-textarea>
         </a-form-item>
+        <a-form-item label="处理情况" field="status">
+          <a-select v-model:model-value="store.form.status">
+            <a-option
+              v-for="item in store.status"
+              :key="item.value"
+              :value="item.value"
+              :label="item.label"
+            />
+          </a-select>
+        </a-form-item>
         <a-form-item label="违规时间" field="dateTime">
           <a-date-picker
             v-model="store.form.dateTime"

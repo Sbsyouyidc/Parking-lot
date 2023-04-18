@@ -41,6 +41,7 @@ declare module '@vue/runtime-core' {
     AOption: typeof import('@arco-design/web-vue')['Option']
     APageHeader: typeof import('@arco-design/web-vue')['PageHeader']
     AResult: typeof import('@arco-design/web-vue')['Result']
+    ASele: typeof import('@arco-design/web-vue')['Sele']
     ASelect: typeof import('@arco-design/web-vue')['Select']
     ASpace: typeof import('@arco-design/web-vue')['Space']
     ASpin: typeof import('@arco-design/web-vue')['Spin']

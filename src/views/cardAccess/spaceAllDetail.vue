@@ -20,13 +20,10 @@ const ChargeData = ref({
   price: '',
   duration: ''
 })
-const params = ref({})
+const params = ref({ plate: '', type: '' })
 const visible = ref(false)
-const VehicleDeparture = (number: any) => {
-  console.log(number)
+const VehicleDeparture = async (number: any) => {
   visible.value = true
-  console.log(userStore.plate)
-
   if (userStore.plate) {
     params.value = {
       plate: userStore.plate,
@@ -38,8 +35,6 @@ const VehicleDeparture = (number: any) => {
       type: item.value.type
     }
   }
-  console.log(params)
-
   fetch.put(`/api/parkingSpace/VehicleDeparture/${number}`, params.value).then((result: any) => {
     const { res } = result
     if (res) {

@@ -9,14 +9,19 @@ type Iform = {
   licenseplate?: string
   Irregularities?: string
   dateTime?: string
+  status?: number
 }
 export const useBlackStore = defineStore('black', () => {
   const state = ref()
   const form = ref<Iform>({
     licenseplate: '',
-    Irregularities: ''
+    Irregularities: '',
+    status: 0
   })
-
+  const status = [
+    { label: '待处理', value: 0, color: '#f53f3f' },
+    { label: '已处理', value: 1, color: '#00b42a' }
+  ]
   function initStore() {
     return fetch.get('/api/getAllBlack').then((res) => {
       const { result } = res
@@ -50,5 +55,11 @@ export const useBlackStore = defineStore('black', () => {
       }
     })
   }
-  return { state, initStore, deletedItem, putItem, postItem, form }
+
+  function blackArray(input: string) {
+    return fetch.get(`api/getBlackPlate?plate=${input}`).then((result) => {
+      return result
+    })
+  }
+  return { state, initStore, deletedItem, putItem, postItem, form, status, blackArray }
 })

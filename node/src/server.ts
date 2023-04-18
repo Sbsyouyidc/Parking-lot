@@ -61,9 +61,9 @@ export default {
 
   VehicleSelection: async (req: any, res: any) => {
     const time = dayjs().format('YYYY-MM-DD HH:mm:ss')
-
     const { plate } = req.body
     const { id } = req.params
+
     const boolean = await isExistence('parkingspace', 'parkingPlate', plate)
     ;(boolean &&
       res.send({
@@ -322,6 +322,17 @@ export default {
         res.send({ res: false })
       } else {
         res.send({ res: true })
+      }
+    })
+  },
+
+  getBlackPlate: (req: any, res: any) => {
+    const { plate } = req.query
+    connection.query(black.select, [plate], (err, result) => {
+      if (err) {
+        res.send({ res: false })
+      } else {
+        res.send({ res: true, result })
       }
     })
   }

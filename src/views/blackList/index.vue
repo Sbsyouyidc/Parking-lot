@@ -44,6 +44,13 @@ const add = () => {
             {{ dayjs(record.dateTime).format('YYYY-MM-DD HH:mm:ss') }}
           </template></a-table-column
         >
+        <a-table-column title="处理状态">
+          <template #cell="{ record }">
+            <a-tag :color="store.status[record.status].color">
+              {{ store.status[record.status].label }}</a-tag
+            >
+          </template>
+        </a-table-column>
         <a-table-column title="操作" fixed="right" width="150">
           <template #cell="{ record }">
             <a-space size="medium">
