@@ -50,7 +50,8 @@ const mouserDown = (event: MouseEvent, index: number) => {
     @mousedown="mouserDown($event, index)"
     :style="{
       left: concatData[index].coordinates.X + 'px',
-      top: concatData[index].coordinates.Y + 'px'
+      top: concatData[index].coordinates.Y + 'px',
+      transform: `rotate(${concatData[index].coordinates.degree}deg)`
     }"
     class="edit-item"
     :class="[

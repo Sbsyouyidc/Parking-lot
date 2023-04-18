@@ -2,13 +2,14 @@
 <script setup lang="ts">
 import { ref, reactive, watch } from 'vue'
 import { useRouter } from 'vue-router'
-
+import { useRoute } from 'vue-router'
 const router = useRouter()
+const route = useRoute()
 </script>
 
 <template>
   <a-layout class="user-main" style="height: 100%">
-    <a-layout-header class="box-shadow">11111111111111 </a-layout-header>
+    <a-layout-header class="box-shadow">{{ route.meta.title }} </a-layout-header>
     <a-layout-content>
       <keep-alive><RouterView /></keep-alive>
     </a-layout-content>

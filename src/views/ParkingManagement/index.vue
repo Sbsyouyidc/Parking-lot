@@ -40,7 +40,7 @@ const drop = (e: { clientX: any; clientY: any }) => {
       EndParkingTime: '',
       ParkingPlate: '',
       StartParkingTime: '',
-      coordinates: { X: 0, Y: 0 },
+      coordinates: { X: 0, Y: 0, degree: 0 },
       creationTime: '',
       number: '',
       status: 'true',

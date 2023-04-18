@@ -18,24 +18,34 @@ const form = reactive({
 
 <template>
   <div class="parking-inquiry">
-    <a-select
-      allow-clear
-      :options="options"
-      :style="{ width: '120px' }"
-      v-model:model-value="form.select"
-      default-value=""
-      placeholder="查询类别"
-    />
-    <a-input-search
-      :style="{ width: '220px' }"
-      button-text="搜索"
-      search-button
-      placeholder="查询条件"
-      @search="store.searchSpace(form.select, form.input)"
-      v-model:model-value="form.input"
-    />
+    <div style="margin-left: 10px">
+      <a-select
+        allow-clear
+        :options="options"
+        :style="{ width: '120px' }"
+        v-model:model-value="form.select"
+        default-value=""
+        placeholder="查询类别"
+      />
+      <a-input-search
+        :style="{ width: '220px' }"
+        button-text="搜索"
+        search-button
+        placeholder="查询条件"
+        @search="store.searchSpace(form.select, form.input)"
+        v-model:model-value="form.input"
+      />
+    </div>
 
     <parking-table />
   </div>
 </template>
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+.arco-input-search {
+  margin-left: 5px;
+}
+:deep(.arco-select-view-single),
+:deep(.arco-input-wrapper) {
+  background: rgb(255, 255, 255);
+}
+</style>

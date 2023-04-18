@@ -91,7 +91,11 @@ const input = ref('')
     v-if="item.status == 'true'"
     :class="[item.ParkingPlate ? 'stopped' : 'not-stopped']"
     class="park"
-    :style="{ left: item.coordinates.X + 'px', top: item.coordinates.Y + 'px' }"
+    :style="{
+      left: item.coordinates.X + 'px',
+      top: item.coordinates.Y + 'px',
+      transform: `rotate(${item.coordinates.degree}deg)`
+    }"
     @click="handleClick"
   >
     <span v-if="item.ParkingPlate" class="plate">{{ item.ParkingPlate }}</span>

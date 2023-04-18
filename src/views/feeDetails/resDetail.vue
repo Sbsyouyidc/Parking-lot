@@ -33,7 +33,6 @@ const detail = computed(() => obj.value.PriceDetails.filter((item, index) => ind
 <style lang="less" scoped>
 .res-detail {
   margin: 0 auto;
-
   font-weight: bold;
   padding: 10px;
   font-family: sans-serif;

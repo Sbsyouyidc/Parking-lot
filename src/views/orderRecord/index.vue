@@ -112,4 +112,11 @@ const option = ref('')
 .arco-input-group {
   margin-bottom: 20px;
 }
+.arco-input-search {
+  margin-left: 5px;
+}
+:deep(.arco-select-view-single),
+:deep(.arco-input-wrapper) {
+  background: rgb(255, 255, 255);
+}
 </style>

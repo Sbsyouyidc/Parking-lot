@@ -91,11 +91,10 @@ export default {
   },
   //车位查询
   getSearchPark: (req: any, res: any) => {
-    const { number = '%', ParkingPlate = '%' } = req.query
+    const arr = Object.entries(req.query)[0]
     connection.query(
-      `SELECT * FROM parkingspace where CONCAT(ParkingPlate,number) LIKE  CONCAT('${ParkingPlate}','${number}')`,
+      `SELECT * FROM parkingspace where ${arr[0]} = '${arr[1]}'`,
       (err: any, results: IData[]) => {
-        if (err) throw new Error(err)
         res.send(results)
       }
     )

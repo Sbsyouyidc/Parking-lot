@@ -17,6 +17,9 @@ const login = () => {
         router.push('/userMain')
       } else {
         router.push('/Home')
+
+        localStorage.setItem('plate', '')
+        localStorage.setItem('myState', '')
       }
       Message.success(message)
     } else {

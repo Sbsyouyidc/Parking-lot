@@ -156,20 +156,42 @@ export const PriceDetail = (duration: number, type: string) => {
     }
   })
 }
-export const recognition = (imagePath: string) => {
-  return new Promise<any>((resolve, reject) => {
-    const image = getFileContentAsBase64(path.join(__dirname, '../public/images', imagePath))
-    const options = {
-      method: 'POST',
-      url: 'https://aip.baidubce.com/rest/2.0/ocr/v1/license_plate?access_token=24.d4b8277a543061c7899826015549c5e4.2592000.1680698095.282335-30317694',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        Accept: 'application/json'
-      },
-      form: {
-        image
+const getAccessToken = () => {
+  const options = {
+    method: 'POST',
+    url:
+      'https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&client_id=' +
+      'LdqGQkY1foQt4ijSLHTU1ZMW' +
+      '&client_secret=' +
+      'vvwm6PAD2NHrYh9r14EryGacgjwGans6'
+  }
+  return new Promise((resolve, reject) => {
+    request(options, (error, response) => {
+      if (error) {
+        reject(error)
+      } else {
+        resolve(JSON.parse(response.body).access_token)
       }
+    })
+  })
+}
+
+export const recognition = async (imagePath: string) => {
+  const image = getFileContentAsBase64(path.join(__dirname, '../public/images', imagePath))
+  const options = {
+    method: 'POST',
+    url:
+      'https://aip.baidubce.com/rest/2.0/ocr/v1/license_plate?access_token=' +
+      (await getAccessToken()),
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      Accept: 'application/json'
+    },
+    form: {
+      image
     }
+  }
+  return new Promise<any>((resolve, reject) => {
     request(options, async (error, response) => {
       if (error) throw new Error(error)
       const object = JSON.parse(response.body)

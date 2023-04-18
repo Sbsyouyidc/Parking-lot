@@ -3,7 +3,7 @@
 import { ref, reactive, watch } from 'vue'
 import { useBlackStore } from '@/stores/black'
 import type { ValidatedError } from '@arco-design/web-vue/es/form'
-
+import plateSelect from '@/components/Module/plateSelect.vue'
 const store = useBlackStore()
 type Props = {
   visible_f: boolean
@@ -54,7 +54,9 @@ watch(
     handleClick()
   }
 )
-
+const change = (e: string) => {
+  store.form.licenseplate = e
+}
 const onOk = (dateString: any, date: any) => {
   store.form.dateTime = dateString
 }
@@ -66,7 +68,7 @@ const onOk = (dateString: any, date: any) => {
       <template #title> 违规行为登记 </template>
       <a-form :model="store.form" :rules="rules" ref="formRef">
         <a-form-item label="车牌" field="licenseplate">
-          <a-input v-model="store.form.licenseplate"></a-input>
+          <plateSelect @on-change="change" :input="store.form.licenseplate"></plateSelect>
         </a-form-item>
         <a-form-item label="违规行为" field="Irregularities">
           <a-textarea v-model="store.form.Irregularities" :auto-size="{ minRows: 4 }"></a-textarea>

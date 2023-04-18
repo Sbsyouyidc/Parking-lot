@@ -23,6 +23,8 @@ const addItems = (type: string) => {
   const item = { type, StartClock: '', EndClock: '', HourlyCharge: '' }
   emit('on-addItem', item, type)
 }
+
+const defaultType = ['小型车', '中型车', '大型车']
 </script>
 
 <template>
@@ -38,7 +40,7 @@ const addItems = (type: string) => {
         </a-button-group>
       </a-collapse-item>
     </a-collapse>
-    <a-button @click="() => emit('on-allDelete', type)">
+    <a-button @click="() => emit('on-allDelete', type)" v-if="!defaultType.includes(type)">
       <icon-delete />
     </a-button>
   </div>

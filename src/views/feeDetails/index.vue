@@ -37,4 +37,10 @@ watchEffect(() => {
 .arco-input-search {
   margin-bottom: 20px;
 }
+.arco-input-search {
+  margin-left: 5px;
+}
+:deep(.arco-input-wrapper) {
+  background: rgb(255, 255, 255);
+}
 </style>

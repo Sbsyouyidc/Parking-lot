@@ -29,11 +29,18 @@ const deleteItem = (id: number | undefined, index: number | undefined) => {
     <div class="filed">
       坐标
       <a-space>
-        <a-input v-model="curItem.coordinates.X"> <template #prepend>X</template> </a-input
-        ><a-input v-model="curItem.coordinates.Y">
+        <a-input-number v-model="curItem.coordinates.X">
+          <template #prepend>X</template> </a-input-number
+        ><a-input-number v-model="curItem.coordinates.Y">
           <template #prepend>Y</template>
-        </a-input></a-space
+        </a-input-number></a-space
       >
+    </div>
+    <div class="filed">
+      旋转
+      <a-input-number v-model="curItem.coordinates.degree">
+        <template #append> ° </template>
+      </a-input-number>
     </div>
     <div class="filed">编号 <a-input v-model="curItem.number"> </a-input></div>
     <div class="filed">
