@@ -33,7 +33,7 @@ const { item } = toRefs(props)
 const { filterBlack } = storeToRefs(blackStore)
 
 const handleOk = async () => {
- await blackStore.blackArray(input.value)
+  await blackStore.blackArray(input.value)
   if (filterBlack.value.length >= 3) {
     visible_model.value = !visible_model.value
     return
@@ -122,8 +122,8 @@ const visible_model = ref(true)
 </template>
 <style lang="less" scoped>
 .park {
-  width: 90px;
-  height: 30px;
+  width: 30px;
+  height: 90px;
   cursor: pointer;
   position: absolute;
   & > .number {

@@ -25,7 +25,7 @@ const deleteItem = (id: number | undefined, index: number | undefined) => {
 </script>
 
 <template>
-  <a-menu class="edit-card" mode="pop" :style="{ width: '200px', height: props.height + 'px' }">
+  <a-menu class="edit-card" mode="pop" :style="{ width: '220px', height: props.height + 'px' }">
     <div class="filed">
       坐标
       <a-space>

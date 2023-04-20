@@ -2,7 +2,7 @@ import fs from 'fs'
 import dayjs from 'dayjs'
 import duration from 'dayjs/plugin/duration'
 import { recognition, isExistence, Duration, IData, Price, connection } from './utils'
-import { black } from './sql'
+import { black, violation } from './sql'
 dayjs.extend(duration)
 
 interface IParking {
@@ -333,6 +333,19 @@ export default {
         res.send({ res: false })
       } else {
         res.send({ res: true, arr: result })
+      }
+    })
+  },
+  postBlackProcess: (req: any, res: any) => {
+    const { params } = req.body
+    const arr = JSON.parse(params)
+    connection.query(`UPDATE black SET ? WHERE id in (?)`, [{ status: 1 }, arr], (err, result) => {
+      console.log(result)
+      if (err) {
+        console.log(err)
+        res.send({ res: false })
+      } else {
+        res.send({ res: true })
       }
     })
   }

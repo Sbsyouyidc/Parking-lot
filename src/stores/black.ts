@@ -1,6 +1,6 @@
-import { computed, ref, reactive } from 'vue'
+import { computed, ref, reactive, toRaw } from 'vue'
 import { defineStore } from 'pinia'
-import { Notification, Result } from '@arco-design/web-vue'
+import { Notification, Message } from '@arco-design/web-vue'
 import fetch from '@/request/fetch'
 import dayjs from 'dayjs'
 
@@ -27,10 +27,11 @@ export const useBlackStore = defineStore('black', () => {
       status: number
     }[]
   >([])
-
+  const handlingArr = ref<any[]>([])
   const status = [
     { label: '待处理', value: 0, color: '#f53f3f' },
-    { label: '已处理', value: 1, color: '#00b42a' }
+    { label: '需处理', value: 1, color: '#ffb400' },
+    { label: '已处理', value: 2, color: '#00b42a' }
   ]
   function initStore() {
     return fetch.get('/api/getAllBlack').then((res) => {
@@ -73,8 +74,19 @@ export const useBlackStore = defineStore('black', () => {
   }
 
   const filterBlack = computed(() =>
-    plateBlack.value.filter((item: { status: number }) => item.status !== 1)
+    plateBlack.value.filter((item: { status: number }) => item.status !== 2)
   )
+  const UntreatedBlack = computed(() =>
+    plateBlack.value.filter((item: { status: number }) => item.status == 2)
+  )
+
+  function blackProcess() {
+    fetch
+      .put('/api/postBlackProcess', { params: JSON.stringify(toRaw(handlingArr.value)) })
+      .then((result) => {
+        result.res && Message.success('已提交申请')
+      })
+  }
   return {
     state,
     initStore,
@@ -85,6 +97,9 @@ export const useBlackStore = defineStore('black', () => {
     status,
     blackArray,
     plateBlack,
-    filterBlack
+    filterBlack,
+    UntreatedBlack,
+    handlingArr,
+    blackProcess
   }
 })

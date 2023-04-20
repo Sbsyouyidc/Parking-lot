@@ -73,7 +73,11 @@ const save = () => {
   <div class="parking-management">
     <a-button type="primary" @click="save">保存</a-button>
     <main>
-      <div class="card box-shadow" draggable="true" @dragstart="dragStart">车位</div>
+      <div>
+        <div class="card box-shadow" draggable="true" @dragstart="dragStart">车位</div>
+        <div class="card box-shadow" draggable="true" @dragstart="dragStart">出口</div>
+      </div>
+
       <div id="tutorial" @drop="drop" @dragover="dragOver">
         <edit-item :client="client" />
       </div>
@@ -97,6 +101,7 @@ main {
 .card {
   width: 90px;
   height: 30px;
+  margin-bottom: 15px;
   text-align: center;
 }
 

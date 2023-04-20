@@ -1,15 +1,16 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
-import { ref, reactive, onActivated } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import { useUserMainStore } from '@/stores/userMain'
 import { useBlackStore } from '@/stores/black'
 import { storeToRefs } from 'pinia'
-
+import dayjs from 'dayjs'
+import checkGroup from './checkGroup.vue'
 const store = useUserMainStore()
 const blackStore = useBlackStore()
 
 const { mySate } = storeToRefs(store)
-onActivated(() => {
+onMounted(() => {
   const plate = localStorage.getItem('plate') as string
   blackStore.blackArray(plate)
 })
@@ -46,20 +47,47 @@ const data = ref([
         <span class="right">{{ item.value }}</span>
       </a-list-item>
     </a-list>
-    <a-divider />
-    <a-list>
-      <template #header> 违规记录 </template>
-      <a-list-item v-for="idx in blackStore.plateBlack" :key="idx">
+
+    <checkGroup />
+    <!-- <a-list>
+      <template #header> 待处理违规记录 </template>
+      <a-list-item v-for="idx in blackStore.filterBlack" :key="idx">
         <template #meta>
-          <div>
-            <div>违规记录号</div>
+          <div class="item">
+            <div>违规编号</div>
+            <div>{{ idx.id }}</div>
+          </div>
+          <div class="item">
+            <div>违规情况</div>
             <div>{{ idx.Irregularities }}</div>
           </div>
-          <div>
+          <div class="item">
             <div>处理状态</div>
             <div>{{ blackStore.status[idx.status].label }}</div>
           </div>
-          <div>违规时间{{ idx.dateTime }}</div>
+          <span class="date">{{ dayjs(idx.dateTime).format('YYYY-MM-DD HH:mm:ss') }}</span>
+        </template>
+      </a-list-item>
+    </a-list> -->
+
+    <a-divider />
+    <a-list>
+      <template #header> 历史违规记录 </template>
+      <a-list-item v-for="idx in blackStore.UntreatedBlack" :key="idx">
+        <template #meta>
+          <div class="item">
+            <div>违规编号</div>
+            <div>{{ idx.id }}</div>
+          </div>
+          <div class="item">
+            <div>违规情况</div>
+            <div>{{ idx.Irregularities }}</div>
+          </div>
+          <div class="item">
+            <div>处理状态</div>
+            <div>{{ blackStore.status[idx.status].label }}</div>
+          </div>
+          <span class="date">{{ dayjs(idx.dateTime).format('YYYY-MM-DD HH:mm:ss') }}</span>
         </template>
       </a-list-item>
     </a-list>
@@ -73,6 +101,24 @@ const data = ref([
   background-color: #ffffffe6;
 }
 .right {
+  float: right;
+}
+
+.custom-checkbox-card-checked .custom-checkbox-card-mask-dot {
+  background-color: rgb(var(--primary-6));
+}
+.item {
+  display: flex;
+  justify-content: space-between;
+
+  & div:nth-child(1) {
+    color: var(--color-neutral-6);
+  }
+  & ~ & {
+    margin-top: 5px;
+  }
+}
+.date {
   float: right;
 }
 </style>

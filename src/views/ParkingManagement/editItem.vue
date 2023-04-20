@@ -69,8 +69,8 @@ const mouserDown = (event: MouseEvent, index: number) => {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 90px;
-  height: 30px;
+  width: 30px;
+  height: 90px;
   position: absolute;
   user-select: none;
   font-weight: bold;
