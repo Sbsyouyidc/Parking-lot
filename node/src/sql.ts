@@ -12,3 +12,4 @@ export const violation = {
   update: 'UPDATE black SET ? WHERE id in (?)',
   delete: 'DELETE FROM black WHERE id = ?'
 }
+export const userInfo = { update: 'UPDATE user SET ? WHERE `Id` = ?' }

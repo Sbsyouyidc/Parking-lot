@@ -37,4 +37,5 @@ router.post('/postBlack', server.postBlack)
 router.put('/putBlack', server.putBlack)
 router.get('/getBlackPlate', server.getBlackPlate)
 router.put('/postBlackProcess', server.postBlackProcess)
+router.put('/putUser', server.putUser)
 export default router

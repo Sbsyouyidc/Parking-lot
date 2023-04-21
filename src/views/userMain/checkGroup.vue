@@ -19,9 +19,7 @@ const click = () => {
 <template>
   <a-typography-title :heading="6">
     待处理违规记录
-    <a-button style="margin-bottom: 10px; float: right" type="primary" @click="click"
-      >申请处理</a-button
-    >
+    <a-button style="float: right" size="mini" type="primary" @click="click">申请处理</a-button>
   </a-typography-title>
 
   <a-checkbox-group @change="change">

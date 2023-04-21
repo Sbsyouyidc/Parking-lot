@@ -44,12 +44,24 @@ const search = (id: string) => {
   <div class="user-order-record">
     <div v-if="filter.length !== 0">
       <a-card v-for="item in filter" :key="item.id" @click="search(item.id)"
-        ><div>订单号 {{ item.id }}</div>
-        <div>车牌号 {{ item.LicensePlate }}</div>
-        <div>车位编号 {{ item.number }}</div>
+        ><div class="item">
+          <div>订单号</div>
+          <div>{{ item.id }}</div>
+        </div>
+        <div class="item">
+          <div>车牌号</div>
+          <div>{{ item.LicensePlate }}</div>
+        </div>
+        <div class="item">
+          <div>车位编号</div>
+          <div>{{ item.number }}</div>
+        </div>
         <div>
-          <span>开始时间 {{ item.StartParkingTime }}</span>
-          <span class="price"> 车费 ￥{{ item.Price }}</span>
+          <div class="item">
+            <div>开始时间</div>
+            <div>{{ item.StartParkingTime }}</div>
+          </div>
+          <div class="price">车费 ￥{{ item.Price }}</div>
         </div>
       </a-card>
     </div>
@@ -63,8 +75,19 @@ const search = (id: string) => {
 <style lang="less" scoped>
 .arco-card {
   margin: 15px;
+  .item {
+    display: flex;
+    justify-content: space-between;
+
+    & div:nth-child(1) {
+      color: var(--color-neutral-6);
+    }
+    & ~ & {
+      margin-top: 5px;
+    }
+  }
   & .price {
-    float: right;
+    text-align: right;
     font-weight: bold;
   }
 }

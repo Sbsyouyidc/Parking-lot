@@ -5,7 +5,9 @@ import { useRouter } from 'vue-router'
 import { useUserMainStore } from '@/stores/userMain'
 import { useBlackStore } from '@/stores/black'
 import { storeToRefs } from 'pinia'
+import { IconEdit, IconSave } from '@arco-design/web-vue/es/icon'
 import dayjs from 'dayjs'
+
 import checkGroup from './checkGroup.vue'
 
 const store = useUserMainStore()
@@ -24,21 +26,43 @@ const data = ref([
   {
     label: '密码',
     value: mySate.value.password
-  },
-  {
-    label: '车牌',
-    value: mySate.value.LicensePlate
   }
 ])
 
 const logout = () => {
   router.push({ name: 'Login' })
 }
+
+const edit = ref(false)
+const click = () => {
+  edit.value = !edit.value
+}
+
+const save = () => {
+  const params = {
+    info: {
+      username: data.value[0].value,
+      password: data.value[1].value
+    },
+    Id: mySate.value.Id
+  }
+  console.log(params)
+}
 </script>
 
 <template>
   <div class="my-main">
-    <a-typography-title :heading="6"> 个人信息 </a-typography-title>
+    <a-typography-title :heading="6">
+      待处理违规记录
+      <a-space style="float: right">
+        <a-button type="primary" size="mini" @click="save" v-if="edit">
+          <template #icon> <icon-save /> </template
+        ></a-button>
+        <a-button size="mini">
+          <template #icon> <icon-edit @click="click" /> </template
+        ></a-button>
+      </a-space>
+    </a-typography-title>
     <a-list>
       <a-list-item>
         <span>车牌 </span>
@@ -49,8 +73,11 @@ const logout = () => {
         ></a-image>
       </a-list-item>
       <a-list-item v-for="item in data" :key="item">
-        <span>{{ item.label }}</span>
-        <span class="right">{{ item.value }}</span>
+        <div style="text-align: right">
+          <span style="float: left">{{ item.label }}</span>
+          <a-input v-model:model-value="item.value" v-if="edit" />
+          <div class="right" v-else>{{ item.value }}</div>
+        </div>
       </a-list-item>
     </a-list>
     <checkGroup />
@@ -89,6 +116,9 @@ const logout = () => {
 }
 .right {
   float: right;
+}
+:deep(.arco-input-wrapper) {
+  width: auto;
 }
 
 .custom-checkbox-card-checked .custom-checkbox-card-mask-dot {
