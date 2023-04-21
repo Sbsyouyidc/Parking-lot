@@ -1,14 +1,16 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import { useUserMainStore } from '@/stores/userMain'
 import { useBlackStore } from '@/stores/black'
 import { storeToRefs } from 'pinia'
 import dayjs from 'dayjs'
 import checkGroup from './checkGroup.vue'
+
 const store = useUserMainStore()
 const blackStore = useBlackStore()
-
+const router = useRouter()
 const { mySate } = storeToRefs(store)
 onMounted(() => {
   const plate = localStorage.getItem('plate') as string
@@ -28,6 +30,10 @@ const data = ref([
     value: mySate.value.LicensePlate
   }
 ])
+
+const logout = () => {
+  router.push({ name: 'Login' })
+}
 </script>
 
 <template>
@@ -47,29 +53,7 @@ const data = ref([
         <span class="right">{{ item.value }}</span>
       </a-list-item>
     </a-list>
-
     <checkGroup />
-    <!-- <a-list>
-      <template #header> 待处理违规记录 </template>
-      <a-list-item v-for="idx in blackStore.filterBlack" :key="idx">
-        <template #meta>
-          <div class="item">
-            <div>违规编号</div>
-            <div>{{ idx.id }}</div>
-          </div>
-          <div class="item">
-            <div>违规情况</div>
-            <div>{{ idx.Irregularities }}</div>
-          </div>
-          <div class="item">
-            <div>处理状态</div>
-            <div>{{ blackStore.status[idx.status].label }}</div>
-          </div>
-          <span class="date">{{ dayjs(idx.dateTime).format('YYYY-MM-DD HH:mm:ss') }}</span>
-        </template>
-      </a-list-item>
-    </a-list> -->
-
     <a-divider />
     <a-list>
       <template #header> 历史违规记录 </template>
@@ -91,6 +75,9 @@ const data = ref([
         </template>
       </a-list-item>
     </a-list>
+    <div style="width: 100%; padding: 20px">
+      <a-button type="primary" style="width: 100%" @click="logout">退出</a-button>
+    </div>
   </div>
 </template>
 <style lang="less" scoped>

@@ -1,12 +1,16 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { Message } from '@arco-design/web-vue'
 import fetch from '@/request/fetch'
 import { useUserMainStore } from '@/stores/userMain'
 const store = useUserMainStore()
 const router = useRouter()
+onMounted(() => {
+  localStorage.setItem('plate', '')
+  localStorage.setItem('myState', '')
+})
 const login = () => {
   fetch.post('/api/login', form).then((result: { res: string; message: string; arr: any }) => {
     const { res, message, arr } = result

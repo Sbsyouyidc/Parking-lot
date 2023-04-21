@@ -1,15 +1,25 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
-import { ref, reactive, watch } from 'vue'
+import { ref, reactive, watchEffect } from 'vue'
 import fetch from '@/request/fetch'
 
 const options = ref<any[]>([])
-const props = defineProps<{
-  input?: string
-}>()
+const props = withDefaults(
+  defineProps<{
+    input?: string
+  }>(),
+  {}
+)
+
 const initStore = () => {
   return fetch.get('/api/getAllUser').then((res: any) => {
-    options.value = res.filter((item: { type: string }) => item.type == '普通用户')
+    const defa = localStorage.getItem('plate') as string
+    if (defa) {
+      options.value = res.filter((item: { LicensePlate: string }) => item.LicensePlate == defa)
+    } else {
+      options.value = res.filter((item: { type: string }) => item.type == '普通用户')
+      console.log(options.value)
+    }
   })
 }
 

@@ -5,7 +5,7 @@ import dayjs from 'dayjs'
 import { IconEdit, IconDelete } from '@arco-design/web-vue/es/icon'
 import { useBlackStore } from '@/stores/black'
 import modal from './modal.vue'
-import process from './process.vue'
+
 const store = useBlackStore()
 onMounted(() => {
   store.initStore()
@@ -33,8 +33,8 @@ const add = () => {
 
 <template>
   <modal :visible_f="visible" @optionItem="optionItem" /> <a-button @click="add">新增</a-button>
+
   <div class="show">
-    <!-- <process /> -->
     <div class="black-list">
       <a-table :data="store.state" :pagination="{ pageSize: 15 }">
         <template #columns>

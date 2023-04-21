@@ -1,10 +1,15 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
-import { ref, reactive, watch } from 'vue'
+import { ref, reactive, watch, onMounted } from 'vue'
+import { useUserMainStore } from '@/stores/userMain'
 import { useRouter } from 'vue-router'
 import { useRoute } from 'vue-router'
+const store = useUserMainStore()
 const router = useRouter()
 const route = useRoute()
+onMounted(() => {
+  store.init()
+})
 </script>
 
 <template>
