@@ -9,7 +9,7 @@ import { IconEdit, IconSave } from '@arco-design/web-vue/es/icon'
 import dayjs from 'dayjs'
 
 import checkGroup from './checkGroup.vue'
-
+import upload from './upload.vue'
 const store = useUserMainStore()
 const blackStore = useBlackStore()
 const router = useRouter()
@@ -66,7 +66,9 @@ const save = () => {
     <a-list>
       <a-list-item>
         <span>车牌 </span>
+        <upload v-if="edit" class="right" />
         <a-image
+          v-else
           class="right"
           width="100"
           :src="`http://localhost:3000/static/images/${mySate.image}`"
