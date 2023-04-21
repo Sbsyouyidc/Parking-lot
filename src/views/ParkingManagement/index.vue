@@ -17,6 +17,7 @@ const client = reactive({
   y: 0,
   height: 0
 })
+const basie = ref('')
 onMounted(async () => {
   await store.initStore()
   nextTick(() => {
@@ -28,13 +29,15 @@ onMounted(async () => {
   })
 })
 
-const dragStart = (e: any) => {
+const dragStart = (e: any, type1: string = '') => {
+  basie.value = type1
   offset.x = e.layerX
   offset.y = e.layerY
 }
 
 const drop = (e: { clientX: any; clientY: any }) => {
   const index = data.value.newItem.length
+  const type = basie.value
   store.$patch((state) => {
     state.data.newItem.push({
       EndParkingTime: '',
@@ -44,7 +47,7 @@ const drop = (e: { clientX: any; clientY: any }) => {
       creationTime: '',
       number: '',
       status: 'true',
-      type: '',
+      type,
       index
     })
   })
@@ -74,8 +77,10 @@ const save = () => {
     <a-button type="primary" @click="save">保存</a-button>
     <main>
       <div>
-        <div class="card box-shadow" draggable="true" @dragstart="dragStart">车位</div>
-        <div class="card box-shadow" draggable="true" @dragstart="dragStart">出口</div>
+        <div class="card box-shadow" draggable="true" @dragstart="dragStart($event)">车位</div>
+        <div class="card box-shadow" draggable="true" @dragstart="dragStart($event, 'static')">
+          出口
+        </div>
       </div>
 
       <div id="tutorial" @drop="drop" @dragover="dragOver">

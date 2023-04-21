@@ -60,8 +60,12 @@ const handleOk = async () => {
 
 const visible = ref(false)
 
-const handleClick = () => {
-  visible.value = true
+const handleClick = (type: string) => {
+  console.log(type)
+
+  if (type !== 'static') {
+    visible.value = true
+  }
 }
 
 const handleCancel = () => {
@@ -107,25 +111,45 @@ const visible_model = ref(true)
   >
   <div
     v-if="item.status == 'true'"
-    :class="[item.ParkingPlate ? 'stopped' : 'not-stopped']"
-    class="park"
+    :class="[
+      item.ParkingPlate ? 'stopped' : 'not-stopped',
+      item.type == 'static' ? 'static' : 'park'
+    ]"
+    class="default"
     :style="{
       left: item.coordinates.X + 'px',
       top: item.coordinates.Y + 'px',
       transform: `rotate(${item.coordinates.degree}deg)`
     }"
-    @click="handleClick"
+    @click="handleClick(item.type)"
   >
     <span v-if="item.ParkingPlate" class="plate">{{ item.ParkingPlate }}</span>
     <span class="number">{{ item.number }}</span>
   </div>
 </template>
 <style lang="less" scoped>
+.default {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  user-select: none;
+  font-weight: bold;
+}
+
+.static {
+  width: 60px;
+  height: 90px;
+  background: transparent !important;
+  border-left: 1px solid rgb(0, 0, 0) !important;
+  border-right: 1px solid rgb(0, 0, 0) !important;
+}
 .park {
+  cursor: pointer;
   width: 30px;
   height: 90px;
-  cursor: pointer;
-  position: absolute;
+  border: 2px dashed #00f;
+  background-color: rgba(0, 0, 255, 0.2);
   & > .number {
     position: absolute;
     font-weight: bold;

@@ -53,9 +53,10 @@ const mouserDown = (event: MouseEvent, index: number) => {
       top: concatData[index].coordinates.Y + 'px',
       transform: `rotate(${concatData[index].coordinates.degree}deg)`
     }"
-    class="edit-item"
+    class="default"
     :class="[
       concatData[index].status == 'true' ? 'use' : 'unUse',
+      concatData[index].type == 'static' ? 'static' : 'edit-item',
       index == curIndex ? 'select' : ''
     ]"
     :data-index="index"
@@ -64,22 +65,28 @@ const mouserDown = (event: MouseEvent, index: number) => {
   </div>
 </template>
 <style lang="less" scoped>
-.edit-item {
+.default {
   cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 30px;
-  height: 90px;
   position: absolute;
   user-select: none;
   font-weight: bold;
 }
-
-.use {
-  background-color: rgba(0, 0, 255, 0.2);
+.edit-item {
+  width: 30px;
+  height: 90px;
   border: 2px dashed #00f;
+  background-color: rgba(0, 0, 255, 0.2);
 }
+.static {
+  width: 60px;
+  height: 90px;
+  border-left: 1px solid rgb(0, 0, 0);
+  border-right: 1px solid rgb(0, 0, 0);
+}
+
 .unUse {
   background-color: rgba(82, 82, 82, 0.2);
   border: 2px dashed rgb(86, 86, 88);
