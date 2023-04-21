@@ -6,7 +6,7 @@ import { useParkInfoStore } from '@/stores/parkInfo'
 import { onActivated } from 'vue'
 import spaceAllDetail from './spaceAllDetail.vue'
 import { storeToRefs } from 'pinia'
-import container from '@/components/Module/container.vue'
+
 onActivated(async () => {
   await store.initStore()
   await store.VehicleDeparture()
@@ -26,6 +26,7 @@ const filter = computed(() =>
   <div class="card-access box-shadow-inset">
     <parkSpace :item="item" v-for="(item, index) in store.state" :key="index" />
   </div>
+  <a-typography-title :heading="6"> 停车列表 </a-typography-title>
   <div class="all-detail">
     <spaceAllDetail v-for="(item, index) in filter" :key="index" :item="item" />
   </div>
@@ -49,4 +50,5 @@ const filter = computed(() =>
 .all-detail {
   display: flex;
 }
+
 </style>
