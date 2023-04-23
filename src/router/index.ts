@@ -55,7 +55,7 @@ const router = createRouter({
         {
           path: '/BlackList',
           name: 'BlackList',
-          meta: { title: '黑名单' },
+          meta: { title: '违规异常管理' },
           component: () => import('@/views/blackList/index.vue')
         },
         {

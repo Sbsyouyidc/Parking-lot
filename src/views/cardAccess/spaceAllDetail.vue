@@ -39,7 +39,19 @@ const params = computed(() => {
     }
   }
 })
-
+let timer: number | null = setInterval(() => {
+  duration.value = Duration(dayjs().diff(dayjs(item.value.StartParkingTime)))!
+  const time = dayjs().diff(dayjs(item.value.StartParkingTime))
+  if (time % limit <= Math.floor(limit / 10)) {
+    const text =
+      params.value.plate +
+      `在编号${item.value.number}车位` +
+      '停放时间已到达' +
+      duration.value +
+      '，检查停放情况'
+    messageStore.postMessage('abnormal', text)
+  }
+}, 1000)
 const VehicleDeparture = async (number: any) => {
   visible.value = true
   fetch.put(`/api/parkingSpace/VehicleDeparture/${number}`, params.value).then((result: any) => {
@@ -47,7 +59,8 @@ const VehicleDeparture = async (number: any) => {
     if (res) {
       ChargeData.value = result
       store.parkingData = { number: '', start: '', end: '', Price: '', duration: '', type: '' }
-      clearInterval(timer)
+      clearInterval(timer as number)
+      timer = null
     }
   })
 }
@@ -55,15 +68,6 @@ const VehicleDeparture = async (number: any) => {
 const duration = ref('')
 
 const limit = messageStore.limit
-
-const timer = setInterval(() => {
-  duration.value = Duration(dayjs().diff(dayjs(item.value.StartParkingTime)))!
-  const time = dayjs().diff(dayjs(item.value.StartParkingTime))
-  if (time % limit <= Math.floor(limit / 10)) {
-    const text = params.value.plate + '停放时间已到达' + duration.value + '，检查停放情况'
-    messageStore.postMessage('abnormal', text)
-  }
-}, 1000)
 </script>
 
 <template>

@@ -75,7 +75,7 @@ const mouserDown = (event: MouseEvent, index: number) => {
   font-weight: bold;
 }
 .edit-item {
-  width: 30px;
+  width: 50px;
   height: 90px;
   border: 2px dashed #00f;
   background-color: rgba(0, 0, 255, 0.2);

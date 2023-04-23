@@ -5,7 +5,7 @@ import { useMessageStore } from '@/stores/message'
 import { IconInfoCircle, IconDelete } from '@arco-design/web-vue/es/icon'
 
 const store = useMessageStore()
-onMounted(() => {
+onActivated(() => {
   store.init()
 })
 const items: { [key: string]: string } = {

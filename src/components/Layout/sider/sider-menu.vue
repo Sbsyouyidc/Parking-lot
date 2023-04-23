@@ -46,7 +46,7 @@ const click = (key: string) => {
       <a-sub-menu key="3">
         <template #icon><icon-apps></icon-apps></template>
         <template #title>系统管理</template>
-        <a-menu-item key="BlackList">黑名单管理</a-menu-item>
+        <a-menu-item key="BlackList">违规异常管理</a-menu-item>
         <a-menu-item key="chargeStandard">收费标准管理</a-menu-item>
         <a-menu-item key="ParkingManagement">车位管理</a-menu-item>
       </a-sub-menu>

@@ -33,7 +33,9 @@ export const useParkInfoStore = defineStore('parkInfo', () => {
     })
   }
   const parkinfoArray = computed(() =>
-    state.value.filter((item: { type: string }) => item.type !== 'static')
+    state.value
+      .filter((item: { type: string }) => item.type !== 'static')
+      .sort((a, b) => a.number - b.number)
   )
   function VehicleDeparture(): Promise<void> {
     if (spaceNumber.value) {

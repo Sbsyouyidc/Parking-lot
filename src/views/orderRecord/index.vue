@@ -24,7 +24,7 @@ const getOrderRecord = (): Promise<void> => {
     })
     value.value = ''
     option.value = ''
-    data.value = res
+    data.value = res.sort((a, b) => a - b)
   })
 }
 const pagination = { pageSize: 14 }

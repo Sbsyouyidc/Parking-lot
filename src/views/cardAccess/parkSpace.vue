@@ -146,7 +146,7 @@ const visible_model = ref(true)
 }
 .park {
   cursor: pointer;
-  width: 30px;
+  width: 50px;
   height: 90px;
   border: 2px dashed #00f;
   background-color: rgba(0, 0, 255, 0.2);
