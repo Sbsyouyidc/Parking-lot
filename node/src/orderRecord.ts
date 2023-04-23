@@ -121,7 +121,5 @@ export default {
         }
       )
     })
-
-    // const   PriceDetail(duration,type)
   }
 }

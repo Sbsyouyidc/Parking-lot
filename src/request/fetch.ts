@@ -18,8 +18,8 @@ const initFetch = (params: IParams) => {
   return urlencoded
 }
 
-const Fetch = (path: string, requestOptions?: RequestInit | undefined) => {
-  loading.changeLoading()
+const Fetch = (path: string, requestOptions?: RequestInit | undefined, Initiate = true) => {
+  Initiate && loading.changeLoading()
   return fetch(path, requestOptions)
     .then((response) => {
       const { status } = response
@@ -33,8 +33,9 @@ const Fetch = (path: string, requestOptions?: RequestInit | undefined) => {
         content: error
       })
     })
-    .finally(() => loading.changeLoading())
+    .finally(() => Initiate && loading.changeLoading())
 }
+
 export default {
   get: (path: string) => {
     const requestOptions = {
@@ -45,7 +46,7 @@ export default {
     }
     return Fetch(path, requestOptions)
   },
-  post: (path: string, params: IParams) => {
+  post: (path: string, params: IParams, Initiate: boolean) => {
     const requestOptions = {
       headers,
       method: 'POST',
@@ -53,7 +54,7 @@ export default {
       mode: 'cors' as RequestMode,
       redirect: 'manual' as RequestRedirect
     }
-    return Fetch(path, requestOptions)
+    return Fetch(path, requestOptions, Initiate)
   },
   put: (path: string, params: IParams | null = null) => {
     const requestOptions = {

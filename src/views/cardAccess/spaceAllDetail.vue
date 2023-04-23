@@ -1,13 +1,17 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
-import { ref, toRefs } from 'vue'
+import { ref, toRefs, computed } from 'vue'
 import { Duration } from '@/util/index'
 import { useParkInfoStore } from '@/stores/parkInfo'
 import { useUserMainStore } from '@/stores/userMain'
+import { useMessageStore } from '@/stores/message'
 import dayjs from 'dayjs'
 import fetch from '@/request/fetch'
+
 const userStore = useUserMainStore()
 const store = useParkInfoStore()
+const messageStore = useMessageStore()
+
 const props = defineProps<{
   item: any
 }>()
@@ -20,32 +24,46 @@ const ChargeData = ref({
   price: '',
   duration: ''
 })
-const params = ref({ plate: '', type: '' })
+
 const visible = ref(false)
-const VehicleDeparture = async (number: any) => {
-  visible.value = true
+const params = computed(() => {
   if (userStore.plate) {
-    params.value = {
+    return {
       plate: userStore.plate,
       type: userStore.type
     }
   } else {
-    params.value = {
+    return {
       plate: item.value.ParkingPlate,
       type: item.value.type
     }
   }
+})
+
+const VehicleDeparture = async (number: any) => {
+  visible.value = true
   fetch.put(`/api/parkingSpace/VehicleDeparture/${number}`, params.value).then((result: any) => {
     const { res } = result
     if (res) {
       ChargeData.value = result
       store.parkingData = { number: '', start: '', end: '', Price: '', duration: '', type: '' }
+      clearInterval(timer)
     }
   })
 }
 
 const duration = ref('')
-setInterval(() => (duration.value = Duration(dayjs().diff(dayjs(item.value.StartParkingTime)))))
+
+const limit = messageStore.limit
+
+const timer = setInterval(() => {
+  duration.value = Duration(dayjs().diff(dayjs(item.value.StartParkingTime)))!
+  const time = dayjs().diff(dayjs(item.value.StartParkingTime))
+  if (time % limit <= Math.floor(limit / 10)) {
+    const text = params.value.plate + '停放时间已到达' + duration.value + '，检查停放情况'
+    messageStore.postMessage('abnormal', text)
+  }
+}, 1000)
 </script>
 
 <template>

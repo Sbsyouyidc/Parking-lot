@@ -7,7 +7,7 @@ export const useShowPanelStore = defineStore('showPanel', () => {
   const cartNumber = ref<any[]>([])
   function initStore(): Promise<void> {
     return fetch.get('/api/parkingSpace').then((res) => {
-      state.value = res
+      state.value = res.filter((item: { type: string }) => item.type !== 'static')
     })
   }
   function getOrderRecord(): Promise<void> {

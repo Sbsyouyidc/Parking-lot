@@ -2,7 +2,8 @@ import fs from 'fs'
 import dayjs from 'dayjs'
 import duration from 'dayjs/plugin/duration'
 import { recognition, isExistence, Duration, IData, Price, connection } from './utils'
-import { black, violation, userInfo } from './sql'
+import { black, violation, userInfo, message } from './sql'
+import { type } from 'os'
 dayjs.extend(duration)
 
 interface IParking {
@@ -16,6 +17,8 @@ interface IParking {
   status: string
   type: string
 }
+
+const time = dayjs().format('YYYY-MM-DD HH:mm:ss')
 export default {
   //上传
   upload: (req: any, res: any) => {
@@ -31,7 +34,6 @@ export default {
       path: `/${originalname}`
     })
   },
-
   //登录
   login: async (req: any, res: any) => {
     const { username, password } = req.body
@@ -58,7 +60,6 @@ export default {
       res.send(results)
     })
   },
-
   VehicleSelection: async (req: any, res: any) => {
     const time = dayjs().format('YYYY-MM-DD HH:mm:ss')
     const { plate } = req.body
@@ -83,7 +84,6 @@ export default {
         }
       )
   },
-
   VehicleDuration: async (req: any, res: any) => {
     const { number } = req.query
     connection.query(
@@ -98,7 +98,6 @@ export default {
       }
     )
   },
-
   VehicleDeparture: async (req: any, res: any) => {
     const { number } = req.params
     console.log(number)
@@ -139,7 +138,6 @@ export default {
       )
     }
   },
-
   //保存车位信息
   postSaveParking: (req: any, res: any) => {
     const { params } = req.body
@@ -178,7 +176,6 @@ export default {
       message: '保存成功'
     })
   },
-
   //获取用户列表
   getAllUser: (req: any, res: any) => {
     connection.query('SELECT * FROM user', (err: any, result) => {
@@ -186,7 +183,6 @@ export default {
       res.send(result)
     })
   },
-
   //删除车牌
   deleteUserPlate: (req: any, res: any) => {
     const { id } = req.params
@@ -198,7 +194,6 @@ export default {
       })
     })
   },
-
   postNewUser: async (req: any, res: any) => {
     const { username, password, type, image = null } = req.body
     const boolean = await isExistence('user', 'username', username)
@@ -240,7 +235,6 @@ export default {
       }
     }
   },
-
   putUpdateUser: (req: any, res: any) => {
     const { username, password, type, image: new_image, Id, LicensePlate } = req.body
     if (type == '管理员') {
@@ -325,7 +319,6 @@ export default {
       }
     })
   },
-
   getBlackPlate: (req: any, res: any) => {
     const { plate } = req.query
     connection.query(black.select, [plate], (err, result) => {
@@ -359,6 +352,55 @@ export default {
       } else {
         res.send({ res: true })
       }
+    })
+  },
+
+  //消息
+  postMessage: (req: any, res: any) => {
+    const { type, text } = req.body
+    const params = {
+      type,
+      text,
+      time
+    }
+    connection.query(message.insert, [params], (err, result) => {
+      console.log(result)
+      if (err) {
+        console.log(err)
+        res.send({ res: false })
+      } else {
+        res.send({ res: true, message: text })
+      }
+    })
+  },
+
+  getAllMessage: (req: any, res: any) => {
+    const params: {
+      abnormal: any[]
+      Appointment: any[]
+    } = {
+      abnormal: [],
+      Appointment: []
+    }
+    connection.execute(message.select, ['abnormal'], (err, result: any[]) => {
+      params.abnormal = result
+      connection.execute(message.select, ['Appointment'], (err, result: any[]) => {
+        params.Appointment = result
+        res.send({
+          res: params
+        })
+      })
+    })
+  },
+
+  deleteMessage: (req: any, res: any) => {
+    const { id } = req.params
+    console.log(req)
+
+    connection.query(message.delete, [id], (err, result) => {
+      res.send({
+        res: true
+      })
     })
   }
 }

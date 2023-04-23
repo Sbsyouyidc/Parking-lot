@@ -24,8 +24,7 @@ export const useManaGement = defineStore('management', () => {
     creationTime: '',
     number: '',
     status: 'true',
-    type: '',
-    
+    type: ''
   })
 
   const data = reactive<{ oldItem: IData[]; newItem: IData[]; deletedItem: IData[] }>({

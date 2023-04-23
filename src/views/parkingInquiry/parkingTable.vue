@@ -30,7 +30,7 @@ const filterable = {
 
 <template>
   <a-table
-    :data="store.state"
+    :data="store.parkinfoArray"
     style="margin-top: 30px"
     :bordered="{ wrapper: true, cell: true }"
     :pagination="{ pageSize: 14 }"

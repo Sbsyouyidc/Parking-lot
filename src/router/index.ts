@@ -65,10 +65,10 @@ const router = createRouter({
           component: () => import('@/views/panel/index.vue')
         },
         {
-          path: '/Monitoring',
-          name: 'Monitoring',
-          meta: { title: '监控' },
-          component: () => import('@/views/monitoring/index.vue')
+          path: '/Message',
+          name: 'Message',
+          meta: { title: '消息通知' },
+          component: () => import('@/views/message/index.vue')
         }
       ]
     },

@@ -13,7 +13,6 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
-    "@amap/amap-jsapi-loader": "^1.0.1",
     "dayjs": "^1.11.7",
     "echarts": "^5.4.2",
     "pinia": "^2.0.32",

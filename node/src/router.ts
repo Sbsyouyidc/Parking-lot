@@ -38,4 +38,8 @@ router.put('/putBlack', server.putBlack)
 router.get('/getBlackPlate', server.getBlackPlate)
 router.put('/postBlackProcess', server.postBlackProcess)
 router.put('/putUser', server.putUser)
+
+router.post('/postMessage', server.postMessage)
+router.get('/getAllMessage', server.getAllMessage)
+router.delete('/deleteMessage/:id', server.deleteMessage)
 export default router

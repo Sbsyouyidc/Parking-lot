@@ -21,6 +21,7 @@ const logout = () => {
       <a-menu-item key="Home">管理员</a-menu-item>
       <a-menu-item key="userMain">用户</a-menu-item>
       <a-menu-item key="Panel">面版</a-menu-item>
+      <a-menu-item key="Message">消息通知</a-menu-item>
     </a-menu>
     <a-button class="logout" @click="logout">退出</a-button>
   </div>
