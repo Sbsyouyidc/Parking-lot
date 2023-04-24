@@ -26,20 +26,21 @@ export const getFileContentAsBase64 = (path: string) => {
 }
 
 export const isExistence = (Table: string, Condition: string, id: string) => {
-  return new Promise<boolean>((resolve, reject) => {
+  return new Promise<boolean | string>((resolve, reject) => {
     connection.execute(
       `SELECT * FROM ${Table} where ${Condition} = '${id}'`,
       (err: any, results: IData[]) => {
         if (err) {
           reject(err)
         } else {
-          const res = results.length !== 0 ? true : false
+          const res = results.length !== 0 ? results[0].id : false
           resolve(res)
         }
       }
     )
   })
 }
+
 export const Duration = (duration: number) => {
   const time = dayjs.duration(duration)
   if (time.asDays() >= 1) {
@@ -156,7 +157,7 @@ export const PriceDetail = (duration: number, type: string) => {
     }
   })
 }
-const getAccessToken = () => {
+export const getAccessToken = () => {
   const options = {
     method: 'POST',
     url:

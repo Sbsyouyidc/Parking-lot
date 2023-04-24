@@ -9,7 +9,6 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
-    AAvatar: typeof import('@arco-design/web-vue')['Avatar']
     AButton: typeof import('@arco-design/web-vue')['Button']
     AButtonGroup: typeof import('@arco-design/web-vue')['ButtonGroup']
     ACard: typeof import('@arco-design/web-vue')['Card']
@@ -45,8 +44,9 @@ declare module '@vue/runtime-core' {
     AOption: typeof import('@arco-design/web-vue')['Option']
     APageHeader: typeof import('@arco-design/web-vue')['PageHeader']
     AProgress: typeof import('@arco-design/web-vue')['Progress']
+    ARadio: typeof import('@arco-design/web-vue')['Radio']
+    ARadioGroup: typeof import('@arco-design/web-vue')['RadioGroup']
     AResult: typeof import('@arco-design/web-vue')['Result']
-    ASele: typeof import('@arco-design/web-vue')['Sele']
     ASelect: typeof import('@arco-design/web-vue')['Select']
     ASpace: typeof import('@arco-design/web-vue')['Space']
     ASpin: typeof import('@arco-design/web-vue')['Spin']
@@ -58,14 +58,10 @@ declare module '@vue/runtime-core' {
     ATabs: typeof import('@arco-design/web-vue')['Tabs']
     ATag: typeof import('@arco-design/web-vue')['Tag']
     ATextarea: typeof import('@arco-design/web-vue')['Textarea']
-    ATypographyText: typeof import('@arco-design/web-vue')['TypographyText']
     ATypographyTitle: typeof import('@arco-design/web-vue')['TypographyTitle']
     AUpload: typeof import('@arco-design/web-vue')['Upload']
-    Container: typeof import('./src/components/Module/container.vue')['default']
     HeaderMenu: typeof import('./src/components/Layout/header/header-menu.vue')['default']
     Layout: typeof import('./src/components/Layout/index.vue')['default']
-    Map: typeof import('./src/components/Module/map.vue')['default']
-    MapContainer: typeof import('./src/components/Module/mapContainer.vue')['default']
     PlateSelect: typeof import('./src/components/Module/plateSelect.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

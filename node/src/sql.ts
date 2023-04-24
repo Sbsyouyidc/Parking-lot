@@ -21,3 +21,10 @@ export const message = {
   update: 'UPDATE message SET ? WHERE id = ?',
   delete: 'DELETE FROM message WHERE id = ?'
 }
+export const monitoring = {
+  select: 'SELECT * FROM history WHERE type = ?',
+  selectId: 'SELECT * FROM history WHERE id = ?',
+  insert: 'INSERT INTO history SET ?',
+  update: 'UPDATE history SET ? WHERE id = ?',
+  delete: 'DELETE FROM history WHERE id = ?'
+}

@@ -3,14 +3,7 @@ import dayjs from 'dayjs'
 
 dayjs.extend(duration)
 
-export const base64 = (file: any, callback: (dataUrl: string) => void) => {
-  const reader = new FileReader()
-  reader.readAsDataURL(file)
-  reader.onload = function (e) {
-    const dataUrl = e.target?.result as string
-    callback(dataUrl)
-  }
-}
+
 
 export const Duration = (duration: number) => {
   const time = dayjs.duration(duration)
@@ -54,4 +47,20 @@ export const throttle = (func: () => void, wait: number) => {
       lastTime = nowTime
     }
   }
+}
+
+export const file = (image: string) => {
+  const blob = dataURLtoFile(image, 'image/jpeg')
+  const fileOfBlob = new File([blob], dayjs().format('YYYYMMDDHHmmss') + '.jpg')
+  const data = new FormData()
+  data.append('file', fileOfBlob)
+  return data
+}
+const dataURLtoFile = (dataURI: string, type: string) => {
+  const binary = atob(dataURI.split(',')[1])
+  const array = []
+  for (let i = 0; i < binary.length; i++) {
+    array.push(binary.charCodeAt(i))
+  }
+  return new Blob([new Uint8Array(array)], { type: type })
 }

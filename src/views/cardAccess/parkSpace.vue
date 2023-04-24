@@ -83,7 +83,7 @@ const visible_model = ref(true)
     @ok="handleOk"
     @cancel="handleCancel"
     unmountOnClose
-    popup-container=".card-access"
+    popup-container=".arco-tabs-content"
     size="large"
   >
     <template #title> 车位详细 </template>

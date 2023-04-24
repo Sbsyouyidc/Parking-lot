@@ -2,6 +2,7 @@ import express from 'express'
 // 创建路由对象
 const router = express.Router()
 import server from './server'
+import entry from './entry'
 import orderRecord from './orderRecord'
 import multer from 'multer'
 import path from 'path'
@@ -42,4 +43,6 @@ router.put('/putUser', server.putUser)
 router.post('/postMessage', server.postMessage)
 router.get('/getAllMessage', server.getAllMessage)
 router.delete('/deleteMessage/:id', server.deleteMessage)
+
+router.post('/entry', entry.entry)
 export default router

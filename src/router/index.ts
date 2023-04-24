@@ -13,7 +13,7 @@ const router = createRouter({
         {
           path: '/cardAccess',
           name: 'cardAccess',
-          meta: { title: '车辆出入' },
+          meta: { title: '车场管理' },
           component: () => import('@/views/cardAccess/index.vue')
         },
         {
@@ -69,6 +69,12 @@ const router = createRouter({
           name: 'Message',
           meta: { title: '消息通知' },
           component: () => import('@/views/message/index.vue')
+        },
+        {
+          path: '/Media',
+          name: 'Media',
+          meta: { title: '图像采集' },
+          component: () => import('@/views/media/index.vue')
         }
       ]
     },

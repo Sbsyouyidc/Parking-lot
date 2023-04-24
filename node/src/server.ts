@@ -22,6 +22,8 @@ const time = dayjs().format('YYYY-MM-DD HH:mm:ss')
 export default {
   //上传
   upload: (req: any, res: any) => {
+    console.log(req.file)
+
     const { originalname, path: filePath, destination } = req.file
     const newName = `${destination}\\${originalname}`
     fs.rename(filePath, newName, (err: any) => {

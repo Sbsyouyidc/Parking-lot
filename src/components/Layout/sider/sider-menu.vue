@@ -26,10 +26,16 @@ const click = (key: string) => {
       @menu-item-click="click"
       @collapse="onCollapse"
     >
+      <a-menu-item key="Panel"
+        ><template #icon><icon-apps></icon-apps></template>面版</a-menu-item
+      >
+      <a-menu-item key="Message"
+        ><template #icon><icon-apps></icon-apps></template>消息通知</a-menu-item
+      >
       <a-sub-menu key="0">
         <template #icon><icon-apps></icon-apps></template>
         <template #title>车场管理</template>
-        <a-menu-item key="cardAccess">车辆出入</a-menu-item>
+        <a-menu-item key="cardAccess">车场管理</a-menu-item>
       </a-sub-menu>
       <a-sub-menu key="1">
         <template #icon><icon-apps></icon-apps></template>

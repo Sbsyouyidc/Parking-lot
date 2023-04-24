@@ -1,5 +1,6 @@
-import { Message } from '@arco-design/web-vue'
+import { Message, Upload } from '@arco-design/web-vue'
 import { useLoadingStore } from '@/stores/loading'
+
 const loading = useLoadingStore()
 
 interface IParams {
@@ -18,7 +19,7 @@ const initFetch = (params: IParams) => {
   return urlencoded
 }
 
-const Fetch = (path: string, requestOptions?: RequestInit | undefined, Initiate = true) => {
+const Fetch = (path: string, requestOptions?: RequestInit | undefined | any, Initiate = true) => {
   Initiate && loading.changeLoading()
   return fetch(path, requestOptions)
     .then((response) => {
@@ -75,5 +76,14 @@ export default {
     }
     params && Object.assign(requestOptions, { body: initFetch(params) })
     return Fetch(path, requestOptions)
+  },
+  Upload: (path: string, params: IParams, Initiate: boolean) => {
+    const requestOptions = {
+      method: 'POST',
+      body: params,
+      mode: 'cors' as RequestMode,
+      redirect: 'manual' as RequestRedirect
+    }
+    return Fetch(path, requestOptions, Initiate)
   }
 }
