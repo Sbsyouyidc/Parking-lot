@@ -1,9 +1,8 @@
 import duration from 'dayjs/plugin/duration'
 import dayjs from 'dayjs'
+import mitt from 'mitt'
 
 dayjs.extend(duration)
-
-
 
 export const Duration = (duration: number) => {
   const time = dayjs.duration(duration)
@@ -64,3 +63,5 @@ const dataURLtoFile = (dataURI: string, type: string) => {
   }
   return new Blob([new Uint8Array(array)], { type: type })
 }
+
+export const emitter =  mitt()

@@ -23,7 +23,7 @@ pinia.use(({ store }) => {
 })
 
 app.use(pinia)
-
 app.use(router)
 app.use(ArcoVue)
+
 app.mount('#app')

@@ -7,7 +7,6 @@ export type IData = {
   ParkingPlate: string
   StartParkingTime: string
   coordinates: { X: number; Y: number; degree?: number }
-  creationTime: string
   id?: number
   index?: number
   number: string
@@ -21,7 +20,7 @@ export const useManaGement = defineStore('management', () => {
     ParkingPlate: '',
     StartParkingTime: '',
     coordinates: { X: 0, Y: 0, degree: 0 },
-    creationTime: '',
+
     number: '',
     status: 'true',
     type: ''

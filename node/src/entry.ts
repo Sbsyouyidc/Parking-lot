@@ -16,7 +16,7 @@ import path from 'path'
 
 dayjs.extend(duration)
 const time = dayjs().format('YYYY-MM-DD HH:mm:ss')
- const lastId = (Table: string, Condition: string, id: string) => {
+const lastId = (Table: string, Condition: string, id: string) => {
   return new Promise<any>((resolve, reject) => {
     connection.execute(
       `SELECT * FROM ${Table} where ${Condition} = '${id}'`,
@@ -24,7 +24,7 @@ const time = dayjs().format('YYYY-MM-DD HH:mm:ss')
         if (err) {
           reject(err)
         } else {
-          const res = results[results.length - 1]
+          const res = results ? results[results.length - 1] : false
           resolve(res)
         }
       }
@@ -56,29 +56,27 @@ export default {
         if (object.words_result) {
           const { number } = object.words_result
           const obj = await lastId('history', 'plate', number)
-          console.log(obj.leaveTime)
-
-          if (obj.leaveTime) {
+          if (!obj || obj?.leaveTime) {
             const params = {
               plate: number,
               entryImage: imagePath,
               entryTime: time
             }
             connection.query(monitoring.insert, params, (err, result) => {
-              res.send({ res: true, message: number })
+              res.send({ res: 'entry', message: number, params })
             })
           } else {
             const params = {
+              plate: number,
               leaveImage: imagePath,
               leaveTime: time
             }
-
             connection.query(monitoring.update, [params, obj.id], (err, result) => {
-              res.send({ res: true, message: '离开' + number })
+              res.send({ res: 'leave', message: '离开' + number, params })
             })
           }
         } else {
-          res.send({ res: true, message: '未识别' })
+          res.send({ res: false, message: '未识别' })
         }
       })
     })

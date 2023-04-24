@@ -3,7 +3,6 @@ import { defineStore } from 'pinia'
 import dayjs from 'dayjs'
 import fetch from '@/request/fetch'
 import type { IData } from './management'
-import { Notification } from '@arco-design/web-vue'
 
 export const useParkInfoStore = defineStore('parkInfo', () => {
   const state = ref<IData[]>([])
@@ -33,10 +32,9 @@ export const useParkInfoStore = defineStore('parkInfo', () => {
     })
   }
   const parkinfoArray = computed(() =>
-    state.value
-      .filter((item: { type: string }) => item.type !== 'static')
-      .sort((a, b) => a.number - b.number)
+    state.value.filter((item) => (item.status = 'true')).sort((a, b) => a.number - b.number)
   )
+
   function VehicleDeparture(): Promise<void> {
     if (spaceNumber.value) {
       if (parkingData.value.start) {
@@ -86,6 +84,7 @@ export const useParkInfoStore = defineStore('parkInfo', () => {
     }
     fetch.post('/api/postMessage', params).then((result) => {})
   }
+
   return {
     initStore,
     VehicleDeparture,

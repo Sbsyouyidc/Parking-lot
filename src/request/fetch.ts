@@ -47,7 +47,7 @@ export default {
     }
     return Fetch(path, requestOptions)
   },
-  post: (path: string, params: IParams, Initiate: boolean) => {
+  post: (path: string, params: IParams, Initiate: boolean = true) => {
     const requestOptions = {
       headers,
       method: 'POST',

@@ -62,6 +62,7 @@ declare module '@vue/runtime-core' {
     AUpload: typeof import('@arco-design/web-vue')['Upload']
     HeaderMenu: typeof import('./src/components/Layout/header/header-menu.vue')['default']
     Layout: typeof import('./src/components/Layout/index.vue')['default']
+    Model: typeof import('./src/components/Module/model.vue')['default']
     PlateSelect: typeof import('./src/components/Module/plateSelect.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

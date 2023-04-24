@@ -24,7 +24,7 @@ watch(
 
 <template>
   <a-modal v-model:visible="visible" @ok="handleOk" @cancel="handleCancel" simple>
-    <template #title> 违规信息 </template>
+    <template #title> 警告 </template>
     <div>
       <slot></slot>
     </div>

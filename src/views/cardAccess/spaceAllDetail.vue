@@ -1,7 +1,7 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
-import { ref, toRefs, computed } from 'vue'
-import { Duration } from '@/util/index'
+import { ref, toRefs, computed, onMounted } from 'vue'
+import { Duration, emitter } from '@/util/index'
 import { useParkInfoStore } from '@/stores/parkInfo'
 import { useUserMainStore } from '@/stores/userMain'
 import { useMessageStore } from '@/stores/message'
@@ -52,9 +52,10 @@ let timer: number | null = setInterval(() => {
     messageStore.postMessage('abnormal', text)
   }
 }, 1000)
-const VehicleDeparture = async (number: any) => {
+
+const VehicleDeparture = async (plate: any) => {
   visible.value = true
-  fetch.put(`/api/parkingSpace/VehicleDeparture/${number}`, params.value).then((result: any) => {
+  fetch.put(`/api/parkingSpace/VehicleDeparture/${plate}`, params.value).then((result: any) => {
     const { res } = result
     if (res) {
       ChargeData.value = result
@@ -66,8 +67,14 @@ const VehicleDeparture = async (number: any) => {
 }
 
 const duration = ref('')
-
 const limit = messageStore.limit
+
+onMounted(() => {
+  emitter.on('leave', (res: any) => {
+    console.log(res)
+    VehicleDeparture(res)
+  })
+})
 </script>
 
 <template>

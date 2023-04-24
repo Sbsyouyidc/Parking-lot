@@ -3,7 +3,6 @@ import dayjs from 'dayjs'
 import duration from 'dayjs/plugin/duration'
 import { recognition, isExistence, Duration, IData, Price, connection } from './utils'
 import { black, violation, userInfo, message } from './sql'
-import { type } from 'os'
 dayjs.extend(duration)
 
 interface IParking {
@@ -11,13 +10,26 @@ interface IParking {
   ParkingPlate: string
   StartParkingTime: string
   coordinates: { X: number; Y: number }
-  creationTime: string
   id?: number
   number: string
   status: string
   type: string
 }
-
+const search = (Table: string, Condition: string, id: string) => {
+  return new Promise<any>((resolve, reject) => {
+    connection.execute(
+      `SELECT * FROM ${Table} where ${Condition} = '${id}'`,
+      (err: any, results: IData[]) => {
+        if (err) {
+          reject(err)
+        } else {
+          const res = results[0]
+          resolve(res)
+        }
+      }
+    )
+  })
+}
 const time = dayjs().format('YYYY-MM-DD HH:mm:ss')
 export default {
   //上传
@@ -66,26 +78,19 @@ export default {
     const time = dayjs().format('YYYY-MM-DD HH:mm:ss')
     const { plate } = req.body
     const { id } = req.params
-
-    const boolean = await isExistence('parkingspace', 'parkingPlate', plate)
-    ;(boolean &&
-      res.send({
-        code: 200,
-        message: '车辆已停放',
-        res: false
-      })) ||
-      connection.query(
-        `UPDATE parkingspace SET ParkingPlate = '${plate}' , StartParkingTime = '${time}' WHERE id = '${id}'`,
-        (err: any, results: IData) => {
-          if (err) throw new Error(err)
-          res.send({
-            code: 200,
-            message: '入场成功',
-            res: true
-          })
-        }
-      )
+    connection.query(
+      `UPDATE parkingspace SET ParkingPlate = '${plate}' , StartParkingTime = '${time}' WHERE id = '${id}'`,
+      (err: any, results: IData) => {
+        if (err) throw new Error(err)
+        res.send({
+          code: 200,
+          message: '入场成功',
+          res: true
+        })
+      }
+    )
   },
+  //时长
   VehicleDuration: async (req: any, res: any) => {
     const { number } = req.query
     connection.query(
@@ -100,14 +105,16 @@ export default {
       }
     )
   },
+
   VehicleDeparture: async (req: any, res: any) => {
-    const { number } = req.params
-    console.log(number)
-    const { plate, type } = req.body
+    const { plate } = req.params
+    console.log(plate)
+
+    const { type, id } = await search('parkingspace', 'ParkingPlate', plate)
     //将停车场的车牌变为null
     const boolean = await new Promise<boolean>((resolve, reject) => {
       connection.query(
-        `UPDATE parkingspace SET ParkingPlate = Null WHERE number = '${number}'`,
+        `UPDATE parkingspace SET ParkingPlate = Null WHERE ParkingPlate = '${plate}'`,
         (err: any, results: IData) => {
           if (err) reject(err)
           resolve(true)
@@ -117,10 +124,12 @@ export default {
     if (boolean) {
       //清零将开始时间和结束时间取出
       connection.query(
-        `SELECT * FROM parkingspace where number = '${number}'`,
+        `SELECT * FROM parkingspace where id = '${id}'`,
         async (err: any, results: IData[]) => {
           if (err) throw new Error(err)
           const { number, StartParkingTime, EndParkingTime } = results[0]
+          console.log(number)
+
           const end = dayjs(EndParkingTime).format('YYYY-MM-DD HH:mm:ss')
           const start = dayjs(StartParkingTime).format('YYYY-MM-DD HH:mm:ss')
           const duration = Duration(dayjs(EndParkingTime).diff(dayjs(StartParkingTime)))
@@ -160,7 +169,7 @@ export default {
       const str = JSON.stringify(item.coordinates)
       const time = dayjs().format('YYYY-MM-DD HH:mm:ss')
       connection.execute(
-        `INSERT INTO parkingspace( number,status, type ,coordinates, creationTime) VALUES ( '${item.number}', '${item.status}', '${item.type}','${str}','${time}')`,
+        `INSERT INTO parkingspace( number,status, type ,coordinates) VALUES ( '${item.number}', '${item.status}', '${item.type}','${str}')`,
         (err) => {
           if (err) throw new Error(err)
         }

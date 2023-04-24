@@ -1,6 +1,9 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
 import { ref, toRefs, watchEffect, nextTick } from 'vue'
+import { storeToRefs } from 'pinia'
+import dayjs from 'dayjs'
+
 import fetch from '@/request/fetch'
 import { Notification } from '@arco-design/web-vue'
 import { useParkInfoStore } from '@/stores/parkInfo'
@@ -8,9 +11,8 @@ import { useUserMainStore } from '@/stores/userMain'
 import { useBlackStore } from '@/stores/black'
 import plateSelect from '@/components/Module/plateSelect.vue'
 import type { IData } from '@/stores/management'
-import model from './model.vue'
-import { storeToRefs } from 'pinia'
-import dayjs from 'dayjs'
+import model from '@/components/Module/model.vue'
+
 type Props = {
   item: IData
 }
@@ -83,7 +85,7 @@ const visible_model = ref(true)
     @ok="handleOk"
     @cancel="handleCancel"
     unmountOnClose
-    popup-container=".arco-tabs-content"
+    popup-container=".card-access"
     size="large"
   >
     <template #title> 车位详细 </template>

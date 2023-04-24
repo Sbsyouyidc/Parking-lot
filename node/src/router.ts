@@ -13,7 +13,7 @@ router.post('/login', server.login)
 router.get('/parkingSpace', server.parkingSpace)
 //停车
 router.put('/parkingSpace/VehicleSelection/:id', server.VehicleSelection)
-router.put('/parkingSpace/VehicleDeparture/:number', server.VehicleDeparture)
+router.put('/parkingSpace/VehicleDeparture/:plate', server.VehicleDeparture)
 router.get('/parkingSpace/VehicleDuration', server.VehicleDuration)
 //订单
 router.get('/getOrderRecord', orderRecord.getOrderRecord)
