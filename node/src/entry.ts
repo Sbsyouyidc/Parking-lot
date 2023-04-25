@@ -86,5 +86,16 @@ export default {
     const { plate } = req.query
     const imagePlate = await lastId('history', 'plate', plate)
     res.send({ ...imagePlate })
+  },
+  putForced: async (req: any, res: any) => {
+    // const id = lastId()
+  },
+  history: (req: any, res: any) => {
+    connection.query(
+      `SELECT plate,date_format(entryTime,'%Y-%m-%d %H:%I:%s') 'time' ,entryImage FROM history  UNION ALL SELECT plate, date_format(leaveTime,'%Y-%m-%d %H:%I:%s')  'time' ,leaveImage FROM history order by time`,
+      (err, result: any[]) => {
+        res.send(result)
+      }
+    )
   }
 }

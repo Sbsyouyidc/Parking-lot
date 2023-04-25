@@ -46,4 +46,5 @@ router.delete('/deleteMessage/:id', server.deleteMessage)
 
 router.post('/entry', entry.entry)
 router.get('/getPlateImage', entry.getPlateImage)
+router.get('/history', entry.history)
 export default router

@@ -11,7 +11,7 @@ import { useUserMainStore } from '@/stores/userMain'
 import { useBlackStore } from '@/stores/black'
 import plateSelect from '@/components/Module/plateSelect.vue'
 import type { IData } from '@/stores/management'
-import model from '@/components/Module/model.vue'
+import modal from '@/components/Module/modal.vue'
 
 type Props = {
   item: IData
@@ -79,7 +79,7 @@ const form = reactive({
   input: '',
   value: ''
 })
-const visible_model = ref(true)
+const visible_model = ref(false)
 </script>
 
 <template>
@@ -106,13 +106,13 @@ const visible_model = ref(true)
     </div>
   </a-modal>
 
-  <model :visible="visible_model">
+  <modal v-model:visible="visible_model">
     <div>
       {{ '未处理违规记录已到上线，请先处理违规记录' }}
     </div>
     <div>
       {{ '上限为3次，目前为' + filterBlack.length + '次' }}
-    </div></model
+    </div></modal
   >
   <div
     v-if="item.status !== 'false'"

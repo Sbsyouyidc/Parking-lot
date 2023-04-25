@@ -5,7 +5,7 @@ import { ref, reactive } from 'vue'
 import { onMounted, onActivated, watchEffect } from 'vue'
 import dayjs from 'dayjs'
 import type { TableColumnData } from '@arco-design/web-vue/es/table'
-import { Duration } from '@/util'
+import { Duration, spaceType } from '@/util'
 onActivated(() => {
   getOrderRecord()
 })
@@ -15,11 +15,11 @@ onMounted(() => {
 const getOrderRecord = (): Promise<void> => {
   return fetch.get(`/api/getSearchOrder?${option.value}=${value.value}`).then((res: any[]) => {
     res.forEach((item: { [key: string]: any }) => {
-      const { StartParkingTime, EndParkingTime, conditionTime } = item
+      const { StartParkingTime, EndParkingTime, conditionTime, status } = item
       item.StartParkingTime = dayjs(StartParkingTime).format('YYYY-MM-DD HH:mm')
       item.EndParkingTime = dayjs(EndParkingTime).format('YYYY-MM-DD HH:mm')
-      item.conditionTime = dayjs(conditionTime).format('YYYY-MM-DD HH:mm')
-      const duration = Duration(dayjs(EndParkingTime).diff(dayjs(StartParkingTime)))
+      const duration =
+        status == 'parked' ? Duration(dayjs(EndParkingTime).diff(dayjs(StartParkingTime))) : 0
       item.duration = duration
     })
     value.value = ''
@@ -28,49 +28,7 @@ const getOrderRecord = (): Promise<void> => {
   })
 }
 const pagination = { pageSize: 14 }
-const columns: TableColumnData[] = [
-  {
-    title: '订单号',
-    dataIndex: 'id',
-    align: 'center'
-  },
 
-  {
-    title: '车牌号',
-    dataIndex: 'LicensePlate',
-    align: 'center'
-  },
-  {
-    title: '停车位',
-    dataIndex: 'number',
-    align: 'center'
-  },
-  {
-    title: '价格',
-    dataIndex: 'Price',
-    align: 'center'
-  },
-  {
-    title: '时长',
-    dataIndex: 'duration',
-    align: 'center'
-  },
-  {
-    title: '开始时间',
-    dataIndex: 'StartParkingTime',
-    align: 'center'
-  },
-  {
-    title: '结束时间',
-    dataIndex: 'EndParkingTime',
-    align: 'center'
-  },
-  {
-    title: '录入时间',
-    dataIndex: 'conditionTime',
-    align: 'center'
-  }
-]
 const data = ref<any>([])
 const options = [
   {
@@ -82,6 +40,19 @@ const options = [
   { value: 'number', label: '停车位' }
 ]
 
+const filterable = {
+  filters: [
+    {
+      text: '预约',
+      value: 'appointment'
+    },
+    {
+      text: '停放',
+      value: 'parked'
+    }
+  ],
+  filter: (value: any, row: { status: any }) => row.status == value
+}
 const value = ref('')
 const option = ref('')
 </script>
@@ -106,7 +77,20 @@ const option = ref('')
     />
   </a-input-group>
 
-  <a-table :columns="columns" :data="data" :pagination="pagination" />
+  <a-table :data="data" :pagination="pagination">
+    <template #columns>
+      <a-table-column title="订单号" data-index="id"></a-table-column>
+      <a-table-column title="订单类型" :filterable="filterable" data-index="status">
+        <template #cell="{ record }">{{ spaceType[record.status] }}</template></a-table-column
+      >
+      <a-table-column title="车牌号" data-index="LicensePlate"></a-table-column>
+      <a-table-column title="停车位" data-index="number"></a-table-column>
+      <a-table-column title="价格" data-index="Price"></a-table-column>
+      <a-table-column title="时长" data-index="duration"></a-table-column>
+      <a-table-column title="开始时间" data-index="StartParkingTime"></a-table-column>
+      <a-table-column title="结束时间" data-index="EndParkingTime"></a-table-column>
+    </template>
+  </a-table>
 </template>
 <style lang="less" scoped>
 .arco-input-group {

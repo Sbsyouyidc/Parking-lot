@@ -18,10 +18,10 @@ const login = () => {
       if (arr.LicensePlate) {
         localStorage.setItem('plate', arr.LicensePlate)
         localStorage.setItem('myState', JSON.stringify(arr))
+        store.init()
         router.push('/userMain')
       } else {
         router.push('/Home')
-
         localStorage.setItem('plate', '')
         localStorage.setItem('myState', '')
       }

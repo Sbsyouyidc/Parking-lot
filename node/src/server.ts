@@ -20,12 +20,9 @@ const search = (Table: string, Condition: string, id: string) => {
     connection.execute(
       `SELECT * FROM ${Table} where ${Condition} = '${id}'`,
       (err: any, results: IData[]) => {
-        if (err) {
-          reject(err)
-        } else {
-          const res = results[0]
-          resolve(res)
-        }
+        const res = results[0]
+        console.log('asdasdas' + res)
+        resolve(res)
       }
     )
   })
@@ -33,9 +30,8 @@ const search = (Table: string, Condition: string, id: string) => {
 const time = dayjs().format('YYYY-MM-DD HH:mm:ss')
 export default {
   //上传
-  upload: (req: any, res: any) => {
-    console.log(req.file)
 
+  upload: (req: any, res: any) => {
     const { originalname, path: filePath, destination } = req.file
     const newName = `${destination}\\${originalname}`
     fs.rename(filePath, newName, (err: any) => {
@@ -117,7 +113,7 @@ export default {
 
   VehicleDeparture: async (req: any, res: any) => {
     const { plate } = req.params
-    console.log(plate)
+    const { status } = req.body
 
     const { type, id } = await search('parkingspace', 'ParkingPlate', plate)
     //将停车场的车牌变为null
@@ -142,13 +138,17 @@ export default {
           const end = dayjs(EndParkingTime).format('YYYY-MM-DD HH:mm:ss')
           const start = dayjs(StartParkingTime).format('YYYY-MM-DD HH:mm:ss')
           const duration = Duration(dayjs(EndParkingTime).diff(dayjs(StartParkingTime)))
-          const price = await Price(dayjs(EndParkingTime).diff(dayjs(StartParkingTime)), type)
+          const price =
+            status == 'appointment'
+              ? 0
+              : await Price(dayjs(EndParkingTime).diff(dayjs(StartParkingTime)), type)
+
           connection.query(
             `UPDATE parkingspace SET StartParkingTime = Null WHERE number = '${number}'`
           )
           //将信息存入订单表
           connection.query(
-            `INSERT INTO priceorder (LicensePlate, number, Price, StartParkingTime, EndParkingTime,conditionTime) VALUES ('${plate}', '${number}', '${price}', '${start}', '${end}','${end}')`,
+            `INSERT INTO priceorder (LicensePlate, number, Price, StartParkingTime, EndParkingTime,conditionTime,status) VALUES ('${plate}', '${number}', '${price}', '${start}', '${end}','${end}','${status}')`,
             (err: any, results: any) => {
               if (err) throw new Error(err)
               res.send({ res: true, message: '离场成功', duration, end, start, number, price })

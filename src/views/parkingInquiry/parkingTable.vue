@@ -6,7 +6,7 @@ import dayjs from 'dayjs'
 import duration from './duration.vue'
 import tableImage from './image.vue'
 import { spaceType } from '@/util'
-
+import { emitter } from '@/util/index'
 const store = useParkInfoStore()
 onMounted(() => {
   store.initStore()
@@ -40,7 +40,7 @@ const expandable = reactive({
   <a-table
     :data="store.parkinfoArray"
     style="margin-top: 30px"
-    :bordered="{ wrapper: true, cell: true }"
+    :bordered="{ wrapper: true }"
     :pagination="{ pageSize: 14 }"
     :expandable="expandable"
     row-key="id"
@@ -54,12 +54,12 @@ const expandable = reactive({
         data-index="ParkingPlate"
         :filterable="filterable"
       ></a-table-column>
-      <a-table-column title="开始时间">
+      <a-table-column title="开始时间" data-index="StartParkingTime">
         <template #cell="{ record }">
           {{ formatDate(record.StartParkingTime) }}
         </template>
       </a-table-column>
-      <a-table-column title="停放时长">
+      <a-table-column title="停放时长" data-index="StartParkingTime">
         <template #cell="{ record }">
           <duration :time="record.StartParkingTime" />
         </template>
@@ -68,6 +68,15 @@ const expandable = reactive({
       <a-table-column title="状态" data-index="status">
         <template #cell="{ record }">
           <div>{{ spaceType[record.status] }}</div>
+        </template>
+      </a-table-column>
+      <a-table-column title="操作">
+        <template #cell="{ record }">
+          <a-button
+            v-show="record.status == 'parked'"
+            @click="emitter.emit('leave', { plate: record.ParkingPlate, status: 'parked' })"
+            >强制离场</a-button
+          >
         </template>
       </a-table-column>
     </template>
