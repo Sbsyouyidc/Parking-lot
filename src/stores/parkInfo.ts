@@ -32,7 +32,7 @@ export const useParkInfoStore = defineStore('parkInfo', () => {
     })
   }
   const parkinfoArray = computed(() =>
-    state.value.filter((item) => (item.status = 'true')).sort((a, b) => a.number - b.number)
+    state.value.filter((item) => item.status !== 'false').sort((a, b) => a.number - b.number)
   )
 
   function VehicleDuration(): Promise<void> {

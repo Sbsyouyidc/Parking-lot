@@ -51,7 +51,7 @@ const handleOk = async () => {
       if (res) {
         store.type = item.value.type
         localStorage.setItem('spaceNumber', item.value.number)
-        Message.success('预约成功')
+        Message.success(message)
         store.initStore()
         store.VehicleDuration().then(() => {
           visible.value = false
@@ -64,9 +64,9 @@ const handleOk = async () => {
 
 const visible = ref(false)
 
-const handleClick = (type: string) => {
+const handleClick = (type: string, status: string) => {
   console.log(type)
-  if (type !== 'static') {
+  if (type !== 'static' && status == 'true') {
     visible.value = true
   }
 }
@@ -123,7 +123,7 @@ const visible_model = ref(true)
       top: item.coordinates.Y + 'px',
       transform: `rotate(${item.coordinates.degree}deg)`
     }"
-    @click="handleClick(item.type)"
+    @click="handleClick(item.type, item.status)"
   >
     <span v-if="item.ParkingPlate" class="plate">{{ item.ParkingPlate }}</span>
     <span class="number">{{ item.number }}</span>

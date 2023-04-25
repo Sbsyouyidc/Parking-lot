@@ -5,6 +5,7 @@ import { useParkInfoStore } from '@/stores/parkInfo'
 import dayjs from 'dayjs'
 import duration from './duration.vue'
 import tableImage from './image.vue'
+import { spaceType } from '@/util'
 
 const store = useParkInfoStore()
 onMounted(() => {
@@ -49,7 +50,7 @@ const expandable = reactive({
       ><a-table-column title="收费标准" data-index="type"></a-table-column>
 
       <a-table-column
-        title="停放车辆"
+        title="暂用车牌"
         data-index="ParkingPlate"
         :filterable="filterable"
       ></a-table-column>
@@ -66,7 +67,7 @@ const expandable = reactive({
 
       <a-table-column title="状态" data-index="status">
         <template #cell="{ record }">
-          <div>{{ record.status }}</div>
+          <div>{{ spaceType[record.status] }}</div>
         </template>
       </a-table-column>
     </template>

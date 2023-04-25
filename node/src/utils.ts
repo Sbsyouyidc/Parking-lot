@@ -26,14 +26,14 @@ export const getFileContentAsBase64 = (path: string) => {
 }
 
 export const isExistence = (Table: string, Condition: string, id: string) => {
-  return new Promise<boolean | string>((resolve, reject) => {
+  return new Promise<boolean>((resolve, reject) => {
     connection.execute(
       `SELECT * FROM ${Table} where ${Condition} = '${id}'`,
       (err: any, results: IData[]) => {
         if (err) {
           reject(err)
         } else {
-          const res = results.length !== 0 ? results[0].id : false
+          const res = results.length !== 0 ? true : false
           resolve(res)
         }
       }

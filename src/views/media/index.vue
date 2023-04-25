@@ -60,6 +60,8 @@ const takePhoto = () => {
             })
         }
         if (res == 'leave') {
+          console.log(plate)
+
           emitter.emit('leave', plate)
         }
       })

@@ -64,4 +64,10 @@ const dataURLtoFile = (dataURI: string, type: string) => {
   return new Blob([new Uint8Array(array)], { type: type })
 }
 
-export const emitter =  mitt()
+export const emitter = mitt()
+
+export const spaceType: { [key: string]: string } = {
+  parked: '停放',
+  appointment: '预约',
+  true: '可使用'
+}

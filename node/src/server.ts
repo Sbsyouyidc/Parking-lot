@@ -76,20 +76,28 @@ export default {
     })
   },
   VehicleSelection: async (req: any, res: any) => {
-    const { plate, status = 'true', ReservationTime = '' } = req.body
     const { id } = req.params
+    const { plate, status = 'parked', ReservationTime = '' } = req.body
     const time = ReservationTime ? ReservationTime : dayjs().format('YYYY-MM-DD HH:mm:ss')
-    connection.query(
-      `UPDATE parkingspace SET ParkingPlate = '${plate}',status = '${status}' , StartParkingTime = '${time}' WHERE id = '${id}'`,
-      (err: any, results: IData) => {
-        if (err) throw new Error(err)
-        res.send({
-          code: 200,
-          message: '入场成功',
-          res: true
-        })
-      }
-    )
+    const boolean = await isExistence('parkingspace', 'ParkingPlate', plate)
+    console.log(boolean, status)
+    ;(!boolean &&
+      connection.query(
+        `UPDATE parkingspace SET ParkingPlate = '${plate}',status = '${status}' , StartParkingTime = '${time}' WHERE id = '${id}'`,
+        (err: any, results: IData) => {
+          if (err) throw new Error(err)
+          res.send({
+            code: 200,
+            message: ReservationTime ? '预约成功' : '入场成功',
+            res: true
+          })
+        }
+      )) ||
+      res.send({
+        code: 200,
+        message: '请取消已预约信息，重新预约',
+        res: false
+      })
   },
   //时长
   VehicleDuration: async (req: any, res: any) => {
@@ -109,6 +117,8 @@ export default {
 
   VehicleDeparture: async (req: any, res: any) => {
     const { plate } = req.params
+    console.log(plate)
+
     const { type, id } = await search('parkingspace', 'ParkingPlate', plate)
     //将停车场的车牌变为null
     const boolean = await new Promise<boolean>((resolve, reject) => {

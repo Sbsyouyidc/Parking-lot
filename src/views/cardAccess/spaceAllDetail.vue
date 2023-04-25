@@ -79,12 +79,19 @@ onMounted(() => {
     </a-descriptions>
   </a-modal>
 
-  <a-descriptions layout="vertical" bordered :column="{ xs: 3, lg: 5 }" align="center" size="small">
+  <a-descriptions
+    layout="vertical"
+    bordered
+    :column="{ xs: 3, lg: 5 }"
+    align="center"
+    size="small"
+    v-show="item.status == 'appointment'"
+  >
     <a-descriptions-item label="停车位">{{ item.number }}</a-descriptions-item>
     <a-descriptions-item label="车位类别">{{ item.type }}</a-descriptions-item>
     <a-descriptions-item label="车牌">{{ item.ParkingPlate }}</a-descriptions-item>
-    <a-descriptions-item label="开始时间">{{
-      dayjs(item.StartParkingTime).format('YYYY-MM-DD HH:mm:ss')
+    <a-descriptions-item label="预约时间">{{
+      dayjs(item.StartParkingTime).format('YYYY-MM-DD HH:mm')
     }}</a-descriptions-item>
     ><a-descriptions-item label="操作">
       <a-button type="primary" @click="VehicleDeparture(item.ParkingPlate)"
