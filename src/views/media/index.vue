@@ -41,6 +41,8 @@ const takePhoto = () => {
           params: { plate },
           res
         } = result
+        console.log(result)
+
         Notification.info(message)
         if (res == 'entry') {
           await blackStore.blackArray(plate)
