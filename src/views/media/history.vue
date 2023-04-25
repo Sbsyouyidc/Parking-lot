@@ -8,7 +8,7 @@ onMounted(() => {
 })
 const isReverse = ref(false)
 
-const onChange = (bool) => {
+const onChange = (bool: boolean) => {
   isReverse.value = bool
 }
 </script>
