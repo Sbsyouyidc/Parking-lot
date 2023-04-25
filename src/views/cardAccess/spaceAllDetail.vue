@@ -10,7 +10,6 @@ import fetch from '@/request/fetch'
 
 const userStore = useUserMainStore()
 const store = useParkInfoStore()
-const messageStore = useMessageStore()
 
 const props = defineProps<{
   item: any
@@ -39,19 +38,6 @@ const params = computed(() => {
     }
   }
 })
-let timer: number | null = setInterval(() => {
-  duration.value = Duration(dayjs().diff(dayjs(item.value.StartParkingTime)))!
-  const time = dayjs().diff(dayjs(item.value.StartParkingTime))
-  if (time % limit <= Math.floor(limit / 10)) {
-    const text =
-      params.value.plate +
-      `在编号${item.value.number}车位` +
-      '停放时间已到达' +
-      duration.value +
-      '，检查停放情况'
-    messageStore.postMessage('abnormal', text)
-  }
-}, 1000)
 
 const VehicleDeparture = async (plate: any) => {
   visible.value = true
@@ -60,18 +46,12 @@ const VehicleDeparture = async (plate: any) => {
     if (res) {
       ChargeData.value = result
       store.parkingData = { number: '', start: '', end: '', Price: '', duration: '', type: '' }
-      clearInterval(timer as number)
-      timer = null
     }
   })
 }
 
-const duration = ref('')
-const limit = messageStore.limit
-
 onMounted(() => {
   emitter.on('leave', (res: any) => {
-    console.log(res)
     VehicleDeparture(res)
   })
 })
@@ -99,17 +79,16 @@ onMounted(() => {
     </a-descriptions>
   </a-modal>
 
-  <a-descriptions layout="inline-horizontal" bordered :column="1">
+  <a-descriptions layout="vertical" bordered :column="5" align="center">
     <a-descriptions-item label="停车位">{{ item.number }}</a-descriptions-item>
     <a-descriptions-item label="车位类别">{{ item.type }}</a-descriptions-item>
     <a-descriptions-item label="车牌">{{ item.ParkingPlate }}</a-descriptions-item>
     <a-descriptions-item label="开始时间">{{
       dayjs(item.StartParkingTime).format('YYYY-MM-DD HH:mm:ss')
     }}</a-descriptions-item>
-    <a-descriptions-item label="时长">{{ duration }}</a-descriptions-item
     ><a-descriptions-item label="操作">
-      <a-button type="primary" @click="VehicleDeparture(item.number)"
-        >离场</a-button
+      <a-button type="primary" @click="VehicleDeparture(item.ParkingPlate)"
+        >取消预约</a-button
       ></a-descriptions-item
     >
   </a-descriptions>

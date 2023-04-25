@@ -51,7 +51,7 @@ const handleOk = async () => {
         localStorage.setItem('spaceNumber', item.value.number)
         Notification.success(message)
         store.initStore()
-        store.VehicleDeparture().then(() => {
+        store.VehicleDuration().then(() => {
           visible.value = true
         })
       } else {

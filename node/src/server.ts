@@ -128,7 +128,7 @@ export default {
         async (err: any, results: IData[]) => {
           if (err) throw new Error(err)
           const { number, StartParkingTime, EndParkingTime } = results[0]
-          console.log(number)
+          console.log(results[0])
 
           const end = dayjs(EndParkingTime).format('YYYY-MM-DD HH:mm:ss')
           const start = dayjs(StartParkingTime).format('YYYY-MM-DD HH:mm:ss')

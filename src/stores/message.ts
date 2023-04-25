@@ -6,7 +6,7 @@ import type { IData } from './management'
 import { Message, Notification } from '@arco-design/web-vue'
 
 export const useMessageStore = defineStore('message', () => {
-  const limit = ref<number>(10000)
+  const limit = ref<number>(10000000)
   const state = ref({
     abnormal: '',
     Appointment: ''

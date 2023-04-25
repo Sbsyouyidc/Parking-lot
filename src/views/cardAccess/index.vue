@@ -9,7 +9,7 @@ import { storeToRefs } from 'pinia'
 
 onActivated(async () => {
   await store.initStore()
-  await store.VehicleDeparture()
+  // await store.VehicleDuration()
 })
 
 const store = useParkInfoStore()
@@ -22,13 +22,10 @@ const filter = computed(() =>
 </script>
 
 <template>
-  <!-- <container /> -->
+  <a-typography-title :heading="6"> 停车列表 </a-typography-title>
+  <spaceAllDetail v-for="(item, index) in filter" :key="index" :item="item" />
   <div class="card-access box-shadow-inset">
     <parkSpace :item="item" v-for="(item, index) in store.state" :key="index" />
-  </div>
-  <a-typography-title :heading="6"> 停车列表 </a-typography-title>
-  <div class="all-detail">
-    <spaceAllDetail v-for="(item, index) in filter" :key="index" :item="item" />
   </div>
 </template>
 <style lang="less" scoped>
@@ -47,8 +44,4 @@ const filter = computed(() =>
     background-color: aqua;
   }
 }
-.all-detail {
-  display: flex;
-}
-
 </style>

@@ -3,7 +3,8 @@
 import { ref, reactive, onMounted } from 'vue'
 import { useParkInfoStore } from '@/stores/parkInfo'
 import dayjs from 'dayjs'
-import { Duration } from '@/util/index'
+
+import duration from './duration.vue'
 const store = useParkInfoStore()
 onMounted(() => {
   store.initStore()
@@ -51,10 +52,9 @@ const filterable = {
         </a-table-column>
         <a-table-column title="停放时长">
           <template #cell="{ record }">
-            {{ Duration(dayjs().diff(dayjs(record.StartParkingTime))) }}
-          </template>
-        </a-table-column></a-table-column
-      >
+            <duration :time="record.StartParkingTime" />
+          </template> </a-table-column
+      ></a-table-column>
 
       <a-table-column title="状态" data-index="status">
         <template #cell="{ record }">

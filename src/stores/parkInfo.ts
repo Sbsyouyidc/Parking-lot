@@ -35,7 +35,7 @@ export const useParkInfoStore = defineStore('parkInfo', () => {
     state.value.filter((item) => (item.status = 'true')).sort((a, b) => a.number - b.number)
   )
 
-  function VehicleDeparture(): Promise<void> {
+  function VehicleDuration(): Promise<void> {
     if (spaceNumber.value) {
       if (parkingData.value.start) {
         parkingData.value.end = dayjs().format('YYYY-MM-DD HH:mm:ss')
@@ -87,7 +87,7 @@ export const useParkInfoStore = defineStore('parkInfo', () => {
 
   return {
     initStore,
-    VehicleDeparture,
+    VehicleDuration,
     searchSpace,
     search,
     parkingArray,
