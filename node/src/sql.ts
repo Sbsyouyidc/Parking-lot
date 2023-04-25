@@ -24,6 +24,7 @@ export const message = {
 export const monitoring = {
   select: 'SELECT * FROM history WHERE type = ?',
   selectId: 'SELECT * FROM history WHERE id = ?',
+  selectPlate: 'SELECT * FROM history WHERE plate = ?',
   insert: 'INSERT INTO history SET ?',
   update: 'UPDATE history SET ? WHERE id = ?',
   delete: 'DELETE FROM history WHERE id = ?'

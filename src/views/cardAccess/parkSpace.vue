@@ -1,11 +1,11 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
-import { ref, toRefs, watchEffect, nextTick } from 'vue'
+import { ref, toRefs, watchEffect, nextTick, reactive } from 'vue'
 import { storeToRefs } from 'pinia'
 import dayjs from 'dayjs'
 
 import fetch from '@/request/fetch'
-import { Notification } from '@arco-design/web-vue'
+import { Message, Notification } from '@arco-design/web-vue'
 import { useParkInfoStore } from '@/stores/parkInfo'
 import { useUserMainStore } from '@/stores/userMain'
 import { useBlackStore } from '@/stores/black'
@@ -24,7 +24,7 @@ const blackStore = useBlackStore()
 watchEffect(() => {
   nextTick(() => {
     if (userStore.plate) {
-      input.value = userStore.plate
+      form.input = userStore.plate
     }
   })
 })
@@ -35,27 +35,29 @@ const { item } = toRefs(props)
 const { filterBlack } = storeToRefs(blackStore)
 
 const handleOk = async () => {
-  await blackStore.blackArray(input.value)
+  await blackStore.blackArray(form.input)
   if (filterBlack.value.length >= 3) {
     visible_model.value = !visible_model.value
     return
   }
   fetch
     .put(`/api/parkingSpace/VehicleSelection/${item.value.id}`, {
-      plate: input.value
+      plate: form.input,
+      status: 'appointment',
+      ReservationTime: form.value
     })
     .then((result: { res: any; message: any }) => {
       const { res, message } = result
       if (res) {
         store.type = item.value.type
         localStorage.setItem('spaceNumber', item.value.number)
-        Notification.success(message)
+        Message.success('预约成功')
         store.initStore()
         store.VehicleDuration().then(() => {
-          visible.value = true
+          visible.value = false
         })
       } else {
-        Notification.warning(message)
+        Message.warning(message)
       }
     })
 }
@@ -64,7 +66,6 @@ const visible = ref(false)
 
 const handleClick = (type: string) => {
   console.log(type)
-
   if (type !== 'static') {
     visible.value = true
   }
@@ -74,35 +75,37 @@ const handleCancel = () => {
   visible.value = false
 }
 
-const input = ref('')
+const form = reactive({
+  input: '',
+  value: ''
+})
 const visible_model = ref(true)
 </script>
 
 <template>
-  <a-drawer
-    :width="340"
-    :visible="visible"
-    @ok="handleOk"
-    @cancel="handleCancel"
-    unmountOnClose
-    popup-container=".card-access"
-    size="large"
-  >
+  <a-modal v-model:visible="visible" @ok="handleOk" @cancel="handleCancel" width="auto">
     <template #title> 车位详细 </template>
     <div>
-      <a-descriptions style="margin-top: 20px" :column="1">
+      <a-descriptions :column="1">
         <a-descriptions-item label="车位编号"> {{ item.number }} </a-descriptions-item>
-        <a-descriptions-item label="开始时间">
-          {{ dayjs(item.StartParkingTime).format('YYYY-MM-DD HH:mm:ss') }}
-        </a-descriptions-item>
         <a-descriptions-item label="车位类别"> {{ item.type }} </a-descriptions-item>
         <a-descriptions-item label="停车">
           <span v-if="item.ParkingPlate">{{ item.ParkingPlate }}</span>
-          <plateSelect @on-change="(val) => (input = val)" />
+          <plateSelect v-else @on-change="(val) => (form.input = val)" />
+        </a-descriptions-item>
+        <a-descriptions-item label="预约时间">
+          <a-date-picker
+            v-model="form.value"
+            :disabledDate="(current: string | number | dayjs.Dayjs | Date | null | undefined) => dayjs(current).isBefore(dayjs())"
+            style="width: 220px"
+            show-time
+            format="YYYY-MM-DD hh:mm"
+          />
         </a-descriptions-item>
       </a-descriptions>
     </div>
-  </a-drawer>
+  </a-modal>
+
   <model :visible="visible_model">
     <div>
       {{ '未处理违规记录已到上线，请先处理违规记录' }}
@@ -112,11 +115,8 @@ const visible_model = ref(true)
     </div></model
   >
   <div
-    v-if="item.status == 'true'"
-    :class="[
-      item.ParkingPlate ? 'stopped' : 'not-stopped',
-      item.type == 'static' ? 'static' : 'park'
-    ]"
+    v-if="item.status !== 'false'"
+    :class="[item.status, item.type == 'static' ? 'static' : 'park']"
     class="default"
     :style="{
       left: item.coordinates.X + 'px',
@@ -170,19 +170,16 @@ const visible_model = ref(true)
     white-space: nowrap;
   }
 }
-.not-stopped {
-  background-color: rgba(0, 0, 255, 0.2);
-  border: 2px dashed #00f;
+.true {
+  background-color: rgba(65, 65, 65, 0.2);
+  border: 2px dashed rgb(173, 173, 177);
 }
-.stopped {
+.appointment {
+  background-color: rgba(13, 36, 245, 0.2);
+  border: 2px dashed rgb(19, 22, 219);
+}
+.parked {
   background-color: rgba(255, 0, 13, 0.2);
   border: 2px dashed rgb(238, 5, 5);
-}
-
-.body-class {
-  & > .number {
-    font-size: medium;
-    font-weight: 400;
-  }
 }
 </style>

@@ -38,14 +38,14 @@ const Fetch = (path: string, requestOptions?: RequestInit | undefined | any, Ini
 }
 
 export default {
-  get: (path: string) => {
+  get: (path: string, Initiate: boolean = true) => {
     const requestOptions = {
       headers,
       method: 'GET',
       mode: 'cors' as RequestMode,
       redirect: 'manual' as RequestRedirect
     }
-    return Fetch(path, requestOptions)
+    return Fetch(path, requestOptions, Initiate)
   },
   post: (path: string, params: IParams, Initiate: boolean = true) => {
     const requestOptions = {

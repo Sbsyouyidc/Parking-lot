@@ -32,36 +32,37 @@ const takePhoto = () => {
   const image = canvas.value.toDataURL('image/png')
   fetch.Upload('/api/upload', file(image), false).then((res: any) => {
     const { path } = res
-    fetch.post('/api/entry', { imagePath: path }, false).then(async (result) => {
-      const {
-        message,
-        params: { plate },
-        res
-      } = result
-      Notification.info(message)
-      if (res == 'entry') {
-        await blackStore.blackArray(plate)
-        if (filterBlack.value.length >= 3) {
-          visible_model.value = !visible_model.value
-          return
+    fetch
+      .post('/api/entry', { imagePath: path }, false)
+      .then(async (result: { message: any; params: { plate: any }; res: any }) => {
+        const {
+          message,
+          params: { plate },
+          res
+        } = result
+        Notification.info(message)
+        if (res == 'entry') {
+          await blackStore.blackArray(plate)
+          if (filterBlack.value.length >= 3) {
+            visible_model.value = !visible_model.value
+            return
+          }
+          fetch
+            .put(`/api/parkingSpace/VehicleSelection/${store.parkinfoArray[0].id}`, {
+              plate
+            })
+            .then((result: { res: any; message: any }) => {
+              const { res, message } = result
+              if (res) {
+                Notification.success(message)
+                store.initStore()
+              }
+            })
         }
-        fetch
-          .put(`/api/parkingSpace/VehicleSelection/${store.parkinfoArray[0].id}`, {
-            plate
-          })
-          .then((result: { res: any; message: any }) => {
-            const { res, message } = result
-            if (res) {
-              Notification.success(message)
-              store.initStore()
-              store.VehicleDeparture()
-            }
-          })
-      }
-      if (res == 'leave') {
-        emitter.emit('leave', plate)
-      }
-    })
+        if (res == 'leave') {
+          emitter.emit('leave', plate)
+        }
+      })
   })
 }
 

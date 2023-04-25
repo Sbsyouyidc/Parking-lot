@@ -51,20 +51,21 @@ export default {
   //登录
   login: async (req: any, res: any) => {
     const { username, password } = req.body
-    const boolean = await isExistence('user', 'username', username)
-    ;(boolean &&
-      connection.query(`SELECT * FROM user WHERE username = '${username}'`, (err, results: any) => {
+
+    connection.query(`SELECT * FROM user WHERE username = '${username}'`, (err, results: any) => {
+      if (results[0]) {
         res.send({
           message: '登陆成功',
           res: true,
           arr: results[0]
         })
-      })) ||
-      res.send({
-        code: 200,
-        message: '用户不存在',
-        res: false
-      })
+      } else {
+        res.send({
+          message: '用户名不存在',
+          res: true
+        })
+      }
+    })
   },
 
   //车位信息
@@ -75,11 +76,11 @@ export default {
     })
   },
   VehicleSelection: async (req: any, res: any) => {
-    const time = dayjs().format('YYYY-MM-DD HH:mm:ss')
-    const { plate } = req.body
+    const { plate, status = 'true', ReservationTime = '' } = req.body
     const { id } = req.params
+    const time = ReservationTime ? ReservationTime : dayjs().format('YYYY-MM-DD HH:mm:ss')
     connection.query(
-      `UPDATE parkingspace SET ParkingPlate = '${plate}' , StartParkingTime = '${time}' WHERE id = '${id}'`,
+      `UPDATE parkingspace SET ParkingPlate = '${plate}',status = '${status}' , StartParkingTime = '${time}' WHERE id = '${id}'`,
       (err: any, results: IData) => {
         if (err) throw new Error(err)
         res.send({
@@ -108,13 +109,11 @@ export default {
 
   VehicleDeparture: async (req: any, res: any) => {
     const { plate } = req.params
-    console.log(plate)
-
     const { type, id } = await search('parkingspace', 'ParkingPlate', plate)
     //将停车场的车牌变为null
     const boolean = await new Promise<boolean>((resolve, reject) => {
       connection.query(
-        `UPDATE parkingspace SET ParkingPlate = Null WHERE ParkingPlate = '${plate}'`,
+        `UPDATE parkingspace SET ParkingPlate = Null , status = 'true' WHERE ParkingPlate = '${plate}'`,
         (err: any, results: IData) => {
           if (err) reject(err)
           resolve(true)

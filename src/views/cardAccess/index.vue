@@ -22,7 +22,7 @@ const filter = computed(() =>
 </script>
 
 <template>
-  <a-typography-title :heading="6"> 停车列表 </a-typography-title>
+  <a-typography-title :heading="6"> 预约列表 </a-typography-title>
   <spaceAllDetail v-for="(item, index) in filter" :key="index" :item="item" />
   <div class="card-access box-shadow-inset">
     <parkSpace :item="item" v-for="(item, index) in store.state" :key="index" />
@@ -32,6 +32,7 @@ const filter = computed(() =>
 .card-access {
   overflow: auto;
   position: relative;
+
   height: 600px;
   margin: 10px;
   background-color: #f0eeee;

@@ -1,10 +1,10 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
 import { ref, toRefs, computed, onMounted } from 'vue'
-import { Duration, emitter } from '@/util/index'
+import { emitter } from '@/util/index'
 import { useParkInfoStore } from '@/stores/parkInfo'
 import { useUserMainStore } from '@/stores/userMain'
-import { useMessageStore } from '@/stores/message'
+
 import dayjs from 'dayjs'
 import fetch from '@/request/fetch'
 
@@ -41,7 +41,7 @@ const params = computed(() => {
 
 const VehicleDeparture = async (plate: any) => {
   visible.value = true
-  fetch.put(`/api/parkingSpace/VehicleDeparture/${plate}`, params.value).then((result: any) => {
+  fetch.put(`/api/parkingSpace/VehicleDeparture/${plate}`).then((result: any) => {
     const { res } = result
     if (res) {
       ChargeData.value = result
@@ -79,7 +79,7 @@ onMounted(() => {
     </a-descriptions>
   </a-modal>
 
-  <a-descriptions layout="vertical" bordered :column="5" align="center">
+  <a-descriptions layout="vertical" bordered :column="{ xs: 3, lg: 5 }" align="center" size="small">
     <a-descriptions-item label="停车位">{{ item.number }}</a-descriptions-item>
     <a-descriptions-item label="车位类别">{{ item.type }}</a-descriptions-item>
     <a-descriptions-item label="车牌">{{ item.ParkingPlate }}</a-descriptions-item>

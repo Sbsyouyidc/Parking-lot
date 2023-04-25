@@ -80,5 +80,11 @@ export default {
         }
       })
     })
+  },
+
+  getPlateImage: async (req: any, res: any) => {
+    const { plate } = req.query
+    const imagePlate = await lastId('history', 'plate', plate)
+    res.send({ ...imagePlate })
   }
 }
