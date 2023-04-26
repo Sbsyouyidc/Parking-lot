@@ -6,32 +6,37 @@ import headerMenu from './header/header-menu.vue'
 import siderMenu from './sider/sider-menu.vue'
 const router = useRouter()
 const route = useRoute()
+
 const isCollapsed = ref(false)
 const layoutLeft = computed(() => (isCollapsed.value ? 48 : 200))
 const activeKey = ref('')
-
+const isMonitoring = ref(true)
 const data = ref<{ key: string; title: string }[]>([])
 watchEffect(() => {
   const {
     meta: { title },
     name
   } = route
-  const isHave = data.value.some((item) => item.key == name)
-  !isHave && data.value.push({ key: name as string, title: title as string })
-  activeKey.value = name as string
+  if (isMonitoring.value) {
+    const isHave = data.value.some((item) => item.key == name)
+    !isHave && data.value.push({ key: name as string, title: title as string })
+    activeKey.value = name as string
+  } else {
+    isMonitoring.value = true
+  }
 })
 
 const handleDelete = (key: string) => {
   const index = data.value.findIndex((item) => item.key == key)
-  data.value = data.value.filter((item) => item.key !== key)
+  data.value = data.value.filter((item: any) => item.key !== key)
+
   if (data.value.length === 0) {
     router.push({ name: 'Panel' })
-  } else if (index == data.value.length) {
+  }
+  if (activeKey.value == key) {
     activeKey.value = data.value[index - 1].key
-    router.push({ name: data.value[index - 1].key })
-  } else {
-    activeKey.value = data.value[index].key
-    router.push({ name: data.value[index].key })
+    router.push({ name: activeKey.value })
+    isMonitoring.value = false
   }
 }
 </script>

@@ -5,7 +5,7 @@ import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { ArcoResolver } from 'unplugin-vue-components/resolvers'
 import viteCompression from 'vite-plugin-compression'
-
+import { createStyleImportPlugin } from 'vite-plugin-style-import'
 export default defineConfig({
   server: {
     open: true,
@@ -20,6 +20,18 @@ export default defineConfig({
       verbose: true //时大于1mb的文件进行压宿
     }),
     vue(),
+    createStyleImportPlugin({
+      libs: [
+        {
+          libraryName: '@arco-design/web-vue',
+          esModule: true,
+          resolveStyle: (name) => {
+            // less
+            return `@arco-design/web-vue/es/${name}/style/index.js`
+          }
+        }
+      ]
+    }),
     AutoImport({
       resolvers: [ArcoResolver()]
     }),
