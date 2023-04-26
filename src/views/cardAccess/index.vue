@@ -12,11 +12,12 @@ import fetch from '@/request/fetch'
 
 onActivated(async () => {
   await store.initStore()
+})
+onMounted(() => {
   emitter.on('leave', (res: any) => {
     VehicleDeparture(res.plate, res.status)
   })
 })
-
 const store = useParkInfoStore()
 const userStore = useUserMainStore()
 const { state } = storeToRefs(store)

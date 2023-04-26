@@ -6,7 +6,7 @@ const store = useHistoryStore()
 onMounted(() => {
   store.init()
 })
-const isReverse = ref(false)
+const isReverse = ref(true)
 
 const onChange = (bool: boolean) => {
   isReverse.value = bool
@@ -16,20 +16,24 @@ const onChange = (bool: boolean) => {
 <template>
   <div class="history">
     <div>
+      <h3>历史记录</h3>
       <a-typography-text :style="{ verticalAlign: 'middle', marginRight: '8px' }">
-        Reverse
+        排序
       </a-typography-text>
       <a-radio-group @change="onChange" :modelValue="isReverse">
-        <a-radio :value="false">No Reverse</a-radio>
-        <a-radio :value="true">Reverse</a-radio>
+        <a-radio :value="false">正序</a-radio>
+        <a-radio :value="true">倒序</a-radio>
       </a-radio-group>
     </div>
     <div class="body">
       <a-timeline :reverse="isReverse">
         <a-timeline-item v-for="(item, key) in store.state" :key="key" :label="item.time">
           <div>车牌{{ item.plate }}</div>
+          <div :style="{ color: item.type == 'entry' ? 'green' : 'red' }">
+            {{ item.type == 'entry' ? '进入' : '离场' }}
+          </div>
           <a-image
-            :src="`http://localhost:3000/static/images/${item.entryImage}`"
+            :src="`http://localhost:3000/static/images/${item.image}`"
             width="150"
             height="150"
           ></a-image
@@ -40,12 +44,10 @@ const onChange = (bool: boolean) => {
 </template>
 <style lang="less" scoped>
 .history {
-  display: flex;
-  flex-direction: column;
-  height: 100%
+  float: right;
 }
 .body {
-  flex: 1;
+  height: 700px;
   overflow-y: auto;
 }
 :deep(.arco-timeline-item-content-wrapper) {

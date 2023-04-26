@@ -10,8 +10,10 @@ import { useBlackStore } from '@/stores/black'
 import modal from '@/components/Module/modal.vue'
 import { emitter } from '@/util/index'
 import History from './history.vue'
+import { useHistoryStore } from './history'
 
 const store = useParkInfoStore()
+const historyStore = useHistoryStore()
 const blackStore = useBlackStore()
 const { filterBlack } = storeToRefs(blackStore)
 
@@ -35,35 +37,47 @@ const takePhoto = () => {
     const { path } = res
     fetch
       .post('/api/entry', { imagePath: path }, false)
-      .then(async (result: { message: any; params: { plate: any }; res: any }) => {
+      .then(async (result: { message: any; params: any; res: any }) => {
         const {
           message,
-          params: { plate },
+          params: { plate, entryImage, leaveImage, leaveTime, entryTime },
           res
         } = result
-        console.log(result)
-
         Notification.info(message)
-        if (res == 'entry') {
-          await blackStore.blackArray(plate)
-          if (filterBlack.value.length >= 3) {
-            visible_model.value = !visible_model.value
-            return
+        if (res !== 'false') {
+          const history_arr = {
+            image: '',
+            plate,
+            time: '',
+            type: ''
           }
-          fetch
-            .put(`/api/parkingSpace/VehicleSelection/${selectId(plate)}`, {
-              plate
-            })
-            .then((result: { res: any; message: any }) => {
-              const { res, message } = result
-              if (res) {
-                Notification.success(message)
-                store.initStore()
-              }
-            })
-        }
-        if (res == 'leave') {
-          emitter.emit('leave', { plate, status: 'parked' })
+          if (res == 'entry') {
+            ;[history_arr.image, history_arr.time, history_arr.type] = [entryImage, entryTime, res]
+
+            await blackStore.blackArray(plate)
+            if (filterBlack.value.length >= 3) {
+              visible_model.value = !visible_model.value
+              return
+            }
+            fetch
+              .put(`/api/parkingSpace/VehicleSelection/${selectId(plate)}`, {
+                plate
+              })
+              .then((result: { res: any; message: any }) => {
+                const { res, message } = result
+                if (res) {
+                  Notification.success(message)
+                  store.initStore()
+                }
+              })
+          }
+          if (res == 'leave') {
+            ;[history_arr.image, history_arr.time, history_arr.type] = [leaveImage, leaveTime, res]
+            emitter.emit(res, { plate, status: 'parked' })
+          }
+          historyStore.$patch((state) => {
+            state.state.push(history_arr)
+          })
         }
       })
   })
@@ -81,14 +95,7 @@ onActivated(async () => {
   const videoStream = await navigator.mediaDevices.getUserMedia(constraints)
   video.value.srcObject = videoStream
 })
-onBeforeUnmount(() => {
-  const stream = video.value.srcObject
-  const tracks = stream.getTracks()
-  tracks.forEach(function (track: { stop: () => void }) {
-    track.stop() //停止视频流
-  })
-  video.value.srcObject = null
-})
+
 onDeactivated(() => {
   const stream = video.value.srcObject
   const tracks = stream.getTracks()
@@ -110,22 +117,25 @@ onDeactivated(() => {
   >
   <div class="media">
     <a-button @click="() => takePhoto()">拍照</a-button>
-    <history />
+
     <video autoplay ref="video" id="video"></video>
+
+    <history />
   </div>
   <canvas id="canvas" ref="canvas" width="900" height="800"></canvas>
 </template>
 <style lang="less" scoped>
 .media {
   display: flex;
+  justify-content: space-around;
 }
 .list {
   width: 300px;
   height: 300px;
 }
 #video {
-  height: 400px;
-  width: 300px;
+  margin-left: 20px;
+  min-width: 100px;
 }
 #canvas {
   display: none;

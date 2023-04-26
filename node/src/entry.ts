@@ -88,13 +88,29 @@ export default {
     res.send({ ...imagePlate })
   },
   putForced: async (req: any, res: any) => {
-    // const id = lastId()
+    const { plate } = req.params
+    console.log(req.params)
+
+    const default_image = '/default_car.jpg'
+    const obj = await lastId('history', 'plate', plate)
+    const params_2 = {
+      plate,
+      leaveImage: default_image,
+      leaveTime: time
+    }
+    connection.query(monitoring.update, [params_2, obj.id], (err, result) => {
+      res.send({ res: 'leave', message: '已强制离场' })
+    })
   },
+
   history: (req: any, res: any) => {
     connection.query(
-      `SELECT plate,date_format(entryTime,'%Y-%m-%d %H:%I:%s') 'time' ,entryImage FROM history  UNION ALL SELECT plate, date_format(leaveTime,'%Y-%m-%d %H:%I:%s')  'time' ,leaveImage FROM history order by time`,
+      `SELECT plate,date_format(entryTime,'%Y-%m-%d %H:%I:%s') 'time' ,entryImage 'image', 'entry' as type 
+      FROM history  
+      UNION ALL 
+      SELECT plate, date_format(leaveTime,'%Y-%m-%d %H:%I:%s') 'time',leaveImage  'image','leave' as type  FROM history order by time`,
       (err, result: any[]) => {
-        res.send(result)
+        res.send(result.filter((item) => item.time !== null))
       }
     )
   }

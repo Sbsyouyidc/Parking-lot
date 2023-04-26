@@ -77,7 +77,13 @@ export default {
     const time = ReservationTime ? ReservationTime : dayjs().format('YYYY-MM-DD HH:mm:ss')
     const boolean = await isExistence('parkingspace', 'ParkingPlate', plate)
     console.log(boolean, status)
-    ;(!boolean &&
+    if (ReservationTime && boolean) {
+      res.send({
+        code: 200,
+        message: '请取消已预约信息，重新预约',
+        res: false
+      })
+    } else {
       connection.query(
         `UPDATE parkingspace SET ParkingPlate = '${plate}',status = '${status}' , StartParkingTime = '${time}' WHERE id = '${id}'`,
         (err: any, results: IData) => {
@@ -88,12 +94,8 @@ export default {
             res: true
           })
         }
-      )) ||
-      res.send({
-        code: 200,
-        message: '请取消已预约信息，重新预约',
-        res: false
-      })
+      )
+    }
   },
   //时长
   VehicleDuration: async (req: any, res: any) => {

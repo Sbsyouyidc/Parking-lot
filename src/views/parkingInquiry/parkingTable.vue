@@ -7,6 +7,8 @@ import duration from './duration.vue'
 import tableImage from './image.vue'
 import { spaceType } from '@/util'
 import { emitter } from '@/util/index'
+import fetch from '@/request/fetch'
+
 const store = useParkInfoStore()
 onMounted(() => {
   store.initStore()
@@ -34,6 +36,15 @@ const expandable = reactive({
   title: '车辆信息',
   width: 100
 })
+
+const emit = (ParkingPlate: any) => {
+  console.log(ParkingPlate)
+
+  fetch.put(`/api/putForced/${ParkingPlate}`).then(() => {
+    emitter.emit('leave', { plate: ParkingPlate, status: 'parked' })
+    store.initStore()
+  })
+}
 </script>
 
 <template>
@@ -70,11 +81,9 @@ const expandable = reactive({
           <div>{{ spaceType[record.status] }}</div>
         </template>
       </a-table-column>
-      <a-table-column title="操作">
+      <a-table-column title="操作" data-index="id">
         <template #cell="{ record }">
-          <a-button
-            v-show="record.status == 'parked'"
-            @click="emitter.emit('leave', { plate: record.ParkingPlate, status: 'parked' })"
+          <a-button v-show="record.status == 'parked'" @click="emit(record.ParkingPlate)"
             >强制离场</a-button
           >
         </template>
