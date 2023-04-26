@@ -53,7 +53,7 @@ const save = () => {
 <template>
   <div class="my-main">
     <a-typography-title :heading="6">
-      待处理违规记录
+      个人信息
       <a-space style="float: right">
         <a-button type="primary" size="mini" @click="save" v-if="edit">
           <template #icon> <icon-save /> </template
@@ -111,7 +111,7 @@ const save = () => {
 </template>
 <style lang="less" scoped>
 .my-main {
-  margin: 10px 15px 10px 15px;
+  margin: 0px 15px 10px 15px;
 }
 .arco-list-wrapper {
   background-color: #ffffffe6;

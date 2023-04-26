@@ -21,6 +21,7 @@ export const Duration = (duration: number) => {
     return time.seconds() + '秒'
   }
 }
+
 export const debounce = (func: () => void, wait: number) => {
   let timer: NodeJS.Timeout | null = null
   return function () {

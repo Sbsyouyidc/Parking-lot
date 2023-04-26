@@ -1,6 +1,6 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
-import { ref, reactive, watch, onMounted } from 'vue'
+import { ref, reactive, watch, onMounted, watchEffect, nextTick } from 'vue'
 import { useUserMainStore } from '@/stores/userMain'
 import { useRouter } from 'vue-router'
 import { useRoute } from 'vue-router'
@@ -10,23 +10,32 @@ const route = useRoute()
 onMounted(() => {
   store.init()
 })
+const menu = ref()
+
+const click = (e) => {
+  for (const key of document.getElementsByClassName('menu-item')) {
+    if (key.innerHTML == route.meta.title) {
+      key.style.borderBottom = '2px solid #5488f0'
+    } else {
+      key.style.borderBottom = 'none'
+    }
+  }
+}
 </script>
 
 <template>
   <a-layout class="user-main" style="height: 100%">
     <a-layout-header class="box-shadow">{{ route.meta.title }} </a-layout-header>
+    <div class="menu" ref="menu" @click="click($event)">
+      <div class="menu-item" @click="router.push({ name: 'userCardAccess' })">预约车位</div>
+      <div class="menu-item" @click="router.push({ name: 'userParkingInquiry' })">车位查询</div>
+      <div class="menu-item" @click="router.push({ name: 'userOrderRecord' })">订单记录</div>
+      <div class="menu-item" @click="router.push({ name: 'userMyInfo' })">我的信息</div>
+    </div>
     <a-layout-content>
       <keep-alive><RouterView /></keep-alive>
     </a-layout-content>
-    <a-layout-footer
-      ><div class="item" @click="router.push({ name: 'userCardAccess' })">选择车位</div>
-      <a-divider direction="vertical" />
-      <div class="item" @click="router.push({ name: 'userParkingInquiry' })">车位查询</div>
-      <a-divider direction="vertical" />
-      <div class="item" @click="router.push({ name: 'userOrderRecord' })">订单查询</div>
-      <a-divider direction="vertical" />
-      <div class="item" @click="router.push({ name: 'userMyInfo' })">我的</div></a-layout-footer
-    >
+    <a-layout-footer></a-layout-footer>
   </a-layout>
 </template>
 <style lang="less" scoped>
@@ -50,12 +59,6 @@ onMounted(() => {
   font-size: 12px;
   align-items: center;
   font-stretch: condensed;
-
-  & .item {
-    flex: 1;
-    line-height: 64px;
-    text-align: center;
-  }
 }
 
 .user-main :deep(.arco-layout-content) {
@@ -64,11 +67,22 @@ onMounted(() => {
 }
 
 .user-main :deep(.arco-layout-footer) {
-  height: 64px;
+  height: 34px;
 }
 .user-main :deep(.arco-layout-header) {
   text-align: center;
   margin-bottom: 2px;
   line-height: 45px;
+}
+
+.menu {
+  display: flex;
+  margin-bottom: 10px;
+  & .menu-item {
+    height: 30px;
+    padding-bottom: 5px;
+    font-size: 4vw;
+    padding: 0 10px 0 10px;
+  }
 }
 </style>

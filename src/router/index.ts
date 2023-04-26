@@ -7,6 +7,7 @@ const router = createRouter({
     {
       path: '/Home',
       name: 'Home',
+      redirect: 'Panel',
       meta: { title: '主页' },
       component: () => import('@/components/Layout/index.vue'),
       children: [
@@ -87,7 +88,7 @@ const router = createRouter({
         {
           path: '/userCardAccess',
           name: 'userCardAccess',
-          meta: { title: '车位查询' },
+          meta: { title: '预约车位' },
           component: () => import('@/views/cardAccess/index.vue')
         },
         {

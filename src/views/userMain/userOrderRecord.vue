@@ -5,7 +5,7 @@ import { IconEmpty } from '@arco-design/web-vue/es/icon'
 import { useUserMainStore } from '@/stores/userMain'
 import { useRouter } from 'vue-router'
 import dayjs from 'dayjs'
-import { Duration } from '@/util'
+import { Duration, spaceType } from '@/util/index'
 import fetch from '@/request/fetch'
 const store = useUserMainStore()
 const router = useRouter()
@@ -44,7 +44,8 @@ const search = (id: string) => {
   <div class="user-order-record">
     <div v-if="filter.length !== 0">
       <a-card v-for="item in filter" :key="item.id" @click="search(item.id)"
-        ><div class="item">
+        ><a-tag class="status">{{ spaceType[item.status] }}</a-tag>
+        <div class="item">
           <div>订单号</div>
           <div>{{ item.id }}</div>
         </div>

@@ -1,7 +1,8 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
-import { defineEmits, ref, watch } from 'vue'
-import { useRouter } from 'vue-router'
+import { defineEmits, ref, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+
 import { IconApps } from '@arco-design/web-vue/es/icon'
 
 const router = useRouter()
@@ -11,6 +12,8 @@ const onCollapse = () => {
 }
 
 const click = (key: string) => {
+  console.log('sd')
+
   router.push({ name: key })
 }
 </script>

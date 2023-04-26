@@ -1,6 +1,6 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
-import { ref, watch, computed } from 'vue'
+import { ref, watchEffect, computed } from 'vue'
 import { RouterView, useRoute, useRouter } from 'vue-router'
 import headerMenu from './header/header-menu.vue'
 import siderMenu from './sider/sider-menu.vue'
@@ -10,19 +10,16 @@ const isCollapsed = ref(false)
 const layoutLeft = computed(() => (isCollapsed.value ? 48 : 200))
 const activeKey = ref('')
 
-watch(
-  () => route.name,
-  (val) => {
-    const {
-      meta: { title }
-    } = route
-    const isHave = data.value.some((item) => item.key == val)
-    !isHave && data.value.push({ key: val as string, title: title as string })
-    activeKey.value = val as string
-  }
-)
-
 const data = ref<{ key: string; title: string }[]>([])
+watchEffect(() => {
+  const {
+    meta: { title },
+    name
+  } = route
+  const isHave = data.value.some((item) => item.key == name)
+  !isHave && data.value.push({ key: name as string, title: title as string })
+  activeKey.value = name as string
+})
 
 const handleDelete = (key: string) => {
   const index = data.value.findIndex((item) => item.key == key)
@@ -58,7 +55,7 @@ const handleDelete = (key: string) => {
           @tab-click="(	
 key: string) => router.push({ name: key })"
         >
-          <a-tab-pane v-for="(item, index) in data" :key="item.key" :title="item.title">
+          <a-tab-pane v-for="item in data" :key="item.key" :title="item.title">
             <RouterView v-slot="{ Component, route }">
               <keep-alive> <component :is="route.name == item.key && Component" /> </keep-alive
             ></RouterView>
