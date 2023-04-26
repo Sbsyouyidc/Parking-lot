@@ -5,7 +5,6 @@ import App from './App.vue'
 import router from './router'
 
 import './assets/main.css'
-import '@arco-design/web-vue/dist/arco.css'
 
 // window._AMapSecurityConfig = {
 //   securityJsCode: '22e549ff2e9713d2e3d221e4d2ca0a0a	'
