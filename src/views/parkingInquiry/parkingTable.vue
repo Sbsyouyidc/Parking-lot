@@ -38,8 +38,6 @@ const expandable = reactive({
 })
 
 const emit = (ParkingPlate: any) => {
-  console.log(ParkingPlate)
-
   fetch.put(`/api/putForced/${ParkingPlate}`).then(() => {
     emitter.emit('leave', { plate: ParkingPlate, status: 'parked' })
     store.initStore()
