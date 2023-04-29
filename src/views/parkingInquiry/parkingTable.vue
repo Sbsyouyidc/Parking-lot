@@ -34,7 +34,7 @@ const filterable = {
 
 const expandable = reactive({
   title: '车辆信息',
-  width: 100
+  width: 40
 })
 
 const emit = (ParkingPlate: any) => {
@@ -55,31 +55,32 @@ const emit = (ParkingPlate: any) => {
     row-key="id"
   >
     <template #columns>
-      <a-table-column title="编号" data-index="number"></a-table-column
-      ><a-table-column title="收费标准" data-index="type"></a-table-column>
+      <a-table-column title="编号" data-index="number" width="50" fixed="left"></a-table-column
+      ><a-table-column title="收费标准" data-index="type" width="200"></a-table-column>
 
       <a-table-column
         title="暂用车牌"
+        width="200"
         data-index="ParkingPlate"
         :filterable="filterable"
       ></a-table-column>
-      <a-table-column title="开始时间" data-index="StartParkingTime">
+      <a-table-column title="开始时间" width="200" data-index="StartParkingTime">
         <template #cell="{ record }">
           {{ formatDate(record.StartParkingTime) }}
         </template>
       </a-table-column>
-      <a-table-column title="停放时长" data-index="StartParkingTime">
+      <a-table-column title="停放时长" width="200" data-index="StartParkingTime">
         <template #cell="{ record }">
           <duration :time="record.StartParkingTime" />
         </template>
       </a-table-column>
 
-      <a-table-column title="状态" data-index="status">
+      <a-table-column title="状态" width="200" data-index="status">
         <template #cell="{ record }">
           <div>{{ spaceType[record.status] }}</div>
         </template>
       </a-table-column>
-      <a-table-column title="操作" data-index="id">
+      <a-table-column title="操作" width="100" fixed="right" data-index="id">
         <template #cell="{ record }">
           <a-button v-show="record.status == 'parked'" @click="emit(record.ParkingPlate)"
             >强制离场</a-button

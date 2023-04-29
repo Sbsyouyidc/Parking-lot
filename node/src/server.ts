@@ -21,7 +21,6 @@ const search = (Table: string, Condition: string, id: string) => {
       `SELECT * FROM ${Table} where ${Condition} = '${id}'`,
       (err: any, results: IData[]) => {
         const res = results[0]
-        console.log('asdasdas' + res)
         resolve(res)
       }
     )

@@ -51,8 +51,12 @@ export const throttle = (func: () => void, wait: number) => {
 
 export const file = (image: string) => {
   const blob = dataURLtoFile(image, 'image/jpeg')
+  console.log(blob)
+
   const fileOfBlob = new File([blob], dayjs().format('YYYYMMDDHHmmss') + '.jpg')
   const data = new FormData()
+  console.log(fileOfBlob)
+
   data.append('file', fileOfBlob)
   return data
 }
