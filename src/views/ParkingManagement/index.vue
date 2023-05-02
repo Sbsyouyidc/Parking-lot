@@ -50,7 +50,6 @@ const drop = (e: { clientX: any; clientY: any }) => {
       index
     })
   })
-
   const { clientX, clientY } = e
   const left = clientX - client.x - offset.x
   const top = clientY - client.y - offset.y

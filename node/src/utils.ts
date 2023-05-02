@@ -61,7 +61,7 @@ export const Duration = (duration: number) => {
 
 export const Price = (duration: number, type: string) => {
   return new Promise<number>((resolve, reject) => {
-    let Remaining = Math.floor(dayjs.duration(duration).asSeconds() as any)
+    let Remaining = Math.round(dayjs.duration(duration).asSeconds() as any)
     if (Remaining < 1) {
       resolve(0)
     } else {
@@ -199,7 +199,6 @@ export const recognition = async (imagePath: string) => {
       console.log(object)
       if (object.words_result) {
         const { number } = object.words_result
-
         const boolean = await isExistence('user', 'licensePlate', number)
         ;(boolean && reject('车牌已存在')) || resolve(number)
       } else {

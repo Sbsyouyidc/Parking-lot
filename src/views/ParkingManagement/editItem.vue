@@ -14,7 +14,6 @@ const props = withDefaults(defineProps<Props>(), {})
 const mouserDown = (event: MouseEvent, index: number) => {
   const { offsetX, offsetY } = event
   curIndex.value = event.target.dataset.index as number
-  console.log(curIndex.value)
 
   const type = concatData.value[index].id ? 'oldItem' : 'newItem'
   let indexOf = 0

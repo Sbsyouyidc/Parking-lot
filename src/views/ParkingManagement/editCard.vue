@@ -43,7 +43,7 @@ const deleteItem = (id: number | undefined, index: number | undefined) => {
       </a-input-number>
     </div>
     <div class="filed">编号 <a-input v-model="curItem.number"> </a-input></div>
-    <div class="filed">
+    <div class="filed" v-if="curItem.status == 'true' || curItem.status == 'false'">
       启用状态
       <a-space>
         <a-switch v-model="curItem.status" checked-value="true" unchecked-value="false"> </a-switch

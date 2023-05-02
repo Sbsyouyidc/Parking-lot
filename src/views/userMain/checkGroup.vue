@@ -75,6 +75,7 @@ const click = () => {
 }
 .arco-checkbox-group {
   background: white;
+  width: 100%;
 }
 .arco-checkbox {
   width: 100%;

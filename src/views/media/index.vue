@@ -53,7 +53,6 @@ const takePhoto = () => {
           }
           if (res == 'entry') {
             ;[history_arr.image, history_arr.time, history_arr.type] = [entryImage, entryTime, res]
-
             await blackStore.blackArray(plate)
             if (filterBlack.value.length >= 3) {
               visible_model.value = !visible_model.value

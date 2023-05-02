@@ -12,21 +12,24 @@ onMounted(() => {
 })
 const menu = ref()
 
-const click = (e) => {
-  for (const key of document.getElementsByClassName('menu-item')) {
-    if (key.innerHTML == route.meta.title) {
-      key.style.borderBottom = '2px solid #5488f0'
-    } else {
-      key.style.borderBottom = 'none'
+watchEffect(() => {
+  console.log(route.meta.title)
+  nextTick(() => {
+    for (const key of document.getElementsByClassName('menu-item')) {
+      if (key.innerHTML == route.meta.title) {
+        key.style.borderBottom = '2px solid #5488f0'
+      } else {
+        key.style.borderBottom = 'none'
+      }
     }
-  }
-}
+  })
+})
 </script>
 
 <template>
   <a-layout class="user-main" style="height: 100%">
     <a-layout-header class="box-shadow">{{ route.meta.title }} </a-layout-header>
-    <div class="menu" ref="menu" @click="click($event)">
+    <div class="menu" ref="menu">
       <div class="menu-item" @click="router.push({ name: 'userCardAccess' })">预约车位</div>
       <div class="menu-item" @click="router.push({ name: 'userParkingInquiry' })">车位查询</div>
       <div class="menu-item" @click="router.push({ name: 'userOrderRecord' })">订单记录</div>
@@ -77,12 +80,12 @@ const click = (e) => {
 
 .menu {
   display: flex;
-  margin-bottom: 10px;
+
   & .menu-item {
     height: 30px;
-    padding-bottom: 5px;
+
     font-size: 4vw;
-    padding: 0 10px 0 10px;
+    padding: 10px 10px 30px 10px;
   }
 }
 </style>

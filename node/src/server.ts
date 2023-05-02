@@ -162,10 +162,7 @@ export default {
   //保存车位信息
   postSaveParking: (req: any, res: any) => {
     const { params } = req.body
-
     const { oldItem, newItem, deletedItem } = JSON.parse(params)
-    console.log(oldItem, newItem, deletedItem)
-
     oldItem.forEach((item: IParking) => {
       const str = JSON.stringify(item.coordinates)
       connection.execute(
@@ -175,9 +172,9 @@ export default {
         }
       )
     })
+    
     newItem.forEach((item: IParking) => {
       const str = JSON.stringify(item.coordinates)
-      const time = dayjs().format('YYYY-MM-DD HH:mm:ss')
       connection.execute(
         `INSERT INTO parkingspace( number,status, type ,coordinates) VALUES ( '${item.number}', '${item.status}', '${item.type}','${str}')`,
         (err) => {
