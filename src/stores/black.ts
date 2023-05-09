@@ -68,7 +68,7 @@ export const useBlackStore = defineStore('black', () => {
   }
 
   function blackArray(input: string) {
-    return fetch.get(`api/getBlackPlate?plate=${input}`).then((result) => {
+    return fetch.get(`/api/getBlackPlate?plate=${input}`).then((result) => {
       plateBlack.value = result.arr
     })
   }

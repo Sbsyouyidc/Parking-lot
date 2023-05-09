@@ -12,7 +12,7 @@ app.use('/api', router)
 
 //错误
 app.use((err: { message: string }, req: any, res: { send: (arg0: string) => void }, next: any) => {
-  res.send('Error：' + err.message)
+  res.send('错误' + err.message)
 })
 app.listen(3000, () => {
   console.log('http://localhost:3000')

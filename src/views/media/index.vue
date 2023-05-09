@@ -1,7 +1,7 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
 import fetch from '@/request/fetch'
-import { ref, reactive, onActivated, onBeforeUnmount, onDeactivated } from 'vue'
+import { ref, onActivated, onBeforeUnmount } from 'vue'
 import { storeToRefs } from 'pinia'
 import { Notification } from '@arco-design/web-vue'
 import { file } from '@/util/index'
@@ -95,7 +95,7 @@ onActivated(async () => {
   video.value.srcObject = videoStream
 })
 
-onDeactivated(() => {
+onBeforeUnmount(() => {
   const stream = video.value.srcObject
   const tracks = stream.getTracks()
   tracks.forEach(function (track: { stop: () => void }) {
