@@ -17,7 +17,8 @@ export const useParkInfoStore = defineStore('parkInfo', () => {
     duration: '',
     type: ''
   })
-
+  const floor = ref(1)
+  const data = ref([])
   const parkingArray = ref<any[]>([])
   const ChargeDetails = ref<{
     Price: string
@@ -34,6 +35,13 @@ export const useParkInfoStore = defineStore('parkInfo', () => {
   const parkinfoArray = computed(() =>
     state.value.filter((item) => item.status !== 'false').sort((a, b) => a.number - b.number)
   )
+
+  function switchFloor(val: number) {
+    floor.value = val
+    return fetch.get(`/api/getParkingSpace?floor=${floor.value}`, false).then((res) => {
+      data.value = res
+    })
+  }
 
   function VehicleDuration(): Promise<void> {
     if (spaceNumber.value) {
@@ -98,6 +106,9 @@ export const useParkInfoStore = defineStore('parkInfo', () => {
     type,
     parkinfoArray,
     ChargeDetails,
-    postMessage
+    postMessage,
+    switchFloor,
+    data,
+    floor
   }
 })

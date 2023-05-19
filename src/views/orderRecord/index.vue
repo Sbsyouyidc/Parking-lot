@@ -84,6 +84,7 @@ const option = ref('')
         <template #cell="{ record }">{{ spaceType[record.status] }}</template></a-table-column
       >
       <a-table-column title="车牌号" data-index="LicensePlate"></a-table-column>
+      <a-table-column title="楼层" data-index="floor"></a-table-column>
       <a-table-column title="停车位" data-index="number"></a-table-column>
       <a-table-column title="价格" data-index="Price"></a-table-column>
       <a-table-column title="时长" data-index="duration"></a-table-column>

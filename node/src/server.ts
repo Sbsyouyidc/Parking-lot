@@ -14,6 +14,7 @@ interface IParking {
   number: string
   status: string
   type: string
+  floor: number
 }
 const search = (Table: string, Condition: string, id: string) => {
   return new Promise<any>((resolve, reject) => {
@@ -69,6 +70,16 @@ export default {
       if (err) throw new Error(err)
       res.send(results)
     })
+  },
+  getParkingSpace: (req: any, res: any) => {
+    const { floor } = req.query
+    connection.execute(
+      `SELECT * FROM parkingSpace where floor = ${floor}`,
+      (err: any, results: IData) => {
+        if (err) throw new Error(err)
+        res.send(results)
+      }
+    )
   },
   VehicleSelection: async (req: any, res: any) => {
     const { id } = req.params
@@ -133,7 +144,7 @@ export default {
         `SELECT * FROM parkingspace where id = '${id}'`,
         async (err: any, results: IData[]) => {
           if (err) throw new Error(err)
-          const { number, StartParkingTime, EndParkingTime } = results[0]
+          const { number, StartParkingTime, EndParkingTime, floor } = results[0]
           console.log(results[0])
 
           const end = dayjs(EndParkingTime).format('YYYY-MM-DD HH:mm:ss')
@@ -149,7 +160,7 @@ export default {
           )
           //将信息存入订单表
           connection.query(
-            `INSERT INTO priceorder (LicensePlate, number, Price, StartParkingTime, EndParkingTime,conditionTime,status) VALUES ('${plate}', '${number}', '${price}', '${start}', '${end}','${end}','${status}')`,
+            `INSERT INTO priceorder (floor,LicensePlate, number, Price, StartParkingTime, EndParkingTime,conditionTime,status) VALUES ('${floor}', '${plate}', '${number}', '${price}', '${start}', '${end}','${end}','${status}')`,
             (err: any, results: any) => {
               if (err) throw new Error(err)
               res.send({ res: true, message: '离场成功', duration, end, start, number, price })
@@ -172,11 +183,13 @@ export default {
         }
       )
     })
-    
+
     newItem.forEach((item: IParking) => {
       const str = JSON.stringify(item.coordinates)
+      console.log(item)
+
       connection.execute(
-        `INSERT INTO parkingspace( number,status, type ,coordinates) VALUES ( '${item.number}', '${item.status}', '${item.type}','${str}')`,
+        `INSERT INTO parkingspace( number,status, type ,coordinates,floor) VALUES ( '${item.number}', '${item.status}', '${item.type}','${str}',${item.floor})`,
         (err) => {
           if (err) throw new Error(err)
         }
@@ -417,6 +430,14 @@ export default {
 
     connection.query(message.delete, [id], (err, result) => {
       res.send({
+        res: true
+      })
+    })
+  },
+  getFloor: (req: any, res: any) => {
+    connection.query(`SELECT  DISTINCT floor FROM parkingSpace`, (err, result) => {
+      res.send({
+        result,
         res: true
       })
     })

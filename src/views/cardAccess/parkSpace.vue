@@ -53,6 +53,7 @@ const handleOk = async () => {
         localStorage.setItem('spaceNumber', item.value.number)
         Message.success(message)
         store.initStore()
+        store.switchFloor(store.floor)
         store.VehicleDuration().then(() => {
           visible.value = false
         })
@@ -89,6 +90,7 @@ const visible_model = ref(false)
       <a-descriptions :column="1">
         <a-descriptions-item label="车位编号"> {{ item.number }} </a-descriptions-item>
         <a-descriptions-item label="车位类别"> {{ item.type }} </a-descriptions-item>
+        <a-descriptions-item label="楼层"> {{ item.floor }} </a-descriptions-item>
         <a-descriptions-item label="停车">
           <span v-if="item.ParkingPlate">{{ item.ParkingPlate }}</span>
           <plateSelect v-else @on-change="(val) => (form.input = val)" />

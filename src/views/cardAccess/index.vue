@@ -9,9 +9,10 @@ import { useUserMainStore } from '@/stores/userMain'
 import modal from '@/components/Module/modal.vue'
 import { emitter } from '@/util/index'
 import fetch from '@/request/fetch'
-
+import cardCube from '@/components/Module/cardCube.vue'
 onActivated(async () => {
   await store.initStore()
+  await store.switchFloor(1)
 })
 onMounted(() => {
   emitter.on('leave', (res: any) => {
@@ -39,7 +40,9 @@ const ChargeData = ref({
 })
 
 const visible = ref(false)
-
+const onChange = (val: number) => {
+  store.switchFloor(val)
+}
 const VehicleDeparture = async (plate: any, status: string) => {
   console.log('asd')
   if (status == 'parked') {
@@ -54,6 +57,7 @@ const VehicleDeparture = async (plate: any, status: string) => {
       ChargeData.value = result
       store.parkingData = { number: '', start: '', end: '', Price: '', duration: '', type: '' }
       store.initStore()
+      store.switchFloor(store.floor)
     }
   })
 }
@@ -84,19 +88,32 @@ const visible_m = ref(false)
   <modal v-model:visible="visible_m">
     <div>预约取消成功</div>
   </modal>
-  <a-typography-title :heading="6"> 预约列表 </a-typography-title>
-  <spaceAllDetail v-for="(item, index) in filter" :key="index" :item="item" />
-  <div class="card-access box-shadow-inset">
-    <parkSpace :item="item" v-for="(item, index) in store.state" :key="index" />
+  <a-typography-title :heading="4"> 预约列表 </a-typography-title>
+  <div style="border: 1px solid #e5e6eb" v-if="filter.length == 0">
+    <a-empty>无预约数据 </a-empty>
   </div>
+  <spaceAllDetail v-for="(item, index) in filter" :key="index" :item="item" v-else />
+
+  <main>
+    <cardCube :height="0" @onChange="onChange" />
+    <div class="card-access box-shadow-inset">
+      <parkSpace :item="item" v-for="(item, index) in store.data" :key="index" />
+    </div>
+  </main>
 </template>
 <style lang="less" scoped>
+main {
+  margin-top: 10px;
+  display: flex;
+
+  justify-content: space-between;
+}
 .card-access {
   overflow: auto;
   position: relative;
-
   height: 600px;
-  margin: 10px;
+  width: 900px;
+  margin: 10px auto;
   background-color: #f0eeee;
   border-radius: 5px;
 }

@@ -1,16 +1,16 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
-import { ref, reactive, onMounted, nextTick, onActivated } from 'vue'
+import { ref, reactive, onMounted, nextTick, onDeactivated } from 'vue'
 import editCard from './editCard.vue'
 import editItem from './editItem.vue'
 import { useManaGement } from '@/stores/management'
 import { storeToRefs } from 'pinia'
+import cardCube from '@/components/Module/cardCube.vue'
 let offset = {
   x: 0,
   y: 0
 }
 const store = useManaGement()
-
 const { data } = storeToRefs(store)
 const client = reactive({
   x: 0,
@@ -25,10 +25,22 @@ onMounted(async () => {
     const { left, top, height } = ctx.getBoundingClientRect()
     client.x = left
     client.y = top
-    client.height = height
+    client.height = height + 45
   })
 })
 
+window.onresize = () => {
+  nextTick(() => {
+    const ctx = document.querySelector('#tutorial') as HTMLCanvasElement
+    const { left, top, height } = ctx.getBoundingClientRect()
+    client.x = left
+    client.y = top
+    client.height = height + 45
+  })
+}
+onDeactivated(() => {
+  window.onresize = null
+})
 const dragStart = (e: any, type1: string = '') => {
   basie.value = type1
   offset.x = e.layerX
@@ -47,7 +59,8 @@ const drop = (e: { clientX: any; clientY: any }) => {
       number: '',
       status: 'true',
       type,
-      index
+      index,
+      floor: store.floor
     })
   })
   const { clientX, clientY } = e
@@ -68,42 +81,53 @@ const save = () => {
     store.initStore()
   })
 }
+
+const onChange = (val: number) => {
+  store.switchFloor(val)
+}
 </script>
 
 <template>
-  <div class="parking-management">
-    <a-button type="primary" @click="save">保存</a-button>
-    <main>
+  <a-button type="primary" @click="save">保存</a-button>
+  <main>
+    <cardCube :height="client.height" @onChange="onChange" />
+    <div>
       <div>
         <div class="card box-shadow" draggable="true" @dragstart="dragStart($event)">车位</div>
         <div class="card box-shadow" draggable="true" @dragstart="dragStart($event, 'static')">
           出口
         </div>
       </div>
-
-      <div id="tutorial" @drop="drop" @dragover="dragOver">
-        <edit-item :client="client" />
+      <div class="body">
+        <div id="tutorial" @drop="drop" @dragover="dragOver">
+          <edit-item :client="client" />
+        </div>
       </div>
-      <editCard :height="client.height" />
-    </main>
-  </div>
+    </div>
+    <editCard :height="client.height" />
+  </main>
 </template>
 <style lang="less" scoped>
 main {
   margin-top: 10px;
   display: flex;
+  justify-content: space-between;
 }
-#tutorial {
-  flex: 1;
-  margin: 0px 10px 0 10px;
-  height: 600px;
-  position: relative;
-  background-color: rgb(240, 238, 238);
+.body {
+  width: 900px;
   overflow: auto;
+  #tutorial {
+    height: 600px;
+    width: 900px;
+    position: relative;
+    background-color: rgb(240, 238, 238);
+  }
 }
+
 .card {
   width: 90px;
   height: 30px;
+  display: inline-block;
   margin-bottom: 15px;
   text-align: center;
 }

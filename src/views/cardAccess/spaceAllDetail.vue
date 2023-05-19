@@ -16,12 +16,13 @@ const { item } = toRefs(props)
   <a-descriptions
     layout="vertical"
     bordered
-    :column="{ xs: 3, lg: 5 }"
+    :column="{ xs: 4, lg: 6 }"
     align="center"
     size="small"
     v-show="item.status == 'appointment'"
   >
     <a-descriptions-item label="停车位">{{ item.number }}</a-descriptions-item>
+    <a-descriptions-item label="楼层">{{ item.floor }}</a-descriptions-item>
     <a-descriptions-item label="车位类别">{{ item.type }}</a-descriptions-item>
     <a-descriptions-item label="车牌">{{ item.ParkingPlate }}</a-descriptions-item>
     <a-descriptions-item label="预约时间">{{

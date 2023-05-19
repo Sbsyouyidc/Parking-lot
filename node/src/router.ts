@@ -48,4 +48,7 @@ router.post('/entry', entry.entry)
 router.get('/getPlateImage', entry.getPlateImage)
 router.put('/putForced/:plate', entry.putForced)
 router.get('/history', entry.history)
+
+router.get('/getParkingSpace', server.getParkingSpace)
+router.get('/getFloor', server.getFloor)
 export default router

@@ -1,7 +1,8 @@
-import { computed, ref, reactive, toRaw } from 'vue'
+import { computed, ref, reactive, toRaw, watchEffect, watch } from 'vue'
 import { defineStore } from 'pinia'
 import fetch from '@/request/fetch'
 import { Message } from '@arco-design/web-vue'
+
 export type IData = {
   EndParkingTime: string
   ParkingPlate: string
@@ -12,6 +13,7 @@ export type IData = {
   number: string
   status: string
   type: string
+  floor: number
 }
 
 export const useManaGement = defineStore('management', () => {
@@ -20,11 +22,13 @@ export const useManaGement = defineStore('management', () => {
     ParkingPlate: '',
     StartParkingTime: '',
     coordinates: { X: 0, Y: 0, degree: 0 },
-
+    floor: 1,
     number: '',
     status: 'true',
     type: ''
   })
+
+  const floor = ref(1)
 
   const data = reactive<{ oldItem: IData[]; newItem: IData[]; deletedItem: IData[] }>({
     oldItem: [],
@@ -35,14 +39,24 @@ export const useManaGement = defineStore('management', () => {
   const Order = ref([])
 
   function initStore() {
-    return Promise.all([fetch.get('/api/parkingSpace'), fetch.get('/api/getAllOrder')]).then(
-      ([res, obj]) => {
-        data.newItem = []
-        data.deletedItem = []
-        data.oldItem = res
-        Order.value = obj.data
-      }
-    )
+    return Promise.all([
+      fetch.get(`/api/getParkingSpace?floor=${floor.value}`),
+      fetch.get('/api/getAllOrder')
+    ]).then(([res, obj]) => {
+      data.newItem = []
+      data.deletedItem = []
+      data.oldItem = res
+      Order.value = obj.data
+    })
+  }
+
+  function switchFloor(val: number) {
+    floor.value = val
+    fetch.get(`/api/getParkingSpace?floor=${val}`, false).then((res) => {
+      data.newItem = []
+      data.deletedItem = []
+      data.oldItem = res
+    })
   }
 
   function save(): Promise<void> {
@@ -71,5 +85,16 @@ export const useManaGement = defineStore('management', () => {
   }
 
   const concatData = computed(() => [...data.oldItem, ...data.newItem])
-  return { curItem, initStore, save, data, Order, orderOptions, deleteItem, concatData }
+  return {
+    curItem,
+    initStore,
+    save,
+    data,
+    Order,
+    orderOptions,
+    deleteItem,
+    concatData,
+    switchFloor,
+    floor
+  }
 })
