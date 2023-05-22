@@ -14,6 +14,8 @@ onMounted(() => {
 const login = () => {
   fetch.post('/api/login', form).then((result: { res: string; message: string; arr: any }) => {
     const { res, message, arr } = result
+    console.log(res)
+
     if (res) {
       if (arr.LicensePlate) {
         localStorage.setItem('plate', arr.LicensePlate)
@@ -27,6 +29,8 @@ const login = () => {
       }
       Message.success(message)
     } else {
+      console.log(message)
+
       Message.info(message)
     }
   })

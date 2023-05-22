@@ -49,16 +49,22 @@ export default {
     const { username, password } = req.body
 
     connection.query(`SELECT * FROM user WHERE username = '${username}'`, (err, results: any) => {
-      if (results[0]) {
+      if (results[0] && results[0].password == password) {
         res.send({
           message: '登陆成功',
           res: true,
           arr: results[0]
         })
+      }
+      if (results[0] && results[0].password !== password) {
+        res.send({
+          message: '密码错误',
+          res: false
+        })
       } else {
         res.send({
           message: '用户名不存在',
-          res: true
+          res: false
         })
       }
     })
